@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
+#include "particle.h"
 
 class testApp : public ofBaseApp{
 	public:
@@ -23,6 +24,9 @@ class testApp : public ofBaseApp{
     };
     
     vector<pixel> pixels;
-    
+    vector <Particle> particles;
     void populatePixels();
+    void createParticles();
+    
+    bool bStart;
 };

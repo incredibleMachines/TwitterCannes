@@ -6,22 +6,29 @@ void testApp::setup(){
 	ofSetFrameRate(60);
 	ofEnableSmoothing();
     
+    
     pic.loadImage("images/image.png");
     pic.setImageType(OF_IMAGE_COLOR);
     
     populatePixels();
+    createParticles();
+    
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
-
+    for(int i=0; i<particles.size(); i++){
+        particles[i].update();
+        if(i==0){
+            cout<<particles[i].pos<<endl;
+        }
+    }
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
-    for(int i; i<pixels.size(); i++){
-        ofSetColor(pixels[i].r, pixels[i].g, pixels[i].b);
-        ofRect(pixels[i].pos.x+250, pixels[i].pos.y, 1,1);
+    for(int i=0; i<particles.size(); i++){
+        particles[i].draw();
     }
 }
 
@@ -38,4 +45,12 @@ void testApp::populatePixels(){
             pixels.push_back(newPixel);
 		}
 	}
+}
+
+void testApp::createParticles(){
+    for(int i=0;i<pixels.size();i++){
+        Particle newParticle;
+        newParticle.setup(pixels[i].pos, pixels[i].r, pixels[i].g, pixels[i].b);
+        particles.push_back(newParticle);
+    }
 }
