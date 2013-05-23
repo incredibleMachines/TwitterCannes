@@ -3,7 +3,7 @@
 #define tileW 20
 #define tileH 20
 
-#define USE_DOF false
+#define USE_DOF true
 
 //--------------------------------------------------------------
 void testApp::setup(){
@@ -28,8 +28,9 @@ void testApp::setup(){
 	
 	if (USE_DOF) {
 		dof.setup(ofGetWidth()/2, ofGetHeight()/2);
-//		dof.setFocalDistance(0);
-//		dof.setFocalRange(20);
+		dof.setFocalDistance(120);
+		dof.setFocalRange(0);
+//        dof.setBlurAmount(0);
 	}
 
 //
@@ -78,7 +79,7 @@ void testApp::draw(){
 	
 	
 	ofSetColor(255);
-	ofRect(0, 0, ofGetWidth(), ofGetHeight());
+//	ofRect(0, 0, ofGetWidth(), ofGetHeight());
 	
     for(int i=0; i<particles.size(); i++){
         particles[i].draw();
@@ -87,7 +88,12 @@ void testApp::draw(){
 	camera.end();
 	if (USE_DOF) {
 		dof.end();
-		dof.getFbo().draw(0,0, ofGetWidth()*2, ofGetHeight()*2);
+        ofFbo temp=dof.getFbo();
+        ofPushMatrix();
+        ofTranslate(ofGetWidth()/2,ofGetHeight()/2);
+        ofRotate(180);
+        temp.draw(0,0,ofGetWidth(),ofGetHeight());
+        ofPopMatrix();
 	}
 	
 	
