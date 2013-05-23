@@ -2,7 +2,20 @@
 
 //--------------------------------------------------------------
 void testApp::setup(){
-	img.loadImage("chanel.jpg");
+    
+    string path = "images";
+    ofDirectory dir(path);
+    dir.allowExt("jpg");
+    dir.listDir();
+
+    for(int i = 0; i < dir.numFiles(); i++){
+        string newImage=dir.getPath(i);
+        images.push_back(newImage);
+    }
+    
+    dir.close();
+    
+//	img.loadImage("images/chanel.jpg");
 //	img.loadImage("derbty.jpg");
 //	img.loadImage("derby2.jpg");
 //	img.loadImage("image.jpg");
@@ -22,23 +35,38 @@ void testApp::setup(){
 	//	finder.findHaarObjects(img);
 	//	cout << finder.blobs.size() << endl;
 	
-	finder.setup("haarcascade_frontalface_alt.xml");
-	finder.setNeighbors(3);
-	
-//	finder.findHaarObjects(img);
-//	finder.findHaarObjects(img, 100, 100);
-	finder.findHaarObjects(img, img.width*0.1, img.width*0.1);
-	
-	cout << finder.blobs.size() << endl;
+
 	
 	//	finder.setup("haarcascade_frontalface_alt2.xml");
 	//	finder.findHaarObjects(img);
 	//	cout << finder.blobs.size() << endl;
-	
+    
+    finder.setup("haarcascade_frontalface_alt.xml");
+    finder.setNeighbors(3);
+    
+    bChange=true;
+    count=0;
+	timer=ofGetElapsedTimeMillis();
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
+    
+    if(ofGetElapsedTimeMillis()-timer>5000){
+        timer=ofGetElapsedTimeMillis();
+        count++;
+        bChange=true;
+        if (count>images.size()-1){
+            count=0;
+        }
+    }
+    
+    if(bChange==true){
+        img.loadImage(images[count]);
+        finder.findHaarObjects(img, img.width*0.1, img.width*0.1);
+        cout << finder.blobs.size() << endl;
+        bChange=false;
+    }
 	
 }
 

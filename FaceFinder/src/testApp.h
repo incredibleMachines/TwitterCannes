@@ -21,4 +21,10 @@ class testApp : public ofBaseApp{
 
 		ofImage img;
 		ofxCvHaarFinder finder;
+    
+    vector<string> images;
+    
+    bool bChange;
+    int count;
+    int timer;
 };
