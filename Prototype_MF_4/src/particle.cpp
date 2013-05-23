@@ -14,13 +14,13 @@
 void Particle::setup(ofPoint pixel, ofImage image, float imageWidth, float imageHeight, float i, float
 					 total) {
 
-	start.x = ofRandom(0, ofGetWidth());
+	start.x = ofRandom(-ofGetWidth(), ofGetWidth()*2);
 //	start.x = ofMap(i, i, total, ofGetWidth()*2, ofGetWidth());
 
 //	start.y = ofRandom(0, ofGetHeight());
 //	start.y = start.x / ofGetWidth() * ofGetHeight() * -1;
-//	start.y = ofRandom(1) < 0.5 ? 0 : ofGetHeight();
-	start.y = 0;
+	start.y = ofRandom(1) < 0.5 ? 0 : ofGetHeight();
+//	start.y = 0;
 	start.z = ofRandom(-200, 200);
 
     pos.x = start.x;
@@ -51,7 +51,7 @@ void Particle::setup(ofPoint pixel, ofImage image, float imageWidth, float image
 void Particle::update(){
 	
 //	float pct = 0.05;
-	float pct = ofMap(myIndex, 0, 1, 0.05, 0.09);
+	float pct = ofMap(myIndex, 1, 0, 0.03, 0.08);
 	
 	pos.x = pos.x * (1-pct) + pct * target.x;
 	pos.y = pos.y * (1-pct) + pct * target.y;

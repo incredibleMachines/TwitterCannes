@@ -1,19 +1,23 @@
 #include "testApp.h"
 
-#define tileW 12
-#define tileH 12
+#define tileW 20
+#define tileH 20
+
+#define USE_DOF false
 
 //--------------------------------------------------------------
 void testApp::setup(){
     ofSetVerticalSync(true);
 	ofSetFrameRate(60);
 	//ofEnableSmoothing();
+	ofSetRectMode(OF_RECTMODE_CENTER);
     
 	//ofSetCircleResolution(10);
     
     pic.loadImage("image.jpg");
     pic.setImageType(OF_IMAGE_COLOR);
 	pic.resize(pic.width/2, pic.height/2);
+	pic.mirror(true, true);
     
     populatePixels();
     //createParticles();
@@ -21,7 +25,25 @@ void testApp::setup(){
 	ofBackground(255);
 	ofSetColor(255);
 	
-//	ofSetRectMode(OF_RECTMODE_CENTER);
+	
+	if (USE_DOF) {
+		dof.setup(ofGetWidth()/2, ofGetHeight()/2);
+//		dof.setFocalDistance(0);
+//		dof.setFocalRange(20);
+	}
+
+//
+//	camera.setDistance(1000);
+//	camera.setFov(100);
+	
+
+
+//	camera.rotateAround(90, ofPoint(0, 0, 1), camera.getPosition());
+//	camera.roll(30);
+
+	camera.setDistance(100);
+	camera.setPosition(ofGetWidth()/2, ofGetHeight()/2, 1000);
+	camera.lookAt(ofPoint(ofGetWidth()/2, ofGetHeight()/2, 10));
     
 }
 
@@ -46,9 +68,28 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
+	if (USE_DOF) {
+		dof.begin();
+		camera.begin(dof.getDimensions());
+	} else {
+		camera.begin();
+	}
+
+	
+	
+	ofSetColor(255);
+	ofRect(0, 0, ofGetWidth(), ofGetHeight());
+	
     for(int i=0; i<particles.size(); i++){
         particles[i].draw();
     }
+	
+	camera.end();
+	if (USE_DOF) {
+		dof.end();
+		dof.getFbo().draw(0,0, ofGetWidth()*2, ofGetHeight()*2);
+	}
+	
 	
 }
 
@@ -82,4 +123,11 @@ void testApp::createParticles(){
 //        newParticle.setup(pixels[i].pos, pixels[i].r, pixels[i].g, pixels[i].b, pic.getPixels(), pic.width, pic.height);
 //        particles.push_back(newParticle);
 //    }
+}
+
+void testApp::mouseDragged(int x, int y, int button) {
+	printf("Position: %f, %f, %f\n", camera.getX(), camera.getY(), camera.getZ());
+	printf("Target: %f, %f, %f\n", camera.getTarget().getX(), camera.getTarget().getY(), camera.getTarget().getZ());
+	printf("Roll: %f\n", camera.getRoll());
+	printf("Distance: %f\n", camera.getDistance());
 }
