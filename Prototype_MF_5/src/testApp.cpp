@@ -27,10 +27,10 @@ void testApp::setup(){
 	
 	
 	if (USE_DOF) {
-		dof.setup(ofGetWidth()/2, ofGetHeight()/2);
-		dof.setFocalDistance(120);
-		dof.setFocalRange(0);
-//        dof.setBlurAmount(0);
+		dof.setup(ofGetWidth(), ofGetHeight());
+		dof.setFocalDistance(347);
+		dof.setFocalRange(5);
+        dof.setBlurAmount(1);
 	}
 
 //
@@ -88,11 +88,12 @@ void testApp::draw(){
 	camera.end();
 	if (USE_DOF) {
 		dof.end();
-        ofFbo temp=dof.getFbo();
         ofPushMatrix();
+		
         ofTranslate(ofGetWidth()/2,ofGetHeight()/2);
         ofRotate(180);
-        temp.draw(0,0,ofGetWidth(),ofGetHeight());
+        dof.getFbo().draw(0,0,ofGetWidth(),ofGetHeight());
+
         ofPopMatrix();
 	}
 	
@@ -129,6 +130,13 @@ void testApp::createParticles(){
 //        newParticle.setup(pixels[i].pos, pixels[i].r, pixels[i].g, pixels[i].b, pic.getPixels(), pic.width, pic.height);
 //        particles.push_back(newParticle);
 //    }
+}
+
+void testApp::mouseMoved(int x, int y) {
+
+//	dof.setFocalRange(ofMap(x, 0, ofGetWidth(), -1000, 1000));
+//	cout << dof.getFocalRange() << endl;
+	
 }
 
 void testApp::mouseDragged(int x, int y, int button) {
