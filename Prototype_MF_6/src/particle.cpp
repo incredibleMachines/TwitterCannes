@@ -34,6 +34,7 @@ void Particle::setup(ofPoint pixel, ofImage image, float imageWidth, float image
 	offset = ofRandom(30, 50);
     timeOffset = ofRandom(0, 1);
 //    timeOffset = 0;
+    animateOutOffset = 0;
 	
 	// Generate a random rotation type 0..2 which will determine
 	// different values for axes of rotation
@@ -42,14 +43,16 @@ void Particle::setup(ofPoint pixel, ofImage image, float imageWidth, float image
 }
 
 void Particle::update(){
-//	float time = MIN(ofGetElapsedTimef(), PI*3/2);
+//	float time = MIN(ofGetElapsedTimef(), PI*9/8);
 	float time = ofGetElapsedTimef();
-	float t = ofMap(sin(time+PI/4-timeOffset), -1, 1, 0, 50);
+	float t = ofMap(sin(time+PI/2-timeOffset), -1, 1, 0, 50);
 //	float t = 0;
-	
-	pos.x = target.x + sin(t/2 + offset) * 4 * t;
-	pos.y = target.y + cos(t/2 + offset * 2) * 5 * t;
-	pos.z = target.z + powf(t, 1.75) * offset / 40;
+    
+    if (!targetReached) {
+        pos.x = target.x + sin(t/4 + offset) * 4 * t;
+        pos.y = target.y + cos(t/4 + offset * 2) * 5 * t;
+        pos.z = target.z + powf(t, 1.75) * offset / 40;
+    }
 
 	
 	// Reached destination
@@ -58,18 +61,21 @@ void Particle::update(){
 	
 	float xDiff = abs(pos.x - target.x);
 	float yDiff = abs(pos.y - target.y);
+    float zDiff = abs(pos.z - target.z);
 	
 	if (xDiff < 0.01 && yDiff < 0.01) {
+//    if (!xDiff && !yDiff && !zDiff) {
 		targetReached = true;
+        pos = target;
 	}
 	
 	prevPos = pos;
 }
 
 void Particle::draw(){
-//	float time = MIN(ofGetElapsedTimef(), PI*3/2);
+//	float time = MIN(ofGetElapsedTimef(), PI*9/8);
 	float time = ofGetElapsedTimef();
-	float t = ofMap(sin(time+PI/4-timeOffset), -1, 1, 0, 25);
+	float t = ofMap(sin(time+PI/2-timeOffset), -1, 1, 0, 25);
 //	float t = 0;
 
 	float rotateX, rotateY, rotateZ;
@@ -123,6 +129,10 @@ void Particle::draw(){
 			rotateZ = offset * t / 30 * RAD_TO_DEG * -1;
 			break;
 	}
+    
+    if (targetReached) {
+        rotateX = rotateY = rotateZ = 0;
+    }
 	
 	ofPushMatrix();
 	ofTranslate(pos);
@@ -135,7 +145,7 @@ void Particle::draw(){
 }
 
 void Particle::flipTarget() {
-
-
-	
+    targetReached = false;
+//    animateOutOffset = ofGetElapsedTimef() + PI*3/2;
+    timeOffset = 0 - ofGetElapsedTimef() + PI/2 + timeOffset;
 }

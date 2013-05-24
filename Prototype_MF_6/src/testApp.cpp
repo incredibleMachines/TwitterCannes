@@ -46,6 +46,7 @@ void testApp::setup(){
 	camera.setPosition(ofGetWidth()/2, ofGetHeight()/2, 1000);
 	camera.lookAt(ofPoint(ofGetWidth()/2, ofGetHeight()/2, 10));
     
+    targetReachedTime = 0;
 }
 
 //--------------------------------------------------------------
@@ -54,6 +55,8 @@ void testApp::update(){
 	
     for(int i=0; i<particles.size(); i++){
         particles[i].update();
+//        if (!i)
+//            cout << particles[i].targetReached << endl;
 		
 		if (!particles[i].targetReached) {
 			flipTarget = false;
@@ -61,9 +64,13 @@ void testApp::update(){
     }
 	
 	if (flipTarget) {
-		for(int i=0; i<particles.size(); i++){
-			particles[i].flipTarget();
-		}
+        if (!targetReachedTime)
+            targetReachedTime = ofGetElapsedTimef();
+        if (ofGetElapsedTimef() - targetReachedTime > 2) {
+            for(int i=0; i<particles.size(); i++){
+                particles[i].flipTarget();
+            }
+        }
 	}
 }
 
