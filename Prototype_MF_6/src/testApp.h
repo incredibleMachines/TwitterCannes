@@ -42,6 +42,8 @@ public:
 	
 	ofEasyCam camera;
 	ofxDOF dof;
+    
+    float targetReachedTime;
 
 };
 
