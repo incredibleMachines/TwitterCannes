@@ -4,26 +4,12 @@
 #define tileH 10
 
 #define USE_DOF true
-#define CAM_MOVE true
+#define CAM_MOVE false
 
 //--------------------------------------------------------------
 void testApp::setup(){
-    	glEnable(GL_DEPTH_TEST);
-    
-    
-    string path = "images";
-    ofDirectory dir(path);
-    dir.allowExt("jpg");
-    dir.allowExt("png");
-    dir.listDir();
-    
-    for(int i = 0; i < dir.numFiles(); i++){
-        string newImage=dir.getPath(i);
-        images.push_back(newImage);
-    }
-    
-    dir.close();
-    
+//    	glEnable(GL_DEPTH_TEST);
+//    
     bool bZ=true;
     ofSetVerticalSync(true);
 	ofSetFrameRate(60);
@@ -63,8 +49,8 @@ void testApp::setup(){
 //	camera.roll(30);
     
     camera.disableMouseInput();
-    camPos.x=pic.width;
-    camPos.y=0;
+    camPos.x=pic.width/2+200;
+    camPos.y=pic.height/2+75;
     camPos.z=500;
     
 //	camera.setDistance(100);
@@ -75,18 +61,14 @@ void testApp::setup(){
     bX=false;
     
     light.setDiffuseColor(ofColor(255,255,255));
-    light.setSpecularColor(ofColor(255,255,255));
-    light.setPointLight();
-    light.setPosition(0, -pic.height/2, 500);
-    
-    material.setShininess(100);
-    material.setSpecularColor(ofColor(255,255,100));
-//    material.setEmissiveColor(ofColor(255,0,0,30));
-    
-    bDirection=true;
-    imgCount=0;
+//    light.setSpecularColor(ofColor(255,255,255));
+    light.setDirectional();
+    light.setOrientation(ofVec3f(180,0,0));
     
     
+    material.setShininess(155);
+//    material.setSpecularColor(ofColor(255,255,255));
+//    material.setEmissiveColor(ofColor(255,255,255,30));
     
 }
 
@@ -98,7 +80,7 @@ void testApp::update(){
         particles[i].update();
 
         if(i==0){
-//            cout<<particles[i].targetReached<<endl;
+            cout<<particles[i].color<<endl;
         }
 		
 		if (!particles[i].targetReached) {
@@ -106,51 +88,30 @@ void testApp::update(){
 		}
     }
 	
-
-        if(bDirection==true){
-        if (count<100) {
+	if (count<100) {
 		for(int i=0; i<particles.size(); i++){
 			particles[i].flipTarget();
 		}
-            bDirection=false;
-        }
-        }
-        else{
-            if (count<400) {
-            pic.loadImage(images[imgCount]);
-            pic.setImageType(OF_IMAGE_COLOR);
-            pic.resize(pic.width/2, pic.height/2);
-            pic.mirror(true, true);
-            
-            populatePixels();
-            bDirection=true;
-            imgCount++;
-            }
-        }
-
+	}
 
     if(bZ==true){
-        camPos.x-=.5;
-        camPos.y+=.5;
+        camPos.z+=.7;
     }
     else{
-        camPos.x+=.5;
-        camPos.y-=.5;
+        camPos.z-=.7;
     }
 
-    if(camPos.x<0){
+    if(camPos.z>1000){
         bZ=false;
     }
-    if(camPos.z>pic.width){
+    if(camPos.z<200){
         bZ=true;
     }
     
     if(CAM_MOVE){
         camera.setPosition(camPos.x, camPos.y, camPos.z);
-        	camera.lookAt(ofPoint(pic.width/2, pic.height/2, 0));
     }
     
-//    cout<<camPos<<endl;
 }
 
 //--------------------------------------------------------------
@@ -167,7 +128,7 @@ void testApp::draw(){
         light.enable();
 	
     material.begin();
-	ofSetColor(255);
+//	ofSetColor(255);
 //	ofRect(0, 0, ofGetWidth(), ofGetHeight());
 	
     for(int i=0; i<particles.size(); i++){
@@ -193,7 +154,6 @@ void testApp::draw(){
 
 void testApp::populatePixels(){
     //imagePixels = pic.getPixels();
-    particles.clear();
 	
 	int total = pic.width/tileW * pic.height/tileH;
 	

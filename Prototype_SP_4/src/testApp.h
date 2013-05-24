@@ -48,13 +48,9 @@ public:
     bool bX;
     
     ofLight light;
+        ofLight light2;
     ofMaterial material;
     
-    vector<string> images;
-    
-    bool bDirection;
-    
-    int imgCount;
  
     
 

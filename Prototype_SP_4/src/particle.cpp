@@ -60,9 +60,12 @@ void Particle::setup(ofPoint pixel, ofImage image, float imageWidth, float image
     bDirection=true;
     
     image.mirror(false,true);
-    ofEnableNormalizedTexCoords();
+//    ofEnableNormalizedTexCoords();
     face.allocate(imageW,imageH, GL_RGB,true);
     face=image.getTextureReference();
+    
+
+    
 
     
 //    cube.loadFromOfImages(image, image, image, image, image, image);
@@ -71,7 +74,7 @@ void Particle::setup(ofPoint pixel, ofImage image, float imageWidth, float image
 
 void Particle::update(){
     if(targetReached==false){
-//        percentage=.01;
+
         if(bDirection==true){
             pos=pos+(startvector*percentage*(pos.z/1000));
         }
@@ -80,25 +83,18 @@ void Particle::update(){
         }
     }
     
-//	pos.x = target.x + sin(t/2 + offset) * 4 * t;
-//	pos.y = target.y + cos(t/2 + offset * 2) * 5 * t;
-//	pos.z = target.z + powf(t, 1.75) * offset / 40;
 
-	
-	// Reached destination
-	// Takes a few seconds for this condition to become true after
-	// image appears complete
     
     if(bDirection==true){
-        if (pos.z<1) {
-            targetReached = true;
-            pos.x=pixelPos.x;
-            pos.y=pixelPos.y;
-            pos.z=0;
-        }
+	if (pos.z<1) {
+		targetReached = true;
+        pos.x=pixelPos.x;
+        pos.y=pixelPos.y;
+        pos.z=0;
+	}
     }
     else{
-        if(pos.z>800){
+        if(pos.z>target.z-1){
             targetReached = true;
             pos.x=target.x;
             pos.y=target.y;
@@ -111,27 +107,26 @@ void Particle::update(){
 
 void Particle::draw(){
 
-
+    face.bind();
 	ofPushMatrix();
 	ofTranslate(pos);
-//    ofRotateX(offset * t / 50 * RAD_TO_DEG);
-//    ofRotateY(offset * t / 40 * RAD_TO_DEG);
-//    ofRotateZ(offset * t / 30 * RAD_TO_DEG);
-//	image.draw(0, 0, tileW, tileH);
-        face.bind();
-    ofBox(0, 0, 0, tileW);
-        face.unbind();
-    
-    
-	ofPopMatrix();
 
+
+    ofBox(0, 0, 0, tileW);
+
+    
+//    vbo.draw(GL_QUADS,0,0);
+	ofPopMatrix();
+        face.unbind();
+
+	//ofCircle(pos, 2);
 }
 
 void Particle::flipTarget() {
 
         target.x=pixelPos.x;
         target.y=pixelPos.y;
-        target.z=ofRandom(800,1200);
+        target.z=ofRandom(500,1200);
         targetReached=false;
     if(bDirection==true){
         startvector=pos-target;
@@ -140,6 +135,6 @@ void Particle::flipTarget() {
         startvector=pixelPos-pos;
     }
     bDirection=!bDirection;
-    percentage=ofRandom(.1,.02);
+    percentage=ofRandom(.005,.02);
 	
 }
