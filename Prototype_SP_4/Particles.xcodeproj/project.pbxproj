@@ -67,21 +67,11 @@
 		BBAB23BE13894E4700AA2426 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../libs/glut/lib/osx/GLUT.framework; sourceTree = "<group>"; };
 		C98E1B47174EAF8000C4468F /* ofxDOF.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxDOF.cpp; sourceTree = "<group>"; };
 		C98E1B48174EAF8000C4468F /* ofxDOF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxDOF.h; sourceTree = "<group>"; };
+		D37BE7701749E1ED00EF2733 /* image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = image.png; sourceTree = "<group>"; };
 		D3B7D93F174B151C008999B3 /* particle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = particle.cpp; sourceTree = "<group>"; };
 		D3B7D940174B151C008999B3 /* particle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = particle.h; sourceTree = "<group>"; };
 		D3E58270174FA60F007BB91E /* skybox.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = skybox.frag; sourceTree = "<group>"; };
 		D3E58271174FA60F007BB91E /* skybox.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = skybox.vert; sourceTree = "<group>"; };
-		D3F2565B174FCEB200D35B1C /* 1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 1.jpg; sourceTree = "<group>"; };
-		D3F2565C174FCEB200D35B1C /* 2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 2.jpg; sourceTree = "<group>"; };
-		D3F2565D174FCEB200D35B1C /* 3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 3.jpg; sourceTree = "<group>"; };
-		D3F2565E174FCEB200D35B1C /* 4.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 4.jpg; sourceTree = "<group>"; };
-		D3F2565F174FCEB200D35B1C /* 5.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 5.jpg; sourceTree = "<group>"; };
-		D3F25660174FCEB200D35B1C /* chanel.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = chanel.jpg; sourceTree = "<group>"; };
-		D3F25661174FCEB200D35B1C /* derbty.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = derbty.jpg; sourceTree = "<group>"; };
-		D3F25662174FCEB200D35B1C /* derby2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = derby2.jpg; sourceTree = "<group>"; };
-		D3F25663174FCEB200D35B1C /* image.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = image.jpg; sourceTree = "<group>"; };
-		D3F25664174FCEB200D35B1C /* pngalpha.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pngalpha.png; sourceTree = "<group>"; };
-		D3F25665174FCEB200D35B1C /* pngnoalpha.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pngnoalpha.png; sourceTree = "<group>"; };
 		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
 		E45BE9710E8CC7DD009D7055 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
 		E45BE9720E8CC7DD009D7055 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = /System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<absolute>"; };
@@ -190,6 +180,15 @@
 			path = src;
 			sourceTree = "<group>";
 		};
+		D37BE76E1749DCAD00EF2733 /* images */ = {
+			isa = PBXGroup;
+			children = (
+				D37BE7701749E1ED00EF2733 /* image.png */,
+			);
+			name = images;
+			path = bin/data/images;
+			sourceTree = "<group>";
+		};
 		D3E5826F174FA60F007BB91E /* shaders */ = {
 			isa = PBXGroup;
 			children = (
@@ -198,25 +197,6 @@
 			);
 			name = shaders;
 			path = bin/data/shaders;
-			sourceTree = "<group>";
-		};
-		D3F2565A174FCEB200D35B1C /* images */ = {
-			isa = PBXGroup;
-			children = (
-				D3F2565B174FCEB200D35B1C /* 1.jpg */,
-				D3F2565C174FCEB200D35B1C /* 2.jpg */,
-				D3F2565D174FCEB200D35B1C /* 3.jpg */,
-				D3F2565E174FCEB200D35B1C /* 4.jpg */,
-				D3F2565F174FCEB200D35B1C /* 5.jpg */,
-				D3F25660174FCEB200D35B1C /* chanel.jpg */,
-				D3F25661174FCEB200D35B1C /* derbty.jpg */,
-				D3F25662174FCEB200D35B1C /* derby2.jpg */,
-				D3F25663174FCEB200D35B1C /* image.jpg */,
-				D3F25664174FCEB200D35B1C /* pngalpha.png */,
-				D3F25665174FCEB200D35B1C /* pngnoalpha.png */,
-			);
-			name = images;
-			path = bin/data/images;
 			sourceTree = "<group>";
 		};
 		E4328144138ABC890047C5CB /* Products */ = {
@@ -245,8 +225,8 @@
 				E4EEC9E9138DF44700A80321 /* openFrameworks */,
 				BB4B014C10F69532006C3DED /* addons */,
 				E45BE5980E8CC70C009D7055 /* frameworks */,
+				D37BE76E1749DCAD00EF2733 /* images */,
 				D3E5826F174FA60F007BB91E /* shaders */,
-				D3F2565A174FCEB200D35B1C /* images */,
 				E4B69B5B0A3A1756003C02F2 /* ParticlesDebug.app */,
 			);
 			sourceTree = "<group>";
