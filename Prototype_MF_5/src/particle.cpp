@@ -32,6 +32,8 @@ void Particle::setup(ofPoint pixel, ofImage image, float imageWidth, float image
 	
 	// for diversity in starting positions
 	offset = ofRandom(30, 50);
+//    timeOffset = ofRandom(0, 1);
+    timeOffset = 0;
 	
 	// Generate a random rotation type 0..2 which will determine
 	// different values for axes of rotation
@@ -42,7 +44,7 @@ void Particle::setup(ofPoint pixel, ofImage image, float imageWidth, float image
 void Particle::update(){
 //	float time = MIN(ofGetElapsedTimef(), PI*3/2);
 	float time = ofGetElapsedTimef();
-	float t = ofMap(sin(time), -1, 1, 0, 50);
+	float t = ofMap(sin(time+PI/4-timeOffset), -1, 1, 0, 50);
 //	float t = 0;
 	
 	pos.x = target.x + sin(t/2 + offset) * 4 * t;
@@ -67,7 +69,7 @@ void Particle::update(){
 void Particle::draw(){
 //	float time = MIN(ofGetElapsedTimef(), PI*3/2);
 	float time = ofGetElapsedTimef();
-	float t = ofMap(sin(time), -1, 1, 0, 25);
+	float t = ofMap(sin(time+PI/4-timeOffset), -1, 1, 0, 25);
 //	float t = 0;
 
 	float rotateX, rotateY, rotateZ;

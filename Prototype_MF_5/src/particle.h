@@ -36,6 +36,7 @@ public:
 	
 	float myIndex;
 	float offset;
+    float timeOffset;
 };
 
 

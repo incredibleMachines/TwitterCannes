@@ -29,7 +29,7 @@ void testApp::setup(){
 	if (USE_DOF) {
 		dof.setup(ofGetWidth(), ofGetHeight());
 		dof.setFocalDistance(347);
-		dof.setFocalRange(5);
+		dof.setFocalRange(15);
         dof.setBlurAmount(1);
 	}
 
