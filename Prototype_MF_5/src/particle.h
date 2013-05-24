@@ -32,6 +32,7 @@ public:
     void draw();
 	
 	bool targetReached;
+	int rotationType;
 	
 	float myIndex;
 	float offset;
