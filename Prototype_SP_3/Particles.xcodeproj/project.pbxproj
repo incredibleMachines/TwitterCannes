@@ -9,9 +9,6 @@
 /* Begin PBXBuildFile section */
 		BBAB23CB13894F3D00AA2426 /* GLUT.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
 		C98E1B4F174EAF8000C4468F /* ofxDOF.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C98E1B47174EAF8000C4468F /* ofxDOF.cpp */; };
-		D3B28A94174FA81C004163F3 /* CubeMap.frag in Sources */ = {isa = PBXBuildFile; fileRef = D3B28A8F174FA81C004163F3 /* CubeMap.frag */; };
-		D3B28A95174FA81C004163F3 /* CubeMap.vert in Sources */ = {isa = PBXBuildFile; fileRef = D3B28A90174FA81C004163F3 /* CubeMap.vert */; };
-		D3B28A96174FA81C004163F3 /* ofxCubeMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D3B28A92174FA81C004163F3 /* ofxCubeMap.cpp */; };
 		D3B7D941174B151C008999B3 /* particle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D3B7D93F174B151C008999B3 /* particle.cpp */; };
 		D3E58272174FA60F007BB91E /* skybox.frag in Sources */ = {isa = PBXBuildFile; fileRef = D3E58270174FA60F007BB91E /* skybox.frag */; };
 		D3E58273174FA60F007BB91E /* skybox.vert in Sources */ = {isa = PBXBuildFile; fileRef = D3E58271174FA60F007BB91E /* skybox.vert */; };
@@ -71,11 +68,6 @@
 		C98E1B47174EAF8000C4468F /* ofxDOF.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxDOF.cpp; sourceTree = "<group>"; };
 		C98E1B48174EAF8000C4468F /* ofxDOF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxDOF.h; sourceTree = "<group>"; };
 		D37BE7701749E1ED00EF2733 /* image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = image.png; sourceTree = "<group>"; };
-		D3B28A8D174FA81C004163F3 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
-		D3B28A8F174FA81C004163F3 /* CubeMap.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = CubeMap.frag; sourceTree = "<group>"; };
-		D3B28A90174FA81C004163F3 /* CubeMap.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = CubeMap.vert; sourceTree = "<group>"; };
-		D3B28A92174FA81C004163F3 /* ofxCubeMap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxCubeMap.cpp; sourceTree = "<group>"; };
-		D3B28A93174FA81C004163F3 /* ofxCubeMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxCubeMap.h; sourceTree = "<group>"; };
 		D3B7D93F174B151C008999B3 /* particle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = particle.cpp; sourceTree = "<group>"; };
 		D3B7D940174B151C008999B3 /* particle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = particle.h; sourceTree = "<group>"; };
 		D3E58270174FA60F007BB91E /* skybox.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = skybox.frag; sourceTree = "<group>"; };
@@ -136,7 +128,6 @@
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
-				D3B28A8C174FA81C004163F3 /* ofxCubeMap */,
 				C98E1B30174EAF8000C4468F /* ofxDOF */,
 			);
 			name = addons;
@@ -196,34 +187,6 @@
 			);
 			name = images;
 			path = bin/data/images;
-			sourceTree = "<group>";
-		};
-		D3B28A8C174FA81C004163F3 /* ofxCubeMap */ = {
-			isa = PBXGroup;
-			children = (
-				D3B28A8D174FA81C004163F3 /* README.md */,
-				D3B28A8E174FA81C004163F3 /* shaders */,
-				D3B28A91174FA81C004163F3 /* src */,
-			);
-			path = ofxCubeMap;
-			sourceTree = "<group>";
-		};
-		D3B28A8E174FA81C004163F3 /* shaders */ = {
-			isa = PBXGroup;
-			children = (
-				D3B28A8F174FA81C004163F3 /* CubeMap.frag */,
-				D3B28A90174FA81C004163F3 /* CubeMap.vert */,
-			);
-			path = shaders;
-			sourceTree = "<group>";
-		};
-		D3B28A91174FA81C004163F3 /* src */ = {
-			isa = PBXGroup;
-			children = (
-				D3B28A92174FA81C004163F3 /* ofxCubeMap.cpp */,
-				D3B28A93174FA81C004163F3 /* ofxCubeMap.h */,
-			);
-			path = src;
 			sourceTree = "<group>";
 		};
 		D3E5826F174FA60F007BB91E /* shaders */ = {
@@ -379,9 +342,6 @@
 				C98E1B4F174EAF8000C4468F /* ofxDOF.cpp in Sources */,
 				D3E58272174FA60F007BB91E /* skybox.frag in Sources */,
 				D3E58273174FA60F007BB91E /* skybox.vert in Sources */,
-				D3B28A94174FA81C004163F3 /* CubeMap.frag in Sources */,
-				D3B28A95174FA81C004163F3 /* CubeMap.vert in Sources */,
-				D3B28A96174FA81C004163F3 /* ofxCubeMap.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
