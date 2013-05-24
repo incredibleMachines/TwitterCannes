@@ -32,8 +32,8 @@ void Particle::setup(ofPoint pixel, ofImage image, float imageWidth, float image
 	
 	// for diversity in starting positions
 	offset = ofRandom(30, 50);
-//    timeOffset = ofRandom(0, 1);
-    timeOffset = 0;
+    timeOffset = ofRandom(0, 1);
+//    timeOffset = 0;
 	
 	// Generate a random rotation type 0..2 which will determine
 	// different values for axes of rotation

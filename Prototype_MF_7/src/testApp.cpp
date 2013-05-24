@@ -61,6 +61,7 @@ void testApp::update(){
     }
 	
 	if (flipTarget) {
+        cout << "Flipping" << endl;
 		for(int i=0; i<particles.size(); i++){
 			particles[i].flipTarget();
 		}

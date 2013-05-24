@@ -1,23 +1,19 @@
 #include "testApp.h"
 
-#define tileW 20
-#define tileH 20
-
-#define USE_DOF true
+#define tileW 12
+#define tileH 12
 
 //--------------------------------------------------------------
 void testApp::setup(){
     ofSetVerticalSync(true);
 	ofSetFrameRate(60);
 	//ofEnableSmoothing();
-	ofSetRectMode(OF_RECTMODE_CENTER);
     
 	//ofSetCircleResolution(10);
     
     pic.loadImage("image.jpg");
     pic.setImageType(OF_IMAGE_COLOR);
 	pic.resize(pic.width/2, pic.height/2);
-	pic.mirror(true, true);
     
     populatePixels();
     //createParticles();
@@ -25,26 +21,7 @@ void testApp::setup(){
 	ofBackground(255);
 	ofSetColor(255);
 	
-	
-	if (USE_DOF) {
-		dof.setup(ofGetWidth(), ofGetHeight());
-		dof.setFocalDistance(347);
-		dof.setFocalRange(15);
-        dof.setBlurAmount(1);
-	}
-
-//
-//	camera.setDistance(1000);
-//	camera.setFov(100);
-	
-
-
-//	camera.rotateAround(90, ofPoint(0, 0, 1), camera.getPosition());
-//	camera.roll(30);
-
-	camera.setDistance(100);
-	camera.setPosition(ofGetWidth()/2, ofGetHeight()/2, 1000);
-	camera.lookAt(ofPoint(ofGetWidth()/2, ofGetHeight()/2, 10));
+//	ofSetRectMode(OF_RECTMODE_CENTER);
     
 }
 
@@ -69,34 +46,9 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
-	if (USE_DOF) {
-		dof.begin();
-		camera.begin(dof.getDimensions());
-	} else {
-		camera.begin();
-	}
-
-	
-	
-	ofSetColor(255);
-//	ofRect(0, 0, ofGetWidth(), ofGetHeight());
-	
     for(int i=0; i<particles.size(); i++){
         particles[i].draw();
     }
-	
-	camera.end();
-	if (USE_DOF) {
-		dof.end();
-        ofPushMatrix();
-		
-        ofTranslate(ofGetWidth()/2,ofGetHeight()/2);
-        ofRotate(180);
-        dof.getFbo().draw(0,0,ofGetWidth(),ofGetHeight());
-
-        ofPopMatrix();
-	}
-	
 	
 }
 
@@ -118,7 +70,7 @@ void testApp::populatePixels(){
 			tileImage.cropFrom(pic, x*tileW, y*tileH, tileW, tileH);
 			
 			Particle p;
-            p.setup(ofPoint(x*tileW, y*tileH), tileImage, pic.width, pic.height, counter, total);
+            p.setup(ofPoint(x*tileW, y*tileH), tileImage, pic.width, pic.height, counter+x*y, total);
 			particles.push_back(p);
 		}
 	}
@@ -130,18 +82,4 @@ void testApp::createParticles(){
 //        newParticle.setup(pixels[i].pos, pixels[i].r, pixels[i].g, pixels[i].b, pic.getPixels(), pic.width, pic.height);
 //        particles.push_back(newParticle);
 //    }
-}
-
-void testApp::mouseMoved(int x, int y) {
-
-//	dof.setFocalRange(ofMap(x, 0, ofGetWidth(), -1000, 1000));
-//	cout << dof.getFocalRange() << endl;
-	
-}
-
-void testApp::mouseDragged(int x, int y, int button) {
-	printf("Position: %f, %f, %f\n", camera.getX(), camera.getY(), camera.getZ());
-	printf("Target: %f, %f, %f\n", camera.getTarget().getX(), camera.getTarget().getY(), camera.getTarget().getZ());
-	printf("Roll: %f\n", camera.getRoll());
-	printf("Distance: %f\n", camera.getDistance());
 }

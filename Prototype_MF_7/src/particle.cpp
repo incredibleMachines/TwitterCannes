@@ -32,8 +32,7 @@ void Particle::setup(ofPoint pixel, ofImage image, float imageWidth, float image
 	
 	// for diversity in starting positions
 	offset = ofRandom(30, 50);
-//    timeOffset = ofRandom(0, 1);
-    timeOffset = 0;
+    timeOffset = ofRandom(0, 1);
 	
 	// Generate a random rotation type 0..2 which will determine
 	// different values for axes of rotation
@@ -42,31 +41,41 @@ void Particle::setup(ofPoint pixel, ofImage image, float imageWidth, float image
 }
 
 void Particle::update(){
-//	float time = MIN(ofGetElapsedTimef(), PI*3/2);
-	float time = ofGetElapsedTimef();
-	float t = ofMap(sin(time+PI/4-timeOffset), -1, 1, 0, 50);
-//	float t = 0;
-	
-	pos.x = target.x + sin(t/2 + offset) * 4 * t;
-	pos.y = target.y + cos(t/2 + offset * 2) * 5 * t;
-	pos.z = target.z + powf(t, 1.75) * offset / 40;
+    
+    if (myIndex == 1) {
+        cout << targetReached << endl;
+    }
+    
+    if (!targetReached) {
+    
+    //	float time = MIN(ofGetElapsedTimef(), PI*3/2);
+        float time = ofGetElapsedTimef();
+        float t = ofMap(sin(time+PI/4-timeOffset), -1, 1, 0, 50);
+    //	float t = 0;
+        
+        pos.x = target.x + sin(t/2 + offset) * 4 * t;
+        pos.y = target.y + cos(t/2 + offset * 2) * 5 * t;
+        pos.z = target.z + powf(t, 1.75) * offset / 40;
 
-	
-	// Reached destination
-	// Takes a few seconds for this condition to become true after
-	// image appears complete
-	
-	float xDiff = abs(pos.x - target.x);
-	float yDiff = abs(pos.y - target.y);
-	
-	if (xDiff < 0.01 && yDiff < 0.01) {
-		targetReached = true;
-	}
-	
-	prevPos = pos;
+        
+        // Reached destination
+        // Takes a few seconds for this condition to become true after
+        // image appears complete
+        
+        float xDiff = abs(pos.x - target.x);
+        float yDiff = abs(pos.y - target.y);
+        
+        if (xDiff < 0.01 && yDiff < 0.01) {
+            targetReached = true;
+        }
+        
+        prevPos = pos;
+        
+    }
 }
 
 void Particle::draw(){
+    
 //	float time = MIN(ofGetElapsedTimef(), PI*3/2);
 	float time = ofGetElapsedTimef();
 	float t = ofMap(sin(time+PI/4-timeOffset), -1, 1, 0, 25);
@@ -135,7 +144,5 @@ void Particle::draw(){
 }
 
 void Particle::flipTarget() {
-
-
 	
 }

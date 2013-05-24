@@ -13,6 +13,8 @@ public:
     ofPoint pos;
     ofPoint pixelPos;
 	ofPoint prevPos;
+    
+    ofColor c;
 
     ofPoint start;
 	ofPoint target;
