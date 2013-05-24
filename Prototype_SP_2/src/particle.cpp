@@ -35,7 +35,6 @@ void Particle::setup(ofPoint pixel, ofImage image, float imageWidth, float image
         start.z=1000;
     }
     
-    
 	this->image = image;
 	imageW = imageWidth;
 	imageH = imageHeight;
@@ -56,14 +55,21 @@ void Particle::setup(ofPoint pixel, ofImage image, float imageWidth, float image
     percentage=1;
 	
 	offset = ofRandom(30, 50);
-    percentage=ofRandom(.01,.1);
+    percentage=ofRandom(.02,.1);
+    
+    bDirection=true;
 	
 }
 
 void Particle::update(){
     if(targetReached==false){
 //        percentage=.01;
-        pos=pos+(startvector*percentage*(pos.z/1000));
+        if(bDirection==true){
+            pos=pos+(startvector*percentage*(pos.z/1000));
+        }
+        else{
+            pos=pos+(startvector*percentage*(pos.z/1000));
+        }
     }
     
 //	pos.x = target.x + sin(t/2 + offset) * 4 * t;
@@ -74,22 +80,28 @@ void Particle::update(){
 	// Reached destination
 	// Takes a few seconds for this condition to become true after
 	// image appears complete
-	
-	float xDiff = abs(pos.x - target.x);
-	float yDiff = abs(pos.y - target.y);
-	
+    
+    if(bDirection==true){
 	if (pos.z<1) {
 		targetReached = true;
         pos.x=pixelPos.x;
         pos.y=pixelPos.y;
         pos.z=0;
 	}
+    }
+    else{
+        if(pos.z>999){
+            targetReached = true;
+            pos.x=pixelPos.x;
+            pos.y=pixelPos.y;
+            pos.z=1000;
+        }
+    }
 	
 	prevPos = pos;
 }
 
 void Particle::draw(){
-	float t = ofMap(sin(ofGetElapsedTimef()), -1, 1, 0, 25);
 
 	ofPushMatrix();
 	ofTranslate(pos);
@@ -102,7 +114,31 @@ void Particle::draw(){
 }
 
 void Particle::flipTarget() {
-
+    int startR=ofRandom(0,100);
+    if (startR<25){
+        target.x=ofRandom(0,ofGetWidth());
+        target.y=-10;
+        target.z=1000;
+    }
+    else if (startR<50){
+        target.x=ofRandom(0,ofGetWidth());
+        target.y=ofGetHeight()+10;
+        target.z=1000;
+    }
+    else if(startR<75){
+        target.x=-10;
+        target.y=ofRandom(0,ofGetHeight());
+        target.z=1000;
+    }
+    else{
+        target.x=ofGetWidth()+10;
+        target.y=ofRandom(0,ofGetHeight());
+        target.z=1000;
+    }
+    targetReached=false;
+    startvector=target-pixelPos;
+    bDirection=false;
+    percentage=ofRandom(.02,.1);
 
 	
 }

@@ -28,8 +28,8 @@ void testApp::setup(){
 	
 	if (USE_DOF) {
 		dof.setup(ofGetWidth(), ofGetHeight());
-		dof.setFocalDistance(348);
-		dof.setFocalRange(3);
+		dof.setFocalDistance(320);
+		dof.setFocalRange(200);
         dof.setBlurAmount(1);
 	}
 
@@ -43,7 +43,7 @@ void testApp::setup(){
 //	camera.roll(30);
 
 	camera.setDistance(100);
-	camera.setPosition(ofGetWidth()/2, ofGetHeight()/2, 1000);
+	camera.setPosition(200, ofGetHeight()/2, 1000);
 	camera.lookAt(ofPoint(ofGetWidth()/2, ofGetHeight()/2, 10));
     
 }
@@ -54,6 +54,9 @@ void testApp::update(){
 	
     for(int i=0; i<particles.size(); i++){
         particles[i].update();
+        if(i==0){
+            cout<<particles[i].targetReached<<endl;
+        }
 		
 		if (!particles[i].targetReached) {
 			flipTarget = false;

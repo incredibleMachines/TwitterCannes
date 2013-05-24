@@ -23,7 +23,7 @@ public:
 
     float percentage;
 	float percentageAdder;
-	bool direction;
+	bool bDirection;
     
 	void setup(ofPoint pixel, ofImage image, float imageWidth, float imageHeight);
 	void flipTarget();
@@ -39,6 +39,7 @@ public:
     ofPoint end;
     ofPoint startvector;
     ofPoint endvector;
+    
     
 };
 
