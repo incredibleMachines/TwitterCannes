@@ -27,6 +27,7 @@ void testApp::setup(){
 
 //--------------------------------------------------------------
 void testApp::update(){
+    float percentReached = 0;
 	bool flipTarget = true;
 	
     for(int i=0; i<particles.size(); i++){
@@ -34,10 +35,14 @@ void testApp::update(){
 		
 		if (!particles[i].targetReached) {
 			flipTarget = false;
-		}
+		} else {
+            percentReached++;
+        }
     }
+    percentReached /= particles.size();
 	
-	if (flipTarget) {
+//	if (flipTarget) {
+    if (percentReached >= 0.8) {
 		for(int i=0; i<particles.size(); i++){
 			particles[i].flipTarget();
 		}

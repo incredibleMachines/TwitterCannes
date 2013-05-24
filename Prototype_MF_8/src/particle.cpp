@@ -54,7 +54,7 @@ void Particle::setup(ofPoint pixel, ofImage image, float imageWidth, float image
 void Particle::update(){
 	
 //	float pct = 0.02;
-	float pct = ofMap(myIndex, 1, 0, 0.04, 0.08);
+	float pct = ofMap(myIndex, 1, 0, 0.043, 0.08);
 	
 	pos.x = pos.x * (1-pct) + pct * target.x;
 	pos.y = pos.y * (1-pct) + pct * target.y;
@@ -105,8 +105,8 @@ void Particle::flipTarget() {
 //		target.y = ofRandom(1) < 0.5 ? 0 : ofGetHeight();
 
 	if (target.x != start.x && target.y != start.y ) {
-		target.x = start.x;
-		target.y = start.y;
+		target.x = ofRandom(-200, -400);
+		target.y = -100;
 //		target.y = ofRandom(0, ofGetHeight()/8);
 		target.z = start.z;
 	} else {
