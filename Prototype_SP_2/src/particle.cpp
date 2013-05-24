@@ -12,7 +12,8 @@
 #define tileH 20
 
 void Particle::setup(ofPoint pixel, ofImage image, float imageWidth, float imageHeight) {
-
+    
+    
     int startR=ofRandom(0,100);
     if (startR<25){
         start.x=ofRandom(0,ofGetWidth());
@@ -45,17 +46,12 @@ void Particle::setup(ofPoint pixel, ofImage image, float imageWidth, float image
     pos.y=start.y;
     pos.z=start.z;
 	
-	target.x = pixelPos.x;
-	target.y = pixelPos.y;
-	target.z = 0;
-	
 	targetReached = false;
     
     startvector=pixelPos-start;
-    percentage=1;
 	
 	offset = ofRandom(30, 50);
-    percentage=ofRandom(.02,.1);
+    percentage=ofRandom(.009,.03);
     
     bDirection=true;
 	
@@ -68,7 +64,7 @@ void Particle::update(){
             pos=pos+(startvector*percentage*(pos.z/1000));
         }
         else{
-            pos=pos+(startvector*percentage*(pos.z/1000));
+            pos=pos+(startvector*percentage*((pos.z-target.z)/1000));
         }
     }
     
@@ -92,8 +88,8 @@ void Particle::update(){
     else{
         if(pos.z>999){
             targetReached = true;
-            pos.x=pixelPos.x;
-            pos.y=pixelPos.y;
+            pos.x=target.x;
+            pos.y=target.y;
             pos.z=1000;
         }
     }
@@ -114,31 +110,18 @@ void Particle::draw(){
 }
 
 void Particle::flipTarget() {
-    int startR=ofRandom(0,100);
-    if (startR<25){
+
         target.x=ofRandom(0,ofGetWidth());
-        target.y=-10;
-        target.z=1000;
-    }
-    else if (startR<50){
-        target.x=ofRandom(0,ofGetWidth());
-        target.y=ofGetHeight()+10;
-        target.z=1000;
-    }
-    else if(startR<75){
-        target.x=-10;
         target.y=ofRandom(0,ofGetHeight());
         target.z=1000;
+        targetReached=false;
+    if(bDirection==true){
+        startvector=pos-target;
     }
     else{
-        target.x=ofGetWidth()+10;
-        target.y=ofRandom(0,ofGetHeight());
-        target.z=1000;
+        startvector=pixelPos-pos;
     }
-    targetReached=false;
-    startvector=target-pixelPos;
-    bDirection=false;
-    percentage=ofRandom(.02,.1);
-
+    bDirection=!bDirection;
+    percentage=ofRandom(.005,.02);
 	
 }

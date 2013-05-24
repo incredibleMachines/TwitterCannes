@@ -39,8 +39,8 @@ public:
     ofPoint end;
     ofPoint startvector;
     ofPoint endvector;
-    
-    
+
+
 };
 
 

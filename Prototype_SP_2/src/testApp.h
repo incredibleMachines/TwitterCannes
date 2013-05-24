@@ -41,6 +41,12 @@ public:
 	
 	ofEasyCam camera;
 	ofxDOF dof;
+    
+    ofVec3f camPos;
+    
+    bool bZ;
+    bool bX;
+    
 
 };
 

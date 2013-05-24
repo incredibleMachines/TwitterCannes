@@ -7,6 +7,8 @@
 
 //--------------------------------------------------------------
 void testApp::setup(){
+    
+    bool bZ=true;
     ofSetVerticalSync(true);
 	ofSetFrameRate(60);
 	//ofEnableSmoothing();
@@ -41,33 +43,73 @@ void testApp::setup(){
 
 //	camera.rotateAround(90, ofPoint(0, 0, 1), camera.getPosition());
 //	camera.roll(30);
-
+    
+    camera.disableMouseInput();
+    camPos.x=300;
+    camPos.y=ofGetHeight()/2;
+    camPos.z=1000;
+    
 	camera.setDistance(100);
-	camera.setPosition(200, ofGetHeight()/2, 1000);
-	camera.lookAt(ofPoint(ofGetWidth()/2, ofGetHeight()/2, 10));
+	camera.setPosition(camPos.x, camPos.y, camPos.z);
+	camera.lookAt(ofPoint(ofGetWidth()/2, ofGetHeight()/2, 0));
+    
+    bZ=true;
+    bX=false;
     
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
-	bool flipTarget = true;
+    int count=0;
 	
     for(int i=0; i<particles.size(); i++){
         particles[i].update();
+
         if(i==0){
             cout<<particles[i].targetReached<<endl;
         }
 		
 		if (!particles[i].targetReached) {
-			flipTarget = false;
+			        count++;
 		}
     }
 	
-	if (flipTarget) {
+	if (count<200) {
 		for(int i=0; i<particles.size(); i++){
 			particles[i].flipTarget();
 		}
 	}
+
+    if(bZ==true){
+        camPos.z+=.7;
+    }
+    else{
+        camPos.z-=.7;
+    }
+    if(bX==true){
+        camPos.x-=1;
+    }
+    else{
+        camPos.x+=1;
+    }
+    if(camPos.x>200){
+        bX=true;
+        bZ=!bZ;
+    }
+    else if(camPos.x<-300){
+        bX=false;
+        bZ=!bZ;
+    }
+    if(camPos.z>1000){
+        bZ=false;
+    }
+    if(camPos.z<200){
+        bZ=true;
+    }
+	camera.setPosition(camPos.x, camPos.y, camPos.z);
+    
+    cout<<camPos<<endl;
+//	camera.lookAt(ofPoint(ofGetWidth()/2,ofGetHeight()/2,0));
 }
 
 //--------------------------------------------------------------
