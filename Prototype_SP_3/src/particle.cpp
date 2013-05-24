@@ -12,7 +12,7 @@
 #define tileH 20
 
 void Particle::setup(ofPoint pixel, ofImage image, float imageWidth, float imageHeight) {
-    
+    	glEnable(GL_DEPTH_TEST);
     
 //    int startR=ofRandom(0,100);
 //    if (startR<25){
@@ -59,15 +59,13 @@ void Particle::setup(ofPoint pixel, ofImage image, float imageWidth, float image
     
     bDirection=true;
     
-    image.mirror(true,false);
-    
-    cube.loadFromOfImages(image, image, image, image, image, image);
+    image.mirror(false,true);
+    ofEnableNormalizedTexCoords();
+    face.allocate(imageW,imageH, GL_RGB,true);
+    face=image.getTextureReference();
 
-//    mesh.addVertex(ofPoint(-20,0,20));
-//    mesh.addVertex(ofPoint(20,0,20));
-//    mesh.addVertex(ofPoint(20,0,-20));
-//    mesh.addVertex(ofPoint(-20,0,-20));
-//    vbo.setMesh(mesh,GL_STATIC_DRAW);
+    
+//    cube.loadFromOfImages(image, image, image, image, image, image);
 
 }
 
@@ -113,26 +111,32 @@ void Particle::update(){
 
 void Particle::draw(){
 
+
 	ofPushMatrix();
 	ofTranslate(pos);
 //    ofRotateX(offset * t / 50 * RAD_TO_DEG);
 //    ofRotateY(offset * t / 40 * RAD_TO_DEG);
 //    ofRotateZ(offset * t / 30 * RAD_TO_DEG);
 //	image.draw(0, 0, tileW, tileH);
+        face.bind();
+    ofBox(0, 0, 0, tileW);
+        face.unbind();
     
-    cube.bind();
     
-//    cubeMapShader.begin();
-//    cubeMapShader.setUniform1i("EnvMap", 0);
-    
-    cube.drawSkybox( tileW );
-    
-//    cubeMapShader.end();
-    
-	cube.unbind();
+//    cube.bind();
+//    
+////    cubeMapShader.begin();
+////    cubeMapShader.setUniform1i("EnvMap", 0);
+//    
+//    cube.drawSkybox( tileW );
+//    
+////    cubeMapShader.end();
+////    
+//	cube.unbind();
     
 //    vbo.draw(GL_QUADS,0,0);
 	ofPopMatrix();
+
 	//ofCircle(pos, 2);
 }
 

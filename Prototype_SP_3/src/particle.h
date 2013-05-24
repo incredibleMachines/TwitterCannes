@@ -7,7 +7,6 @@
 //
 
 #include "ofMain.h"
-#include "ofxCubeMap.h"
 
 class Particle{
 public:
@@ -40,12 +39,8 @@ public:
     ofPoint end;
     ofPoint startvector;
     ofPoint endvector;
-    
-    ofVbo vbo;
-    ofMesh mesh;
-    
-    ofxCubeMap cube;
-    ofShader cubeMapShader;
+
+    ofTexture face;
 
 
 

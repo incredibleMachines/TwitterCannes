@@ -8,7 +8,7 @@
 
 //--------------------------------------------------------------
 void testApp::setup(){
-    ofEnableBlendMode(OF_BLENDMODE_ALPHA);
+    	glEnable(GL_DEPTH_TEST);
     
     bool bZ=true;
     ofSetVerticalSync(true);
@@ -60,14 +60,16 @@ void testApp::setup(){
     bZ=true;
     bX=false;
     
-    light.setDiffuseColor(ofColor(255,100,100));
-    light.setSpecularColor(ofColor(255,200,150));
+    light.setDiffuseColor(ofColor(255,255,255));
+    light.setSpecularColor(ofColor(255,255,255));
     light.setPointLight();
-    light.setPosition(pic.width/2, -pic.height/2, 1600);
+    light.setPosition(0, -pic.height/2, 500);
     
-    material.setShininess(128);
+    material.setShininess(100);
     material.setSpecularColor(ofColor(255,255,100));
 //    material.setEmissiveColor(ofColor(255,0,0,30));
+    
+    ofDisableArbTex();
     
 }
 
@@ -116,7 +118,7 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
-    ofEnableLighting();
+   ofEnableLighting();
     
 	if (USE_DOF) {
 		dof.begin();
@@ -135,9 +137,10 @@ void testApp::draw(){
         particles[i].draw();
     }
     
-    material.end();
+   material.end();
 	
 	camera.end();
+    ofDisableLighting();
 	if (USE_DOF) {
 		dof.end();
         ofFbo temp=dof.getFbo();
