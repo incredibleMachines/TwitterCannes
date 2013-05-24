@@ -35,7 +35,7 @@ void Particle::setup(ofPoint pixel, ofImage image, float imageWidth, float image
 	
 	// Generate a random rotation type 0..2 which will determine
 	// different values for axes of rotation
-	rotationType = ofRandom(3);
+	rotationType = ofRandom(8);
 	
 }
 
@@ -80,14 +80,44 @@ void Particle::draw(){
 			break;
 			
 		case 1:
-			rotateX = offset * t / 50 * RAD_TO_DEG;
-			rotateY = offset * t / 40 * RAD_TO_DEG * -1;
+			rotateX = offset * t / 50 * RAD_TO_DEG * -1;
+			rotateY = offset * t / 40 * RAD_TO_DEG;
 			rotateZ = offset * t / 30 * RAD_TO_DEG;
 			break;
 			
 		case 2:
 			rotateX = offset * t / 50 * RAD_TO_DEG;
+			rotateY = offset * t / 40 * RAD_TO_DEG * -1;
+			rotateZ = offset * t / 30 * RAD_TO_DEG;
+			break;
+			
+		case 3:
+			rotateX = offset * t / 50 * RAD_TO_DEG * -1;
+			rotateY = offset * t / 40 * RAD_TO_DEG * -1;
+			rotateZ = offset * t / 30 * RAD_TO_DEG;
+			break;
+			
+		case 4:
+			rotateX = offset * t / 50 * RAD_TO_DEG;
 			rotateY = offset * t / 40 * RAD_TO_DEG;
+			rotateZ = offset * t / 30 * RAD_TO_DEG * -1;
+			break;
+			
+		case 5:
+			rotateX = offset * t / 50 * RAD_TO_DEG * -1;
+			rotateY = offset * t / 40 * RAD_TO_DEG;
+			rotateZ = offset * t / 30 * RAD_TO_DEG * -1;
+			break;
+			
+		case 6:
+			rotateX = offset * t / 50 * RAD_TO_DEG;
+			rotateY = offset * t / 40 * RAD_TO_DEG * -1;
+			rotateZ = offset * t / 30 * RAD_TO_DEG * -1;
+			break;
+			
+		case 7:
+			rotateX = offset * t / 50 * RAD_TO_DEG * -1;
+			rotateY = offset * t / 40 * RAD_TO_DEG * -1;
 			rotateZ = offset * t / 30 * RAD_TO_DEG * -1;
 			break;
 	}
