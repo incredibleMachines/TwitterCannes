@@ -14,27 +14,31 @@
 void Particle::setup(ofPoint pixel, ofImage image, float imageWidth, float imageHeight) {
     
     
-    int startR=ofRandom(0,100);
-    if (startR<25){
-        start.x=ofRandom(0,ofGetWidth());
-        start.y=-10;
-        start.z=1000;
-    }
-    else if (startR<50){
-        start.x=ofRandom(0,ofGetWidth());
-        start.y=ofGetHeight()+10;
-        start.z=1000;
-    }
-    else if(startR<75){
-        start.x=-10;
-        start.y=ofRandom(0,ofGetHeight());
-        start.z=1000;
-    }
-    else{
-        start.x=ofGetWidth()+10;
-        start.y=ofRandom(0,ofGetHeight());
-        start.z=1000;
-    }
+//    int startR=ofRandom(0,100);
+//    if (startR<25){
+//        start.x=ofRandom(0,ofGetWidth());
+//        start.y=-10;
+//        start.z=1000;
+//    }
+//    else if (startR<50){
+//        start.x=ofRandom(0,ofGetWidth());
+//        start.y=ofGetHeight()+10;
+//        start.z=1000;
+//    }
+//    else if(startR<75){
+//        start.x=-10;
+//        start.y=ofRandom(0,ofGetHeight());
+//        start.z=1000;
+//    }
+//    else{
+//        start.x=ofGetWidth()+10;
+//        start.y=ofRandom(0,ofGetHeight());
+//        start.z=1000;
+//    }
+    
+    start.x=pixel.x;
+    start.y=pixel.y;
+    start.z=ofRandom(1000,1500);
     
 	this->image = image;
 	imageW = imageWidth;
@@ -51,10 +55,14 @@ void Particle::setup(ofPoint pixel, ofImage image, float imageWidth, float image
     startvector=pixelPos-start;
 	
 	offset = ofRandom(30, 50);
-    percentage=ofRandom(.009,.03);
+    percentage=ofRandom(.005,.02);
     
     bDirection=true;
-	
+    
+    image.mirror(true,false);
+    
+    cube.loadFromOfImages(image, image, image, image, image, image);
+
 //    mesh.addVertex(ofPoint(-20,0,20));
 //    mesh.addVertex(ofPoint(20,0,20));
 //    mesh.addVertex(ofPoint(20,0,-20));
@@ -92,11 +100,11 @@ void Particle::update(){
 	}
     }
     else{
-        if(pos.z>999){
+        if(pos.z>target.z-1){
             targetReached = true;
             pos.x=target.x;
             pos.y=target.y;
-            pos.z=1000;
+            pos.z=target.z;
         }
     }
 	
@@ -110,7 +118,19 @@ void Particle::draw(){
 //    ofRotateX(offset * t / 50 * RAD_TO_DEG);
 //    ofRotateY(offset * t / 40 * RAD_TO_DEG);
 //    ofRotateZ(offset * t / 30 * RAD_TO_DEG);
-	image.draw(0, 0, tileW, tileH);
+//	image.draw(0, 0, tileW, tileH);
+    
+    cube.bind();
+    
+//    cubeMapShader.begin();
+//    cubeMapShader.setUniform1i("EnvMap", 0);
+    
+    cube.drawSkybox( tileW );
+    
+//    cubeMapShader.end();
+    
+	cube.unbind();
+    
 //    vbo.draw(GL_QUADS,0,0);
 	ofPopMatrix();
 	//ofCircle(pos, 2);
@@ -118,9 +138,9 @@ void Particle::draw(){
 
 void Particle::flipTarget() {
 
-        target.x=ofRandom(0,ofGetWidth());
-        target.y=ofRandom(0,ofGetHeight());
-        target.z=1000;
+        target.x=pixelPos.x;
+        target.y=pixelPos.y;
+        target.z=ofRandom(500,1200);
         targetReached=false;
     if(bDirection==true){
         startvector=pos-target;

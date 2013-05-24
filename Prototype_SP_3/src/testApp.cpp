@@ -4,15 +4,19 @@
 #define tileH 20
 
 #define USE_DOF true
+#define CAM_MOVE false
 
 //--------------------------------------------------------------
 void testApp::setup(){
+    ofEnableBlendMode(OF_BLENDMODE_ALPHA);
     
     bool bZ=true;
     ofSetVerticalSync(true);
 	ofSetFrameRate(60);
 	//ofEnableSmoothing();
 	ofSetRectMode(OF_RECTMODE_CENTER);
+    
+        ofSetSmoothLighting(true);
     
 	//ofSetCircleResolution(10);
     
@@ -30,8 +34,8 @@ void testApp::setup(){
 	
 	if (USE_DOF) {
 		dof.setup(ofGetWidth(), ofGetHeight());
-		dof.setFocalDistance(320);
-		dof.setFocalRange(200);
+		dof.setFocalDistance(175);
+		dof.setFocalRange(100);
         dof.setBlurAmount(1);
 	}
 
@@ -45,9 +49,9 @@ void testApp::setup(){
 //	camera.roll(30);
     
     camera.disableMouseInput();
-    camPos.x=pic.width/2;
-    camPos.y=pic.height/2;
-    camPos.z=1000;
+    camPos.x=pic.width/2+200;
+    camPos.y=pic.height/2+75;
+    camPos.z=500;
     
 //	camera.setDistance(100);
 	camera.setPosition(camPos.x, camPos.y, camPos.z);
@@ -56,9 +60,14 @@ void testApp::setup(){
     bZ=true;
     bX=false;
     
-    light.enable();
-    light.setDirectional();
-    light.setPosition(0,0,150);
+    light.setDiffuseColor(ofColor(255,100,100));
+    light.setSpecularColor(ofColor(255,200,150));
+    light.setPointLight();
+    light.setPosition(pic.width/2, -pic.height/2, 1600);
+    
+    material.setShininess(128);
+    material.setSpecularColor(ofColor(255,255,100));
+//    material.setEmissiveColor(ofColor(255,0,0,30));
     
 }
 
@@ -81,49 +90,34 @@ void testApp::update(){
 	if (count<100) {
 		for(int i=0; i<particles.size(); i++){
 			particles[i].flipTarget();
-            
-            
-                bZ=!bZ;
-
 		}
 	}
-    
-    if(bX==true){
-        rotate+=.01;
-    }
-    else{
-        rotate-=.01;
-    }
-
 
     if(bZ==true){
-        camPos.z+=.4;
+        camPos.z+=.7;
     }
     else{
-        camPos.z-=.4;
+        camPos.z-=.7;
     }
 
-//    if(camPos.z>999){
-//        bZ=false;
-//    }
-//    if(camPos.z<200){
-//        bZ=true;
-//    }
-    
-    if(rotate<-60){
-        bX=true;
+    if(camPos.z>1000){
+        bZ=false;
     }
-    else if(rotate>60){
-        bX=false;
+    if(camPos.z<200){
+        bZ=true;
     }
     
-	camera.setPosition(camPos.x, camPos.y, camPos.z);
+    if(CAM_MOVE){
+        camera.setPosition(camPos.x, camPos.y, camPos.z);
+    }
     
     cout<<camPos<<endl;
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
+    ofEnableLighting();
+    
 	if (USE_DOF) {
 		dof.begin();
 		camera.begin(dof.getDimensions());
@@ -131,14 +125,17 @@ void testApp::draw(){
 		camera.begin();
 	}
 
+        light.enable();
 	
-	
+    material.begin();
 	ofSetColor(255);
 //	ofRect(0, 0, ofGetWidth(), ofGetHeight());
 	
     for(int i=0; i<particles.size(); i++){
         particles[i].draw();
     }
+    
+    material.end();
 	
 	camera.end();
 	if (USE_DOF) {

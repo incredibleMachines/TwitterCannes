@@ -46,12 +46,11 @@ public:
     
     bool bZ;
     bool bX;
-    bool bSwitch;
     
     ofLight light;
+    ofMaterial material;
     
-    
-    float rotate;
+ 
     
 
 };

@@ -7,6 +7,7 @@
 //
 
 #include "ofMain.h"
+#include "ofxCubeMap.h"
 
 class Particle{
 public:
@@ -42,6 +43,9 @@ public:
     
     ofVbo vbo;
     ofMesh mesh;
+    
+    ofxCubeMap cube;
+    ofShader cubeMapShader;
 
 
 
