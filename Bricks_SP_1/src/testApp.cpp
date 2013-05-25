@@ -14,7 +14,7 @@ void testApp::setup(){
     glEnable(GL_DEPTH_TEST);
     ofSetVerticalSync(true);
 	ofSetFrameRate(30);
-	ofSetRectMode(OF_RECTMODE_CENTER);
+//	ofSetRectMode(OF_RECTMODE_CENTER);
     ofSetSmoothLighting(true);
     
 	ofBackground(255);
@@ -43,7 +43,6 @@ void testApp::setup(){
     
     if (USE_DOF) {
 		dof.setup(ofGetWidth(), ofGetHeight());
-		dof.setFocalDistance(camPoints[0].pos.z/2.5);
 		dof.setFocalRange(100);
         dof.setBlurAmount(1);
 	}
@@ -77,8 +76,6 @@ void testApp::update(){
         }
     }
     
-//    cout<<count<<endl;
-    
     if(count<1){
         cout<<animateCount<<endl;
         if(animateCount<1){
@@ -107,26 +104,28 @@ void testApp::update(){
         if (camCount==0){
             ofPoint move=camPoints[camCount].pos-camPoints[camPoints.size()-1].pos;
             move.normalize();
-            camPos=camPos+camPoints[camPoints.size()].rate*move;
-            camera.setPosition(camPos);
-            camera.lookAt(ofPoint(pic.width/2,pic.height/2, 0));
+            camPos=camPos+camPoints[camCount].rate*move;
         }
         else{
             ofPoint move=camPoints[camCount].pos-camPoints[camCount-1].pos;
             move.normalize();
             camPos=camPos+camPoints[camCount].rate*move;
-            camera.setPosition(camPos);
-            camera.lookAt(ofPoint(pic.width/2,pic.height/2, 0));
         }
-        dof.setFocalDistance(camPos.z/2);
+        camera.setPosition(camPos);
+        camera.lookAt(camPoints[camCount].lookAt);
+        ofPoint temp=ofPoint(camPoints[camCount].lookAt-camPos);;
+        dof.setFocalDistance((temp.length())/4);
 		dof.setFocalRange(100);
 
-//        cout<<"cam "<<camCount<<":" <<camera.getPosition()<<"::"<<camera.getLookAtDir()<<endl;
+        cout<<"cam "<<camCount<<":"<<temp.length()<<endl;
     }
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
+    
+    //GL
+    
    ofEnableLighting();
     
 	if (USE_DOF) {
@@ -150,30 +149,37 @@ void testApp::draw(){
 	camera.end();
     ofDisableLighting();
 	if (USE_DOF) {
+//        dof.drawFocusAssist(0,0);
+
 		dof.end();
+        
+        //fbo of dof for drawing
         ofFbo temp=dof.getFbo();
-        ofPushMatrix();
-        ofTranslate(ofGetWidth()/2,ofGetHeight()/2);
-        ofRotate(180);
         temp.draw(0,0,ofGetWidth(),ofGetHeight());
-        ofPopMatrix();
+
 	}
 	
 	
 }
 
 void testApp::loadImage(){
+   
+    //go to next image in vector, create particles out of it 
+    
     if(imgCount>images.size()-1){
         imgCount=0;
     }
     pic.loadImage(images[imgCount]);
     pic.setImageType(OF_IMAGE_COLOR);
     pic.resize(pic.width/2, pic.height/2);
-    pic.mirror(true, true);
+    pic.mirror(false, false);
     populatePixels();
 }
 
 void testApp::loadDir(){
+    
+    //uses ofDirectory to load image files into vector of strings then closes dir
+    
     string path = "images";
     ofDirectory dir(path);
     dir.allowExt("jpg");
@@ -193,30 +199,39 @@ void testApp::populatePixels(){
     particles.clear();
     for (int x = 0; x < pic.width / tileW; x++){
 		for (int y = 0; y < pic.height / tileH; y++){
+            
+            //crop image for texture on particle
 			ofImage tileImage;
             tileImage.allocate(tileW, tileH, OF_IMAGE_COLOR);
 			tileImage.cropFrom(pic, x*tileW, y*tileH, tileW, tileH);
-			
+            
+            //setup particle - takes ofPoint pos, cropped ofImage, tileW and tileH globals
 			Particle p;
-            p.setup(ofPoint(x*tileW, y*tileH,0), tileImage, tileImage.width, tileImage.height);
+            p.setup(ofPoint(x*tileW, y*tileH,0), tileImage, tileW, tileH);
 			particles.push_back(p);
 		}
 	}
 }
 
 void testApp::loadCams(){
+    
+    //sequentially loads camera positions, rate, and reached into vector of camPoint objects
+    
     camPoint newCamPoint;
     newCamPoint.pos=ofPoint(0,0,500);
     newCamPoint.rate=1;
     newCamPoint.reached=false;
+    newCamPoint.lookAt=ofPoint(pic.width/2,pic.height/2,0);
     camPoints.push_back(newCamPoint);
     newCamPoint.pos=ofPoint(pic.width,pic.height,250);
     newCamPoint.rate=1;
     newCamPoint.reached=false;
+    newCamPoint.lookAt=ofPoint(pic.width/2,pic.height/2,0);
     camPoints.push_back(newCamPoint);
     newCamPoint.pos=ofPoint(pic.width/2,pic.height/2,700);
     newCamPoint.rate=1;
     newCamPoint.reached=false;
+    newCamPoint.lookAt=ofPoint(pic.width/2,pic.height/2,0);    
     camPoints.push_back(newCamPoint);
 
 }

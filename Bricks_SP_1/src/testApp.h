@@ -35,8 +35,10 @@ public:
     class camPoint{
     public:
         ofPoint pos;
+        ofPoint lookAt;
         float rate;
         bool reached;
+        
     };
     
     ofPoint camPos;

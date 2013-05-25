@@ -11,8 +11,11 @@
 class Particle{
 public:
     ofPoint pos;
-    ofPoint pixelPos;
+    ofPoint prevPos;
+    ofPoint target;
+    ofPoint start;
     
+    ofPoint pixelPos;    
     class pointRange{
     public:
         ofPoint pos;
@@ -20,13 +23,7 @@ public:
         ofPoint max;
         
     };
-    
     pointRange startPos;
-	
-    ofPoint prevPos;
-
-	ofPoint target;
-    ofPoint start;
     
     ofPoint move;
 
