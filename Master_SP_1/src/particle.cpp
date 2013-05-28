@@ -17,7 +17,7 @@ void Particle::setup(particlePosition startPos, particlePosition pixelPos, ofIma
 	imageW = imageWidth;
 	imageH = imageHeight;
     
-    bStart=true;
+    bInit=true;
 	
     //load pixel and start position and rate to globals
 	pixel=pixelPos;
@@ -27,6 +27,7 @@ void Particle::setup(particlePosition startPos, particlePosition pixelPos, ofIma
     ofEnableNormalizedTexCoords();
     face.allocate(imageW,imageH, GL_RGB,true);
     face=image.getTextureReference();
+    goToPosition(startPos);
 }
 
 void Particle::update(){
@@ -135,9 +136,14 @@ void Particle::goToPosition(particlePosition goTo){
     if(goTo.startRate==PARTICLE_RATE_EASE){
         current.rate=0;
     }
-    
+        
     move=target.pos-start.pos;
     move.normalize();
+    
+    if(bInit==true){
+        move=ofPoint(0,0,0);
+        bInit=false;
+    }
 }
 
 void Particle::goToPixels(){

@@ -56,7 +56,7 @@ public:
 
     ofPoint move;
     bool targetReached;
-    bool bStart;
+    bool bInit;
 
 	float imageW;
 	float imageH;

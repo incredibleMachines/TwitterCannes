@@ -93,7 +93,7 @@ void testApp::update(){
         camera.setPosition(camPos);
         camera.lookAt(camPoints[camCount].lookAt);
         ofPoint temp=ofPoint(camPoints[camCount].lookAt-camPos);;
-        dof.setFocalDistance((temp.length())/4);
+        dof.setFocalDistance(900);
 		dof.setFocalRange(100);
     }
 }
@@ -185,18 +185,20 @@ void testApp::populatePixels(){
 			particles.push_back(p);
 		}
 	}
-    particleCount++;
+//    particleCount++;
     
     for(int i=0;i<particles.size();i++){
-        particles[i].goToPosition(particlePos[particleCount]);
+        if(i==100){
+        cout<<particles[i].current.pos<<endl;
+        }
     }
 }
 
 void testApp::loadParticles(){
     Particle::particlePosition newPosition;
-    newPosition.type=ofPoint(PARTICLE_POS_PIXEL, PARTICLE_POS_PIXEL, PARTICLE_POS_ABS);
-    newPosition.posMin.z=800;
-    newPosition.posMax.z=1000;
+    newPosition.type=ofPoint(PARTICLE_POS_PIXEL, PARTICLE_POS_PIXEL, PARTICLE_POS_PIXEL);
+    newPosition.posMin.z=100;
+    newPosition.posMax.z=200;
     newPosition.rate=5;
     particlePos.push_back(newPosition);
     Particle::particlePosition newPosition1;
@@ -216,10 +218,10 @@ void testApp::loadCams(){
     //sequentially loads camera positions, rate, and reached into vector of camPoint objects
     
     camPoint newCamPoint;
-    newCamPoint.pos=ofPoint(0,0,500);
+    newCamPoint.pos=ofPoint(pic.width/2,pic.width/2,1000);
     newCamPoint.rate=1;
     newCamPoint.reached=false;
-    newCamPoint.lookAt=ofPoint(0,0,0);
+    newCamPoint.lookAt=ofPoint(pic.width/2,pic.width/2,0);
     camPoints.push_back(newCamPoint);
 //    newCamPoint.pos=ofPoint(pic.width,pic.height,250);
 //    newCamPoint.rate=1;
