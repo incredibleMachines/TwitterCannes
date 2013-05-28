@@ -101,7 +101,7 @@ void testApp::update(){
         camera.setPosition(camPos);
         camera.lookAt(camPoints[camCount].lookAt);
         ofPoint temp=ofPoint(camPoints[camCount].lookAt-camPos);;
-        dof.setFocalDistance(900);
+        dof.setFocalDistance(temp.distance(camPoints[camCount].lookAt)/4);
 		dof.setFocalRange(100);
     }
     
@@ -206,7 +206,7 @@ void testApp::loadParticles(){
     particlePos.push_back(newPosition);
     Particle::keyframe newPosition1;
     newPosition1.type=ofPoint(PARTICLE_POS_PIXEL, PARTICLE_POS_PIXEL, PARTICLE_POS_PIXEL);
-    newPosition1.duration=10000;
+    newPosition1.duration=2000;
     particlePos.push_back(newPosition1);
     Particle::keyframe newPosition3;
     newPosition3.type=ofPoint(PARTICLE_POS_PIXEL, PARTICLE_POS_PIXEL, PARTICLE_POS_PIXEL);

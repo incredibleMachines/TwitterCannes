@@ -32,13 +32,16 @@ void Particle::setup(keyframe startPos, keyframe pixelPos, ofImage image, float 
 
 void Particle::update(){
     
-    if(target.pos.distance(current.pos)<10&&ofGetElapsedTimeMillis()-timer>target.duration){
-        targetReached=true;
-    }
+    float increment=(ofGetFrameRate()/target.duration)*target.length;
     
-    else {
-    current.pos+=(ofGetFrameRate()/target.duration)*target.length*move;
-    }
+        if(target.pos.distance(current.pos)<=increment&&ofGetElapsedTimeMillis()-timer>target.duration){
+                targetReached=true;
+                current.pos=target.pos;
+        }
+        else {
+            current.pos+=increment*move;
+        }
+//    cout<<increment<<endl;
 }
 
 void Particle::draw(){
