@@ -32,7 +32,7 @@ void Particle::setup(particlePosition startPos, particlePosition pixelPos, ofIma
 
 void Particle::update(){
     
-    if(target.pos.distance(current.pos)<current.rate){
+    if(target.pos.distance(current.pos)<target.rate){
         targetReached=true;
     }
     
@@ -51,7 +51,7 @@ void Particle::update(){
                 }
             }
         }
-    current.pos+=current.rate*move;
+    current.pos+=target.rate*move;
     }
 }
 
@@ -123,27 +123,26 @@ void Particle::goToPosition(particlePosition goTo){
             goTo.pos.z=goTo.pos.z;
         }
     }
-    
-    if(goTo.rateMin&&goTo.rateMax){
+        
+    if(goTo.rateMin!=0&&goTo.rateMax!=0){
         goTo.rate=ofRandom(goTo.rateMin,goTo.rateMax);
     }
     
+    
     targetReached=false;
+    
+    if(bInit==true){
+        current=goTo;
+        bInit=false;
+        targetReached=true;
+    }
     
     start=current;
     target=goTo;
-    
-    if(goTo.startRate==PARTICLE_RATE_EASE){
-        current.rate=0;
-    }
         
     move=target.pos-start.pos;
     move.normalize();
-    
-    if(bInit==true){
-        move=ofPoint(0,0,0);
-        bInit=false;
-    }
+
 }
 
 void Particle::goToPixels(){

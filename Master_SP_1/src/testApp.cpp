@@ -67,10 +67,11 @@ void testApp::update(){
     }
     
     if(count==0){
+        particleCount++;
         for(int i=0; i<particles.size(); i++){
             particles[i].goToPosition(particlePos[particleCount]);
         }
-        particleCount++;
+        
     }
 
     if(CAM_MOVE) {
@@ -96,6 +97,7 @@ void testApp::update(){
         dof.setFocalDistance(900);
 		dof.setFocalRange(100);
     }
+    
 }
 
 //--------------------------------------------------------------
@@ -143,6 +145,7 @@ void testApp::loadImage(){
     if(imgCount>images.size()-1){
         imgCount=0;
     }
+    particleCount=0;
     pic.loadImage(images[imgCount]);
     pic.setImageType(OF_IMAGE_COLOR);
     pic.resize(pic.width/2, pic.height/2);
@@ -185,18 +188,12 @@ void testApp::populatePixels(){
 			particles.push_back(p);
 		}
 	}
-//    particleCount++;
-    
-    for(int i=0;i<particles.size();i++){
-        if(i==100){
-        cout<<particles[i].current.pos<<endl;
-        }
-    }
+
 }
 
 void testApp::loadParticles(){
     Particle::particlePosition newPosition;
-    newPosition.type=ofPoint(PARTICLE_POS_PIXEL, PARTICLE_POS_PIXEL, PARTICLE_POS_PIXEL);
+    newPosition.type=ofPoint(PARTICLE_POS_PIXEL, PARTICLE_POS_PIXEL, PARTICLE_POS_ABS);
     newPosition.posMin.z=100;
     newPosition.posMax.z=200;
     newPosition.rate=5;
@@ -218,21 +215,21 @@ void testApp::loadCams(){
     //sequentially loads camera positions, rate, and reached into vector of camPoint objects
     
     camPoint newCamPoint;
-    newCamPoint.pos=ofPoint(pic.width/2,pic.width/2,1000);
+    newCamPoint.pos=ofPoint(pic.width/2,pic.width/2,500);
     newCamPoint.rate=1;
     newCamPoint.reached=false;
     newCamPoint.lookAt=ofPoint(pic.width/2,pic.width/2,0);
     camPoints.push_back(newCamPoint);
-//    newCamPoint.pos=ofPoint(pic.width,pic.height,250);
-//    newCamPoint.rate=1;
-//    newCamPoint.reached=false;
-//    newCamPoint.lookAt=ofPoint(pic.width/2,pic.height/2,0);
-//    camPoints.push_back(newCamPoint);
-//    newCamPoint.pos=ofPoint(pic.width/2,pic.height/2,700);
-//    newCamPoint.rate=1;
-//    newCamPoint.reached=false;
-//    newCamPoint.lookAt=ofPoint(pic.width/2,pic.height/2,0);    
-//    camPoints.push_back(newCamPoint);
+    newCamPoint.pos=ofPoint(pic.width,pic.height,250);
+    newCamPoint.rate=1;
+    newCamPoint.reached=false;
+    newCamPoint.lookAt=ofPoint(pic.width/2,pic.height/2,0);
+    camPoints.push_back(newCamPoint);
+    newCamPoint.pos=ofPoint(pic.width/2,pic.height/2,700);
+    newCamPoint.rate=1;
+    newCamPoint.reached=false;
+    newCamPoint.lookAt=ofPoint(pic.width/2,pic.height/2,0);    
+    camPoints.push_back(newCamPoint);
 
 }
 

@@ -29,8 +29,8 @@ public:
         ofPoint posMax;
         
         float rate=1;
-        float rateMin;
-        float rateMax;
+        float rateMin=0;
+        float rateMax=0;
         
         int path=0;
         int startRate=0;
