@@ -10,9 +10,9 @@
 
 #define PARTICLE_PATH_LINE 0
 #define PARTICLE_PATH_CURVE 1
-#define PARTICLE_RATE_LINEAR 0
-#define PARTICLE_RATE_EASE 1
-#define PARTICLE_RATE_SPEED 2
+#define PARTICLE_INTERPOLATE_LINEAR 0
+#define PARTICLE_INTERPOLATE_EASE 1
+#define PARTICLE_INTERPOLATE_SPEED_UP 2
 #define PARTICLE_POS_ABS 0
 #define PARTICLE_POS_RELATIVE 1
 #define PARTICLE_POS_PIXEL 2
@@ -20,39 +20,38 @@
 class Particle{
 public:
     
-    class particlePosition{
+    class keyframe{
     public:
         
         ofPoint pos;
         ofPoint type=ofPoint(0,0,0);
         ofPoint posMin;
         ofPoint posMax;
+        ofPoint rotation;
         
-        float rate=1;
-        float rateMin=0;
-        float rateMax=0;
+        int length;
+        
+        int duration=1000;
+        int durationMin=0;
+        int durationMax=0;
         
         int path=0;
-        int startRate=0;
-        float startRange;
-        int endRate=0;
-        float endRange;
+        int interpolation=0;
         bool destroy=false;
         
     };
     
-    void setup(particlePosition start, particlePosition pixel, ofImage image, float imageWidth, float imageHeight);
+    void setup(keyframe start, keyframe pixel, ofImage image, float imageWidth, float imageHeight);
     void update();
     void draw();
     
-    void goToPosition(particlePosition goTo);
-    void initPosition(particlePosition goTo);
+    void goToPosition(keyframe goTo);
     void goToPixels();
     
-    particlePosition current;
-    particlePosition start;
-    particlePosition target;
-    particlePosition pixel;
+    keyframe current;
+    keyframe start;
+    keyframe target;
+    keyframe pixel;
 
     ofPoint move;
     bool targetReached;
@@ -62,6 +61,8 @@ public:
 	float imageH;
 	ofImage image;
     ofTexture face;
+    
+    int timer;
     
 };
 

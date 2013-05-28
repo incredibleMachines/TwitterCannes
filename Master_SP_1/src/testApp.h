@@ -24,7 +24,7 @@ public:
 
 	
     vector <Particle> particles;
-    vector <Particle::particlePosition> particlePos;
+    vector <Particle::keyframe> particlePos;
     void loadParticles();
     void populatePixels();
     int particleCount;
@@ -38,11 +38,11 @@ public:
     public:
         ofPoint pos;
         ofPoint lookAt;
-        int pause;              //Pause duration
-        string posMotion;       //linear, ease, speed
-        string posType;         //Line, Curve
-        string lookAtMotion;
-        string lookAtType;
+        int pause;         
+        int posRate=0;
+        int posPath=0;
+        int lookAtRate=0;
+        int lookAtPath=0;
         
         float rate;
         bool reached;

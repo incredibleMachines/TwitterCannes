@@ -8,6 +8,13 @@
 #define CAM_MOUSE false
 #define FACES false
 
+#define CAMERA_PATH_LINE 0
+#define CAMERA_PATH_CURVE 1
+#define CAMERA_RATE_LINEAR 0
+#define CAMERA_RATE_EASE 1
+#define CAMERA_RATE_SPEED 2
+
+
 //--------------------------------------------------------------
 void testApp::setup(){
     
@@ -181,8 +188,8 @@ void testApp::populatePixels(){
 			tileImage.cropFrom(pic, x*tileW, y*tileH, tileW, tileH);
             //setup particle - takes ofPoint pos, cropped ofImage, tileW and tileH globals
 			Particle p;
-            Particle::particlePosition pixelPos;
-            Particle::particlePosition startPos;
+            Particle::keyframe pixelPos;
+            Particle::keyframe startPos;
             pixelPos.pos=ofPoint(x*tileW, y*tileH,0);
             p.setup(particlePos[particleCount], pixelPos, tileImage, tileW, tileH);
 			particles.push_back(p);
@@ -192,21 +199,24 @@ void testApp::populatePixels(){
 }
 
 void testApp::loadParticles(){
-    Particle::particlePosition newPosition;
+    Particle::keyframe newPosition;
     newPosition.type=ofPoint(PARTICLE_POS_PIXEL, PARTICLE_POS_PIXEL, PARTICLE_POS_ABS);
-    newPosition.posMin.z=100;
-    newPosition.posMax.z=200;
-    newPosition.rate=5;
+    newPosition.posMin.z=600;
+    newPosition.posMax.z=800;
     particlePos.push_back(newPosition);
-    Particle::particlePosition newPosition1;
+    Particle::keyframe newPosition1;
     newPosition1.type=ofPoint(PARTICLE_POS_PIXEL, PARTICLE_POS_PIXEL, PARTICLE_POS_PIXEL);
-    newPosition1.rate=5;
+    newPosition1.duration=10000;
     particlePos.push_back(newPosition1);
-    Particle::particlePosition newPosition2;
+    Particle::keyframe newPosition3;
+    newPosition3.type=ofPoint(PARTICLE_POS_PIXEL, PARTICLE_POS_PIXEL, PARTICLE_POS_PIXEL);
+    newPosition3.duration=2000;
+    particlePos.push_back(newPosition3);
+    Particle::keyframe newPosition2;
     newPosition2.type=ofPoint(PARTICLE_POS_PIXEL, PARTICLE_POS_PIXEL, PARTICLE_POS_ABS);
-    newPosition2.posMin.z=200;
-    newPosition2.posMax.z=300;
-    newPosition2.rate=5;
+    newPosition2.pos.z=200;
+    newPosition2.durationMin=500;
+    newPosition2.durationMax=6000;
     particlePos.push_back(newPosition2);
 }
 

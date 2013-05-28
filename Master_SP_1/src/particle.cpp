@@ -8,7 +8,7 @@
 
 #include "particle.h"
 
-void Particle::setup(particlePosition startPos, particlePosition pixelPos, ofImage image, float imageWidth, float imageHeight) {
+void Particle::setup(keyframe startPos, keyframe pixelPos, ofImage image, float imageWidth, float imageHeight) {
     
     glEnable(GL_DEPTH_TEST);
 
@@ -32,26 +32,12 @@ void Particle::setup(particlePosition startPos, particlePosition pixelPos, ofIma
 
 void Particle::update(){
     
-    if(target.pos.distance(current.pos)<target.rate){
+    if(target.pos.distance(current.pos)<10&&ofGetElapsedTimeMillis()-timer>target.duration){
         targetReached=true;
     }
     
     else {
-        float distance=current.pos.distance(start.pos);
-        if(distance<current.startRange*current.rate){
-            if(current.startRate==PARTICLE_RATE_EASE){
-                if(current.rate<target.rate){
-                    current.rate=target.rate*(distance/target.pos.distance(start.pos));
-                }
-            }
-            
-            else if(current.startRate==PARTICLE_RATE_SPEED){
-                if(current.rate<target.rate){
-                    current.rate=target.rate*(target.pos.distance(start.pos)/current.pos.distance(target.pos));
-                }
-            }
-        }
-    current.pos+=target.rate*move;
+    current.pos+=(ofGetFrameRate()/target.duration)*target.length*move;
     }
 }
 
@@ -65,7 +51,7 @@ void Particle::draw(){
 
 }
 
-void Particle::goToPosition(particlePosition goTo){
+void Particle::goToPosition(keyframe goTo){
     
     if(goTo.type.x==PARTICLE_POS_PIXEL){
         goTo.pos.x=pixel.pos.x;
@@ -124,8 +110,8 @@ void Particle::goToPosition(particlePosition goTo){
         }
     }
         
-    if(goTo.rateMin!=0&&goTo.rateMax!=0){
-        goTo.rate=ofRandom(goTo.rateMin,goTo.rateMax);
+    if(goTo.durationMin!=0&&goTo.durationMax!=0){
+        goTo.duration=ofRandom(goTo.durationMin,goTo.durationMax);
     }
     
     
@@ -142,6 +128,9 @@ void Particle::goToPosition(particlePosition goTo){
         
     move=target.pos-start.pos;
     move.normalize();
+    
+    target.length=target.pos.distance(start.pos);
+    timer=ofGetElapsedTimeMillis();
 
 }
 
