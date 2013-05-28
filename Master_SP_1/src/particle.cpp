@@ -48,6 +48,13 @@ void Particle::draw(){
 	ofPushMatrix();
 	ofTranslate(current.pos);
     face.bind();
+    
+    // Rotation of 3D cubes
+    //ofRotateX(current.pos.distance(target.pos)*0.5*ofNoise(pixel.pos.x, pixel.pos.y));
+    //ofRotateY(current.pos.distance(target.pos)*1.25*ofNoise(pixel.pos.x, pixel.pos.y));
+    //ofRotateZ(current.pos.distance(target.pos)*0.75*ofNoise(pixel.pos.x, pixel.pos.y));
+
+    
     ofBox(0, 0, 0, imageW);
     face.unbind();
 	ofPopMatrix();
@@ -113,8 +120,8 @@ void Particle::goToPosition(keyframe goTo){
         }
     }
         
-    if(goTo.durationMin!=0&&goTo.durationMax!=0){
-        goTo.duration=ofRandom(goTo.durationMin,goTo.durationMax);
+    if(goTo.durationMin!=0||goTo.durationMax!=0){
+        goTo.duration+=ofRandom(goTo.durationMin,goTo.durationMax);
     }
     
     

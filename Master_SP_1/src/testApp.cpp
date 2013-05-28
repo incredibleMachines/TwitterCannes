@@ -29,21 +29,21 @@ void testApp::setup(){
     imgCount=0;
     
     //camCount cycles through camPoints vector which includes x,y,z coords and rate of movement between them
-    camCount=0;
+    camKeyframe=0;
     
     //populates vector of images off of specified director and loads camera positions into vector
-    loadParticles();
+    loadParticleKeyframes();
     loadDir();
     loadImage();
-    loadCams();
+    loadCamKeyframes();
     
     //sets up GL lighting and materials
     setupGL();
 	
     //load init camera position
-    camPos.x=camPoints[0].pos.x;
-    camPos.y=camPoints[0].pos.y;
-    camPos.z=camPoints[0].pos.z;
+    camPos.x=camKeyframes[0].pos.x;
+    camPos.y=camKeyframes[0].pos.y;
+    camPos.z=camKeyframes[0].pos.z;
 	camera.setPosition(camPos);
 	camera.lookAt(ofPoint(pic.width/2,pic.height/2, 0));
     
@@ -57,51 +57,55 @@ void testApp::setup(){
         camera.disableMouseInput();
     }
     
-    camCount++;
-    particleCount=0;
+    camKeyframe++;
+    particleKeyframe=0;
     
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
-    int count=0;
+    // Set this flag to true and flip it to false if any of the particles haven't arrived
+    bool allParticlesArrived = true;
 	
+    // Loop through and update all particles
+    // Check if all have reached their target for the current keyframe
     for(int i=0; i<particles.size(); i++){
         particles[i].update();
 		if (!particles[i].targetReached) {
-            count++;
+            allParticlesArrived = false;
 		}
     }
     
-    if(count==0){
-        particleCount++;
+    // Advance the keyframe counter and set the next position for each particle
+    if(allParticlesArrived){
+        particleKeyframe++;
         for(int i=0; i<particles.size(); i++){
-            particles[i].goToPosition(particlePos[particleCount]);
+            particles[i].goToPosition(particleKeyframes[particleKeyframe]);
         }
         
     }
 
     if(CAM_MOVE) {
-        if(camPos.distance(camPoints[camCount].pos)<2){
-            camCount++;
+        if(camPos.distance(camKeyframes[camKeyframe].pos)<2){
+            camKeyframe++;
         }
-        if(camCount>camPoints.size()-1){
-            camCount=0;            
+        if(camKeyframe>camKeyframes.size()-1){
+            camKeyframe=0;            
         }
-        if (camCount==0){
-            ofPoint move=camPoints[camCount].pos-camPoints[camPoints.size()-1].pos;
+        if (camKeyframe==0){
+            ofPoint move=camKeyframes[camKeyframe].pos-camKeyframes[camKeyframes.size()-1].pos;
             move.normalize();
-            camPos=camPos+camPoints[camCount].rate*move;
+            camPos=camPos+camKeyframes[camKeyframe].rate*move;
         }
         else{
-            ofPoint move=camPoints[camCount].pos-camPoints[camCount-1].pos;
+            ofPoint move=camKeyframes[camKeyframe].pos-camKeyframes[camKeyframe-1].pos;
             move.normalize();
-            camPos=camPos+camPoints[camCount].rate*move;
+            camPos=camPos+camKeyframes[camKeyframe].rate*move;
         }
         camera.setPosition(camPos);
-        camera.lookAt(camPoints[camCount].lookAt);
-        ofPoint temp=ofPoint(camPoints[camCount].lookAt-camPos);;
-        dof.setFocalDistance(temp.distance(camPoints[camCount].lookAt)/4);
+        camera.lookAt(camKeyframes[camKeyframe].lookAt);
+        ofPoint temp=ofPoint(camKeyframes[camKeyframe].lookAt-camPos);;
+        dof.setFocalDistance(temp.distance(camKeyframes[camKeyframe].lookAt)/4);
 		dof.setFocalRange(100);
     }
     
@@ -152,12 +156,13 @@ void testApp::loadImage(){
     if(imgCount>images.size()-1){
         imgCount=0;
     }
-    particleCount=0;
+    particleKeyframe=0;
     pic.loadImage(images[imgCount]);
     pic.setImageType(OF_IMAGE_COLOR);
     pic.resize(pic.width/2, pic.height/2);
     pic.mirror(false, false);
-    populatePixels();
+
+    createParticles();
 }
 
 void testApp::loadDir(){
@@ -178,7 +183,7 @@ void testApp::loadDir(){
     dir.close();
 }
 
-void testApp::populatePixels(){
+void testApp::createParticles(){
     particles.clear();
     for (int x = 0; x < pic.width / tileW; x++){
 		for (int y = 0; y < pic.height / tileH; y++){
@@ -191,36 +196,41 @@ void testApp::populatePixels(){
             Particle::keyframe pixelPos;
             Particle::keyframe startPos;
             pixelPos.pos=ofPoint(x*tileW, y*tileH,0);
-            p.setup(particlePos[particleCount], pixelPos, tileImage, tileW, tileH);
+            p.setup(particleKeyframes[particleKeyframe], pixelPos, tileImage, tileW, tileH);
 			particles.push_back(p);
 		}
 	}
 
 }
 
-void testApp::loadParticles(){
+void testApp::loadParticleKeyframes(){
     Particle::keyframe newPosition;
     newPosition.type=ofPoint(PARTICLE_POS_PIXEL, PARTICLE_POS_PIXEL, PARTICLE_POS_ABS);
     newPosition.posMin.z=600;
     newPosition.posMax.z=800;
-    particlePos.push_back(newPosition);
+    particleKeyframes.push_back(newPosition);
+
     Particle::keyframe newPosition1;
     newPosition1.type=ofPoint(PARTICLE_POS_PIXEL, PARTICLE_POS_PIXEL, PARTICLE_POS_PIXEL);
     newPosition1.duration=2000;
-    particlePos.push_back(newPosition1);
+    newPosition1.durationMin=0;
+    newPosition1.durationMax=500;
+    particleKeyframes.push_back(newPosition1);
+
     Particle::keyframe newPosition3;
     newPosition3.type=ofPoint(PARTICLE_POS_PIXEL, PARTICLE_POS_PIXEL, PARTICLE_POS_PIXEL);
     newPosition3.duration=2000;
-    particlePos.push_back(newPosition3);
+    particleKeyframes.push_back(newPosition3);
+
     Particle::keyframe newPosition2;
     newPosition2.type=ofPoint(PARTICLE_POS_PIXEL, PARTICLE_POS_PIXEL, PARTICLE_POS_ABS);
-    newPosition2.pos.z=200;
-    newPosition2.durationMin=500;
-    newPosition2.durationMax=6000;
-    particlePos.push_back(newPosition2);
+    newPosition2.pos.z=500;
+    newPosition2.durationMin=0;
+    newPosition2.durationMax=5500;
+    particleKeyframes.push_back(newPosition2);
 }
 
-void testApp::loadCams(){
+void testApp::loadCamKeyframes(){
     
     //sequentially loads camera positions, rate, and reached into vector of camPoint objects
     
@@ -229,17 +239,17 @@ void testApp::loadCams(){
     newCamPoint.rate=1;
     newCamPoint.reached=false;
     newCamPoint.lookAt=ofPoint(pic.width/2,pic.width/2,0);
-    camPoints.push_back(newCamPoint);
+    camKeyframes.push_back(newCamPoint);
     newCamPoint.pos=ofPoint(pic.width,pic.height,250);
     newCamPoint.rate=1;
     newCamPoint.reached=false;
     newCamPoint.lookAt=ofPoint(pic.width/2,pic.height/2,0);
-    camPoints.push_back(newCamPoint);
+    camKeyframes.push_back(newCamPoint);
     newCamPoint.pos=ofPoint(pic.width/2,pic.height/2,700);
     newCamPoint.rate=1;
     newCamPoint.reached=false;
     newCamPoint.lookAt=ofPoint(pic.width/2,pic.height/2,0);    
-    camPoints.push_back(newCamPoint);
+    camKeyframes.push_back(newCamPoint);
 
 }
 

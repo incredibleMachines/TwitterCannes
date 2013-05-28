@@ -14,7 +14,7 @@ public:
 	
     void loadImage();
     void loadDir();
-    void loadCams();
+    void loadCamKeyframes();
     void setupGL();
     
     ofImage pic;
@@ -24,10 +24,10 @@ public:
 
 	
     vector <Particle> particles;
-    vector <Particle::keyframe> particlePos;
-    void loadParticles();
-    void populatePixels();
-    int particleCount;
+    vector <Particle::keyframe> particleKeyframes;
+    void loadParticleKeyframes();
+    void createParticles();
+    int particleKeyframe;
 	
 	ofEasyCam camera;
 	ofxDOF dof;
@@ -50,8 +50,8 @@ public:
     };
     
     ofPoint camPos;
-    int camCount;
-    vector<camPoint> camPoints;
+    int camKeyframe;
+    vector<camPoint> camKeyframes;
     
     void mouseDragged(int x, int y, int button);
 
