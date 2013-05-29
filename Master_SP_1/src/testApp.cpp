@@ -204,30 +204,35 @@ void testApp::createParticles(){
 }
 
 void testApp::loadParticleKeyframes(){
-    Particle::keyframe newPosition;
-    newPosition.type=ofPoint(PARTICLE_POS_PIXEL, PARTICLE_POS_PIXEL, PARTICLE_POS_ABS);
-    newPosition.posMin.z=600;
-    newPosition.posMax.z=800;
-    particleKeyframes.push_back(newPosition);
+    Particle::keyframe start;
+    start.type=ofPoint(PARTICLE_POS_PIXEL, PARTICLE_POS_PIXEL, PARTICLE_POS_ABS);
+    start.posMin.z=600;
+    start.posMax.z=800;
+    particleKeyframes.push_back(start);
 
-    Particle::keyframe newPosition1;
-    newPosition1.type=ofPoint(PARTICLE_POS_PIXEL, PARTICLE_POS_PIXEL, PARTICLE_POS_PIXEL);
-    newPosition1.duration=2000;
-    newPosition1.durationMin=0;
-    newPosition1.durationMax=500;
-    particleKeyframes.push_back(newPosition1);
+    Particle::keyframe imagePlane;
+    imagePlane.type=ofPoint(PARTICLE_POS_PIXEL, PARTICLE_POS_PIXEL, PARTICLE_POS_PIXEL);
+    imagePlane.duration=6000;
+    imagePlane.durationMin=0;
+    imagePlane.durationMax=2500;
+    imagePlane.interpolation = PARTICLE_INTERPOLATE_QUINT_EASE_OUT;
+    particleKeyframes.push_back(imagePlane);
 
-    Particle::keyframe newPosition3;
-    newPosition3.type=ofPoint(PARTICLE_POS_PIXEL, PARTICLE_POS_PIXEL, PARTICLE_POS_PIXEL);
-    newPosition3.duration=2000;
-    particleKeyframes.push_back(newPosition3);
+    Particle::keyframe holdImage;
+    holdImage.type=ofPoint(PARTICLE_POS_PIXEL, PARTICLE_POS_PIXEL, PARTICLE_POS_PIXEL);
+    holdImage.duration=2000;
+    particleKeyframes.push_back(holdImage);
 
-    Particle::keyframe newPosition2;
-    newPosition2.type=ofPoint(PARTICLE_POS_PIXEL, PARTICLE_POS_PIXEL, PARTICLE_POS_ABS);
-    newPosition2.pos.z=500;
-    newPosition2.durationMin=0;
-    newPosition2.durationMax=5500;
-    particleKeyframes.push_back(newPosition2);
+    Particle::keyframe exit;
+    exit.type=ofPoint(PARTICLE_POS_PIXEL, PARTICLE_POS_PIXEL, PARTICLE_POS_ABS);
+    exit.pos.z=500;
+    exit.posMin.z=0;
+    exit.posMax.z=100;
+    exit.duration=5000;
+    exit.durationMin=0;
+    exit.durationMax=500;
+    exit.interpolation = PARTICLE_INTERPOLATE_ELASTIC_EASE_IN;
+    particleKeyframes.push_back(exit);
 }
 
 void testApp::loadCamKeyframes(){
@@ -240,11 +245,13 @@ void testApp::loadCamKeyframes(){
     newCamPoint.reached=false;
     newCamPoint.lookAt=ofPoint(pic.width/2,pic.width/2,0);
     camKeyframes.push_back(newCamPoint);
+
     newCamPoint.pos=ofPoint(pic.width,pic.height,250);
     newCamPoint.rate=1;
     newCamPoint.reached=false;
     newCamPoint.lookAt=ofPoint(pic.width/2,pic.height/2,0);
     camKeyframes.push_back(newCamPoint);
+
     newCamPoint.pos=ofPoint(pic.width/2,pic.height/2,700);
     newCamPoint.rate=1;
     newCamPoint.reached=false;

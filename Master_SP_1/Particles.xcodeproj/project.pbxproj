@@ -7,6 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		862148DA17565A24002DB77D /* Back.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 862148C417565A24002DB77D /* Back.cpp */; };
+		862148DB17565A24002DB77D /* Bounce.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 862148C617565A24002DB77D /* Bounce.cpp */; };
+		862148DC17565A24002DB77D /* Circ.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 862148C817565A24002DB77D /* Circ.cpp */; };
+		862148DD17565A24002DB77D /* Cubic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 862148CA17565A24002DB77D /* Cubic.cpp */; };
+		862148DE17565A24002DB77D /* Elastic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 862148CC17565A24002DB77D /* Elastic.cpp */; };
+		862148DF17565A24002DB77D /* Expo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 862148CE17565A24002DB77D /* Expo.cpp */; };
+		862148E017565A24002DB77D /* Linear.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 862148D017565A24002DB77D /* Linear.cpp */; };
+		862148E117565A24002DB77D /* Quad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 862148D217565A24002DB77D /* Quad.cpp */; };
+		862148E217565A24002DB77D /* Quart.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 862148D417565A24002DB77D /* Quart.cpp */; };
+		862148E317565A24002DB77D /* Quint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 862148D617565A24002DB77D /* Quint.cpp */; };
+		862148E417565A24002DB77D /* Sine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 862148D817565A24002DB77D /* Sine.cpp */; };
 		BBAB23CB13894F3D00AA2426 /* GLUT.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
 		C98E1B4F174EAF8000C4468F /* ofxDOF.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C98E1B47174EAF8000C4468F /* ofxDOF.cpp */; };
 		D3B7D941174B151C008999B3 /* particle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D3B7D93F174B151C008999B3 /* particle.cpp */; };
@@ -62,6 +73,28 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		862148C417565A24002DB77D /* Back.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Back.cpp; path = src/ofPennerEasing/src/Back.cpp; sourceTree = "<group>"; };
+		862148C517565A24002DB77D /* Back.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Back.h; path = src/ofPennerEasing/src/Back.h; sourceTree = "<group>"; };
+		862148C617565A24002DB77D /* Bounce.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Bounce.cpp; path = src/ofPennerEasing/src/Bounce.cpp; sourceTree = "<group>"; };
+		862148C717565A24002DB77D /* Bounce.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Bounce.h; path = src/ofPennerEasing/src/Bounce.h; sourceTree = "<group>"; };
+		862148C817565A24002DB77D /* Circ.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Circ.cpp; path = src/ofPennerEasing/src/Circ.cpp; sourceTree = "<group>"; };
+		862148C917565A24002DB77D /* Circ.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Circ.h; path = src/ofPennerEasing/src/Circ.h; sourceTree = "<group>"; };
+		862148CA17565A24002DB77D /* Cubic.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Cubic.cpp; path = src/ofPennerEasing/src/Cubic.cpp; sourceTree = "<group>"; };
+		862148CB17565A24002DB77D /* Cubic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Cubic.h; path = src/ofPennerEasing/src/Cubic.h; sourceTree = "<group>"; };
+		862148CC17565A24002DB77D /* Elastic.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Elastic.cpp; path = src/ofPennerEasing/src/Elastic.cpp; sourceTree = "<group>"; };
+		862148CD17565A24002DB77D /* Elastic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Elastic.h; path = src/ofPennerEasing/src/Elastic.h; sourceTree = "<group>"; };
+		862148CE17565A24002DB77D /* Expo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Expo.cpp; path = src/ofPennerEasing/src/Expo.cpp; sourceTree = "<group>"; };
+		862148CF17565A24002DB77D /* Expo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Expo.h; path = src/ofPennerEasing/src/Expo.h; sourceTree = "<group>"; };
+		862148D017565A24002DB77D /* Linear.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Linear.cpp; path = src/ofPennerEasing/src/Linear.cpp; sourceTree = "<group>"; };
+		862148D117565A24002DB77D /* Linear.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Linear.h; path = src/ofPennerEasing/src/Linear.h; sourceTree = "<group>"; };
+		862148D217565A24002DB77D /* Quad.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Quad.cpp; path = src/ofPennerEasing/src/Quad.cpp; sourceTree = "<group>"; };
+		862148D317565A24002DB77D /* Quad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Quad.h; path = src/ofPennerEasing/src/Quad.h; sourceTree = "<group>"; };
+		862148D417565A24002DB77D /* Quart.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Quart.cpp; path = src/ofPennerEasing/src/Quart.cpp; sourceTree = "<group>"; };
+		862148D517565A24002DB77D /* Quart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Quart.h; path = src/ofPennerEasing/src/Quart.h; sourceTree = "<group>"; };
+		862148D617565A24002DB77D /* Quint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Quint.cpp; path = src/ofPennerEasing/src/Quint.cpp; sourceTree = "<group>"; };
+		862148D717565A24002DB77D /* Quint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Quint.h; path = src/ofPennerEasing/src/Quint.h; sourceTree = "<group>"; };
+		862148D817565A24002DB77D /* Sine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Sine.cpp; path = src/ofPennerEasing/src/Sine.cpp; sourceTree = "<group>"; };
+		862148D917565A24002DB77D /* Sine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Sine.h; path = src/ofPennerEasing/src/Sine.h; sourceTree = "<group>"; };
 		BBAB23BE13894E4700AA2426 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../libs/glut/lib/osx/GLUT.framework; sourceTree = "<group>"; };
 		C98E1B47174EAF8000C4468F /* ofxDOF.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxDOF.cpp; sourceTree = "<group>"; };
 		C98E1B48174EAF8000C4468F /* ofxDOF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxDOF.h; sourceTree = "<group>"; };
@@ -124,10 +157,48 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		862148A1175659B8002DB77D /* ofPennerEasing */ = {
+			isa = PBXGroup;
+			children = (
+				862148A2175659C5002DB77D /* src */,
+			);
+			name = ofPennerEasing;
+			sourceTree = "<group>";
+		};
+		862148A2175659C5002DB77D /* src */ = {
+			isa = PBXGroup;
+			children = (
+				862148D017565A24002DB77D /* Linear.cpp */,
+				862148D117565A24002DB77D /* Linear.h */,
+				862148C417565A24002DB77D /* Back.cpp */,
+				862148C517565A24002DB77D /* Back.h */,
+				862148C617565A24002DB77D /* Bounce.cpp */,
+				862148C717565A24002DB77D /* Bounce.h */,
+				862148C817565A24002DB77D /* Circ.cpp */,
+				862148C917565A24002DB77D /* Circ.h */,
+				862148CA17565A24002DB77D /* Cubic.cpp */,
+				862148CB17565A24002DB77D /* Cubic.h */,
+				862148CC17565A24002DB77D /* Elastic.cpp */,
+				862148CD17565A24002DB77D /* Elastic.h */,
+				862148CE17565A24002DB77D /* Expo.cpp */,
+				862148CF17565A24002DB77D /* Expo.h */,
+				862148D217565A24002DB77D /* Quad.cpp */,
+				862148D317565A24002DB77D /* Quad.h */,
+				862148D417565A24002DB77D /* Quart.cpp */,
+				862148D517565A24002DB77D /* Quart.h */,
+				862148D617565A24002DB77D /* Quint.cpp */,
+				862148D717565A24002DB77D /* Quint.h */,
+				862148D817565A24002DB77D /* Sine.cpp */,
+				862148D917565A24002DB77D /* Sine.h */,
+			);
+			name = src;
+			sourceTree = "<group>";
+		};
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
 				C98E1B30174EAF8000C4468F /* ofxDOF */,
+				862148A1175659B8002DB77D /* ofPennerEasing */,
 			);
 			name = addons;
 			sourceTree = "<group>";
@@ -331,6 +402,17 @@
 				E4B69E210A3A1BDC003C02F2 /* testApp.cpp in Sources */,
 				D3B7D941174B151C008999B3 /* particle.cpp in Sources */,
 				C98E1B4F174EAF8000C4468F /* ofxDOF.cpp in Sources */,
+				862148DA17565A24002DB77D /* Back.cpp in Sources */,
+				862148DB17565A24002DB77D /* Bounce.cpp in Sources */,
+				862148DC17565A24002DB77D /* Circ.cpp in Sources */,
+				862148DD17565A24002DB77D /* Cubic.cpp in Sources */,
+				862148DE17565A24002DB77D /* Elastic.cpp in Sources */,
+				862148DF17565A24002DB77D /* Expo.cpp in Sources */,
+				862148E017565A24002DB77D /* Linear.cpp in Sources */,
+				862148E117565A24002DB77D /* Quad.cpp in Sources */,
+				862148E217565A24002DB77D /* Quart.cpp in Sources */,
+				862148E317565A24002DB77D /* Quint.cpp in Sources */,
+				862148E417565A24002DB77D /* Sine.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
