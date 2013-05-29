@@ -184,19 +184,26 @@ void testApp::loadDir(){
 }
 
 void testApp::createParticles(){
+    int particleIndex = 0;
+    int particleCount = pic.width / tileW * pic.height / tileH;
+    
     particles.clear();
+
     for (int x = 0; x < pic.width / tileW; x++){
 		for (int y = 0; y < pic.height / tileH; y++){
+            particleIndex++;
+            
             //crop image for texture on particle
 			ofImage tileImage;
             tileImage.allocate(tileW, tileH, OF_IMAGE_COLOR);
 			tileImage.cropFrom(pic, x*tileW, y*tileH, tileW, tileH);
+            
             //setup particle - takes ofPoint pos, cropped ofImage, tileW and tileH globals
 			Particle p;
             Particle::keyframe pixelPos;
             Particle::keyframe startPos;
             pixelPos.pos=ofPoint(x*tileW, y*tileH,0);
-            p.setup(particleKeyframes[particleKeyframe], pixelPos, tileImage, tileW, tileH);
+            p.setup(particleKeyframes[particleKeyframe], pixelPos, tileImage, tileW, tileH, particleIndex/particleCount);
 			particles.push_back(p);
 		}
 	}
@@ -212,7 +219,7 @@ void testApp::loadParticleKeyframes(){
 
     Particle::keyframe imagePlane;
     imagePlane.type=ofPoint(PARTICLE_POS_PIXEL, PARTICLE_POS_PIXEL, PARTICLE_POS_PIXEL);
-    imagePlane.duration=6000;
+    imagePlane.duration=4000;
     imagePlane.durationMin=0;
     imagePlane.durationMax=2500;
     imagePlane.interpolation = PARTICLE_INTERPOLATE_QUINT_EASE_OUT;
@@ -233,6 +240,24 @@ void testApp::loadParticleKeyframes(){
     exit.durationMax=500;
     exit.interpolation = PARTICLE_INTERPOLATE_ELASTIC_EASE_IN;
     particleKeyframes.push_back(exit);
+
+
+    // For "bird cloud/leave" exit
+    // This currently needs some hardcoded stuff Particle::goToPostion so leave it out for now
+//    Particle::keyframe exit;
+//    exit.type = ofPoint(PARTICLE_POS_ABS, PARTICLE_POS_ABS, PARTICLE_POS_ABS);
+//    exit.duration = 2000;
+//    exit.durationMin = 0;
+//    exit.durationMax = 5000;
+//    exit.posMin.x = -200;
+//    exit.posMax.x = -400;
+//    exit.pos.y = -100;
+//    exit.posMin.z = -200;
+//    exit.posMax.z = 200;
+//    exit.interpolation = PARTICLE_INTERPOLATE_EXPO_EASE_OUT;
+//    particleKeyframes.push_back(exit);
+
+
 }
 
 void testApp::loadCamKeyframes(){
