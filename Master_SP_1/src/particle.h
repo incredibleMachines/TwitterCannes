@@ -84,7 +84,7 @@ public:
         
     };
     
-    void setup(keyframe start, keyframe pixel, ofImage image, float imageWidth, float imageHeight);
+    void setup(keyframe start, keyframe pixel, ofImage image, float imageWidth, float imageHeight, float myIndex);
     void update();
     void draw();
     
@@ -104,6 +104,8 @@ public:
 	float imageH;
 	ofImage image;
     ofTexture face;
+    
+    float myIndex;
     
     int startTime;
     int playhead;

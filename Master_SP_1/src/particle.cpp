@@ -8,7 +8,7 @@
 
 #include "particle.h"
 
-void Particle::setup(keyframe startPos, keyframe pixelPos, ofImage image, float imageWidth, float imageHeight) {
+void Particle::setup(keyframe startPos, keyframe pixelPos, ofImage image, float imageWidth, float imageHeight, float myIndex) {
     
     glEnable(GL_DEPTH_TEST);
 
@@ -16,6 +16,7 @@ void Particle::setup(keyframe startPos, keyframe pixelPos, ofImage image, float 
 	this->image = image;
 	imageW = imageWidth;
 	imageH = imageHeight;
+    this->myIndex = myIndex;
     
     bInit = true;
 	
@@ -146,6 +147,9 @@ void Particle::draw(){
     
     ofBox(0, 0, 0, imageW);
     face.unbind();
+    
+//    image.draw(0, 0, 0, imageW, imageH);
+    
 	ofPopMatrix();
 
 }
@@ -211,7 +215,10 @@ void Particle::goToPosition(keyframe goTo){
     
     if(goTo.durationMin!=0||goTo.durationMax!=0){
         goTo.duration+=ofRandom(goTo.durationMin,goTo.durationMax);
+//        goTo.duration+=ofMap(myIndex*myIndex, 0, 0.25, goTo.durationMin, goTo.durationMax);
     }
+    
+//    cout << pixel.pos.x * pixel.pos.y << endl;
     
     
     targetReached=false;
