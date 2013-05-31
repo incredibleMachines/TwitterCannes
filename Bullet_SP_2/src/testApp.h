@@ -13,24 +13,28 @@ public:
 	void setup();
 	void update();
 	void draw();
-	
-    void loadImage();
-    void loadDir();
+    
     void loadCamKeyframes();
     void setupGL();
     
-    	void mousePressed(int x, int y, int button);
+    void loadImage();
+    void loadDir();
+    void initParticles();
+    void loadParticleKeyframes();
+    
+    void drawHashtag(int x, int y, int z);
+    void drawHashtag(ofPoint pos);
+    void loadTextMeshes();
+    
+    void mousePressed(int x, int y, int button);
     
     ofImage pic;
 	unsigned char * imagePixels;
     int imgCount;
     vector<string> images;
-    
 	
     vector <Particle> particles;
     vector <Particle::keyframe> particleKeyframes;
-    void loadParticleKeyframes();
-    void createParticles();
     int particleKeyframe;
 	
 	ofEasyCam camera;
@@ -58,39 +62,37 @@ public:
     int camKeyframe;
     vector<camPoint> camKeyframes;
     
-    void mouseDragged(int x, int y, int button);
+    void keyReleased(int key);
     
-        ofxBulletWorldRigid			world;
-        ofxBulletBox                  ground;
-            ofxBulletBox                  groundLow;
-
+    ofxBulletWorldRigid           world;
+    ofxBulletBox                  ground;
+    ofxBulletBox                  groundLow;    
+    ofxBulletBox                  background;
     vector<ofxBulletBox*> shapes;
+    
     ofxBulletBox* box;
     vector<ofTexture> face;
-    
     btBoxShape*					boxShape;
     
     ofx3DModelLoader hashtag;
-    ofMesh C_upper;
-	ofMesh A_lower;
-    ofMesh N_lower;
-    ofMesh E_lower;
-    ofMesh S_lower;
-    ofMesh L_upper;
-    ofMesh I_lower;
-    ofMesh O_lower;
-    
-    ofVbo letter;
+    ofx3DModelLoader C_upper;
+	ofx3DModelLoader A_lower;
+    ofx3DModelLoader N_lower;
+    ofx3DModelLoader E_lower;
+    ofx3DModelLoader S_lower;
+    ofx3DModelLoader L_upper;
+    ofx3DModelLoader I_lower;
+    ofx3DModelLoader O_lower;
     
     ofImage whiteImg;
     ofTexture white;
-    ofMaterial whiteMat;
     
-    int zPos;
-    bool bZ;
+    bool bDrawPhysics;
+    bool bSwitchPhysics;
+    bool bStart;
     
-    float drawPhysics;
-    float bSwitchPhysics;
+    bool bCamChange;
+    
     
     
 };

@@ -20,9 +20,6 @@ void Particle::update(){
     
     playhead = ofGetElapsedTimeMillis() - startTime;
     
-    // Calculate increment for linear interpolation
-    float increment=(ofGetFrameRate()/target.duration)*target.length;
-    
     if (playhead >= target.duration) {
         targetReached=true;
         current.pos=target.pos;
@@ -33,8 +30,6 @@ void Particle::update(){
     ofPoint b = start.pos;
     ofPoint c = target.pos - start.pos;
     float d = target.duration;
-    
-//    current.rotation=start.rotation;
     
     if (target.path == PARTICLE_PATH_LINE) {
         
@@ -113,87 +108,65 @@ void Particle::update(){
     }
     
 }
-//
-//void Particle::draw(){
-//	ofPushMatrix();
-//	ofTranslate(current.pos);
-//    face.bind();
-//    
-//    // Rotation of 3D cubes
-////    ofRotateX(current.pos.distance(target.pos)*0.5*ofNoise(pixel.pos.x, pixel.pos.y));
-////    ofRotateY(current.pos.distance(target.pos)*1.25*ofNoise(pixel.pos.x, pixel.pos.y));
-////    ofRotateZ(current.pos.distance(target.pos)*0.75*ofNoise(pixel.pos.x, pixel.pos.y));
-//    
-////    ofBox(0, 0, 0, imageW);
-//    
-//    box->draw();
-//    
-//    face.unbind();
-//    
-////    image.draw(0, 0, 0, imageW, imageH);
-//    
-//	ofPopMatrix();
-//
-//}
 
 void Particle::goToPosition(keyframe goTo){
-//    
-//    if(goTo.type.x==PARTICLE_POS_PIXEL){
-//        goTo.pos.x=pixel.pos.x;
-//    }
-//    else if(goTo.posMin.x&&goTo.posMax.x){
-//        if(goTo.type.x==PARTICLE_POS_RELATIVE){
-//            goTo.pos.x=pixel.pos.x+ofRandom(goTo.posMin.x, goTo.posMax.x);
-//        }
-//        else{
-//            goTo.pos.x=ofRandom(goTo.posMin.x, goTo.posMax.x);
-//        }
-//    }
-//    else{
-//        if(goTo.type.x==PARTICLE_POS_RELATIVE){
-//            goTo.pos.x=pixel.pos.x+goTo.pos.x;
-//        }
-//    }
-//    
-//    if(goTo.type.y==PARTICLE_POS_PIXEL){
-//        goTo.pos.y=pixel.pos.y;
-//    }
-//    else if(goTo.posMin.y&&goTo.posMax.y){
-//        if(goTo.type.y==PARTICLE_POS_RELATIVE){
-//            goTo.pos.y=pixel.pos.y+ofRandom(goTo.posMin.y, goTo.posMax.y);
-//        }
-//        else{
-//            goTo.pos.y=ofRandom(goTo.posMin.y, goTo.posMax.y);
-//        }
-//    }
-//    else{
-//        if(goTo.type.y==PARTICLE_POS_RELATIVE){
-//            goTo.pos.y=pixel.pos.y+goTo.pos.y;
-//        }
-//        else{
-//            goTo.pos.y=goTo.pos.y;
-//        }
-//    }
-//    
-//    if(goTo.type.z==PARTICLE_POS_PIXEL){
-//        goTo.pos.z=pixel.pos.z;
-//    }
-//    else if(goTo.posMin.z&&goTo.posMax.z){
-//        if(goTo.type.z==PARTICLE_POS_RELATIVE){
-//            goTo.pos.z=pixel.pos.z+ofRandom(goTo.posMin.z, goTo.posMax.z);
-//        }
-//        else{
-//            goTo.pos.z=ofRandom(goTo.posMin.z, goTo.posMax.z);
-//        }
-//    }
-//    else{
-//        if(goTo.type.z==PARTICLE_POS_RELATIVE){
-//            goTo.pos.z=pixel.pos.z+goTo.pos.z;
-//        }
-//        else{
-//            goTo.pos.z=goTo.pos.z;
-//        }
-//    }
+    
+    if(goTo.type.x==PARTICLE_POS_PIXEL){
+        goTo.pos.x=pixel.pos.x;
+    }
+    else if(goTo.posMin.x&&goTo.posMax.x){
+        if(goTo.type.x==PARTICLE_POS_RELATIVE){
+            goTo.pos.x=pixel.pos.x+ofRandom(goTo.posMin.x, goTo.posMax.x);
+        }
+        else{
+            goTo.pos.x=ofRandom(goTo.posMin.x, goTo.posMax.x);
+        }
+    }
+    else{
+        if(goTo.type.x==PARTICLE_POS_RELATIVE){
+            goTo.pos.x=pixel.pos.x+goTo.pos.x;
+        }
+    }
+    
+    if(goTo.type.y==PARTICLE_POS_PIXEL){
+        goTo.pos.y=pixel.pos.y;
+    }
+    else if(goTo.posMin.y&&goTo.posMax.y){
+        if(goTo.type.y==PARTICLE_POS_RELATIVE){
+            goTo.pos.y=pixel.pos.y+ofRandom(goTo.posMin.y, goTo.posMax.y);
+        }
+        else{
+            goTo.pos.y=ofRandom(goTo.posMin.y, goTo.posMax.y);
+        }
+    }
+    else{
+        if(goTo.type.y==PARTICLE_POS_RELATIVE){
+            goTo.pos.y=pixel.pos.y+goTo.pos.y;
+        }
+        else{
+            goTo.pos.y=goTo.pos.y;
+        }
+    }
+    
+    if(goTo.type.z==PARTICLE_POS_PIXEL){
+        goTo.pos.z=pixel.pos.z;
+    }
+    else if(goTo.posMin.z&&goTo.posMax.z){
+        if(goTo.type.z==PARTICLE_POS_RELATIVE){
+            goTo.pos.z=pixel.pos.z+ofRandom(goTo.posMin.z, goTo.posMax.z);
+        }
+        else{
+            goTo.pos.z=ofRandom(goTo.posMin.z, goTo.posMax.z);
+        }
+    }
+    else{
+        if(goTo.type.z==PARTICLE_POS_RELATIVE){
+            goTo.pos.z=pixel.pos.z+goTo.pos.z;
+        }
+        else{
+            goTo.pos.z=goTo.pos.z;
+        }
+    }
     
     if(goTo.durationMin!=0||goTo.durationMax!=0){
         goTo.duration+=ofRandom(goTo.durationMin,goTo.durationMax);

@@ -73,6 +73,8 @@ public:
         ofPoint posMax;
         ofPoint rotation;
         
+        ofQuaternion quat;
+        
         int length;
         
         int duration=1000;
@@ -98,9 +100,7 @@ public:
     keyframe pixel;
     keyframe bullet;
 
-    ofPoint move;
     bool targetReached;
-    bool bInit;
 
 	float imageW;
 	float imageH;
@@ -112,8 +112,7 @@ public:
     int startTime;
     int playhead;
     
-    ofxBulletWorldRigid* geometry;
-    ofxBulletBox* box;
+    bool bRotate=true;
     
 };
 
