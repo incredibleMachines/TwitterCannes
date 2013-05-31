@@ -30,67 +30,32 @@ void testApp::setup(){
     //imgCount cycles through the images found in specified image directory
     imgCount=0;
     
-    //camCount cycles through camPoints vector which includes x,y,z coords and rate of movement between them
+    //camKeyframe cycles through camPoints vector which includes x,y,z coords and rate of movement between them
     camKeyframe=0;
+    particleKeyframe=0;
 
+    //Loads Meshes of 3DS files for #CannesLions logo
+    loadTextMeshes();
     
-    //populates vector of images off of specified director and loads camera positions into vector
-//    loadParticleKeyframes();
+    //populates vector of images off of specified directory
     loadDir();
     loadImage();
+    
+    //loads camera keyframe positions into vector
     loadCamKeyframes();
     
-    hashtag.loadModel("OBJ_letters/O_lower/O_lower.3ds",100);
-    
-    ofIndexType index=0;
-
+    //loads particle behavior keyframes
+    //    loadParticleKeyframes();  // REIMPLEMENT to include gravity/physics keyframe
     
     //load init camera position
-    camPos.x=camKeyframes[0].pos.x;
-    camPos.y=camKeyframes[0].pos.y;
-    camPos.z=camKeyframes[0].pos.z;
+    camPos=camKeyframes[0].pos;
 	camera.setPosition(camPos);
-	camera.lookAt(ofPoint(pic.width/2,pic.height/2,0));
-    
-    //setup image boxes
-    
-    boxShape = ofBtGetBoxCollisionShape(tileW, tileH, tileW);
-    
-    for (int x = 0; x < pic.width / tileW; x++){
-		for (int y = 0; y < pic.height / tileH; y++){
-            //crop image for texture on particle
-			ofImage tileImage;
-            tileImage.allocate(tileW, tileH, OF_IMAGE_COLOR);
-			tileImage.cropFrom(pic, x*tileW, y*tileH, tileW, tileH);
-            shapes.push_back( new ofxBulletBox() );
-            ((ofxBulletBox*)shapes[shapes.size()-1])->init(boxShape);
-            ((ofxBulletBox*)shapes[shapes.size()-1])->create(world.world, ofVec3f(ofRandom(0, ofGetWidth()), ofRandom(-200,-600), ofRandom(150,160)), 1);
-            shapes[shapes.size()-1]->setActivationState( DISABLE_DEACTIVATION );
-            shapes[shapes.size()-1]->add();
-            tileImage.mirror(false,true);
-            ofEnableNormalizedTexCoords();
-            ofTexture newFace;
-            newFace.allocate(tileW,tileH, GL_RGB,true);
-            newFace=tileImage.getTextureReference();
-            face.push_back(newFace);
-            
-            
-            Particle::keyframe temp;
-            temp.pos.x=x*tileW;
-            temp.pos.y=y*tileH;
-            temp.pos.z=0;
-            temp.duration=10000;
-            temp.interpolation=PARTICLE_INTERPOLATE_LINEAR;
-            Particle particle;
-            particle.setup(temp,x+x*y);
-            particles.push_back(particle);
-        }
-    }
+	camera.lookAt(camKeyframes[0].lookAt);
     
     if (USE_DOF) {
 		dof.setup(ofGetWidth(), ofGetHeight());
         dof.setFocalDistance(200);
-		dof.setFocalRange(100);
+		dof.setFocalRange(1000);
         dof.setBlurAmount(1);
 	}
     
@@ -98,42 +63,16 @@ void testApp::setup(){
         camera.disableMouseInput();
     }
     
-    camKeyframe++;
-    particleKeyframe=0;
+    whiteImg.loadImage("white.jpg");
+    white=whiteImg.getTextureReference();
     
-    bZ=true;
-    zPos=-100;
-    
-    drawPhysics=true;
-    bSwitchPhysics=false;
-
 }
  
 
 //--------------------------------------------------------------
 void testApp::update(){
     
-    
-//    // Set this flag to true and flip it to false if any of the particles haven't arrived
-//    bool allParticlesArrived = true;
-//	
-//    // Loop through and update all particles
-//    // Check if all have reached their target for the current keyframe
-//    for(int i=0; i<particles.size(); i++){
-//        particles[i].update();
-//		if (!particles[i].targetReached) {
-//            allParticlesArrived = false;
-//		}
-//    }
-//    
-//    // Advance the keyframe counter and set the next position for each particle
-//    if(allParticlesArrived){
-//        particleKeyframe++;
-//        for(int i=0; i<particles.size(); i++){
-//            particles[i].goToPosition(particleKeyframes[particleKeyframe]);
-//        }
-//        
-//    }
+    world.update();
     
     if(CAM_MOVE) {
         if(camPos.distance(camKeyframes[camKeyframe].pos)<2){
@@ -155,43 +94,65 @@ void testApp::update(){
         camera.setPosition(camPos);
         camera.lookAt(camKeyframes[camKeyframe].lookAt);
         ofPoint temp=ofPoint(camKeyframes[camKeyframe].lookAt-camPos);;
-        dof.setFocalDistance(temp.distance(camKeyframes[camKeyframe].lookAt)/4);
-		dof.setFocalRange(100);
+        if(USE_DOF){
+            dof.setFocalDistance(temp.distance(camKeyframes[camKeyframe].lookAt)/4);
+            dof.setFocalRange(1000);
+        }
     }
     
-    world.update();
+    else if(bCamChange==true){
+        camera.setPosition(camKeyframes[camKeyframe].pos);
+        camera.lookAt(camKeyframes[camKeyframe].lookAt);
+        ofPoint temp=ofPoint(camKeyframes[camKeyframe].lookAt-camPos);
+        if(USE_DOF){
+            dof.setFocalDistance(temp.distance(camKeyframes[camKeyframe].lookAt)/4);
+            dof.setFocalRange(1000);
+        }
+        bCamChange=false;
+    }
     
-    if(drawPhysics==false){
-        for (int i=0;i<shapes.size();i++){
-            if(bSwitchPhysics==true){
-                world.disableCollisionEvents();
-                shapes[i]->enableKinematic();
+    
+    //switch out of Bullet physics and into eased particle functions
+    if(bDrawPhysics==false){
+        if(bSwitchPhysics==true){
+            for (int i=0;i<shapes.size();i++){
                 particles[i].bullet.pos=shapes[i]->getPosition();
                 
-                ofPoint tempRot=shapes[i]->getRotation();
-                tempRot.x=ofRadToDeg(tempRot.x);
-                tempRot.y=ofRadToDeg(tempRot.y);
-                tempRot.z=ofRadToDeg(tempRot.z);
                 if(i==0)
                 {
                     cout<<"init: "<<shapes[i]->getRotation()<<endl;
                 }
-                particles[i].bullet.rotation=tempRot;
+                
+                particles[i].bullet.quat = shapes[i]->getRotationQuat();
+
                 particles[i].pixel.pos=particles[i].pixel.pos-particles[i].bullet.pos;
                 particles[i].goToPosition(particles[i].pixel);
+                shapes[i]->enableKinematic();
             }
-            else{
+            bSwitchPhysics=false;
+        }
+        else{
+            for (int i=0;i<shapes.size();i++){
                 particles[i].update();
-            }
-            if(i==0)
-            {
-                cout<<"c: "<<particles[i].current.pos<<endl;
-                cout<<"t: "<<particles[i].target.pos<<endl;
-                cout<<"s: "<<particles[i].start.pos<<endl;
-                cout<<"b: "<<particles[i].bullet.rotation<<endl;
+                
+                if(particles[i].bRotate==true){
+                    ofVec3f pos = shapes[i]->getPosition();
+                    btTransform trans;
+                    trans.setOrigin( btVector3( btScalar(pos.x), btScalar(pos.y), btScalar(pos.z)) );
+                    ofQuaternion rotQuat = shapes[i]->getRotationQuat();
+                    float newRot = rotQuat.w();
+                    newRot -= .05f;
+                    if (newRot<0){
+                        newRot=0;
+                        particles[i].bRotate=false;
+                    }
+                    trans.setRotation( btQuaternion(btVector3(rotQuat.x(), rotQuat.y(), rotQuat.z()), newRot) );
+                    shapes[i]->getRigidBody()->getMotionState()->setWorldTransform( trans );
+                    shapes[i]->activate();
+                }
+
             }
         }
-        bSwitchPhysics=false;
     }
     
 }
@@ -199,9 +160,7 @@ void testApp::update(){
 //--------------------------------------------------------------
 void testApp::draw(){
     
-    //GL
     glEnable(GL_DEPTH_TEST);
-    
     ofEnableLighting();
     
 	if (USE_DOF) {
@@ -211,68 +170,31 @@ void testApp::draw(){
 		camera.begin();
 	}
     
+    
     light.enable();
     light2.enable();
-
-    
     light.draw();
     
+    //material for 
     material.begin();
-    
-    whiteMat.begin();
-    
-    glPushMatrix();
-    glTranslatef(0,400,200);
-    hashtag.draw();
-    glPopMatrix();
-    
-    glPushMatrix();
-    glTranslatef(100,400,200);
-    hashtag.draw();
-    glPopMatrix();
-    
-    glPushMatrix();
-    glTranslatef(200,400,200);
-    hashtag.draw();
-    glPopMatrix();
-    
-    glPushMatrix();
-    glTranslatef(300,400,200);
-    hashtag.draw();
-    glPopMatrix();
-    
-    whiteMat.end();
-
-    material.begin();
+    drawHashtag(-250,500,200);
+    white.bind();
+    background.draw();
+    white.unbind();
     
     for (int i=0;i<shapes.size();i++){
         face[i].bind();
-        if(drawPhysics==true){
+        if(bDrawPhysics==true){
             shapes[i]->draw();
         }
         else{
-
-            
-            glPushMatrix();
-            glTranslatef(particles[i].bullet.pos.x,particles[i].bullet.pos.y,particles[i].bullet.pos.z);
-            glRotatef(-50,1,0,0);
-            glRotatef(-particles[i].bullet.rotation.y,0,1,0);
-            glRotatef(-particles[i].bullet.rotation.z,0,0,1);
-            glPushMatrix();
-            glTranslatef(-particles[i].bullet.pos.x,-particles[i].bullet.pos.y,-particles[i].bullet.pos.z);
+            ofPushMatrix();
+            ofTranslate(particles[i].current.pos);
             shapes[i]->draw();
-            glPopMatrix();
-            glPopMatrix();
+            ofPopMatrix();
         }
         face[i].unbind();
     }
-    
-//    ground.draw();
-
-
-//    for(int i=0; i<particles.size(); i++){
-//        particles[i].draw();
-//    }
     
     material.end();
 	
@@ -285,7 +207,6 @@ void testApp::draw(){
         //fbo of dof for drawing
         ofFbo temp=dof.getFbo();
         temp.draw(0,0,ofGetWidth(),ofGetHeight());
-//
 	}
     glDisable(GL_DEPTH_TEST);	
 	
@@ -303,8 +224,8 @@ void testApp::loadImage(){
     pic.setImageType(OF_IMAGE_COLOR);
     pic.resize(pic.width/2, pic.height/2);
     pic.mirror(false, false);
-    
-//    createParticles();
+    initParticles();
+    imgCount++;
 }
 
 void testApp::loadDir(){
@@ -323,36 +244,6 @@ void testApp::loadDir(){
     }
     
     dir.close();
-}
-
-void testApp::createParticles(){
-    int particleIndex = 0;
-    int particleCount = pic.width / tileW * pic.height / tileH;
-    
-    particles.clear();
-    
-    boxShape = ofBtGetBoxCollisionShape(tileW, tileH, tileW);
-    for (int x = 0; x < pic.width / tileW; x++){
-		for (int y = 0; y < pic.height / tileH; y++){
-            particleIndex++;
-            
-            //crop image for texture on particle
-			ofImage tileImage;
-            tileImage.allocate(tileW, tileH, OF_IMAGE_COLOR);
-			tileImage.cropFrom(pic, x*tileW, y*tileH, tileW, tileH);
-            
-            
-            
-            //setup particle - takes ofPoint pos, cropped ofImage, tileW and tileH globals
-//			Particle p;
-//            Particle::keyframe pixelPos;
-//            Particle::keyframe startPos;
-//            pixelPos.pos=ofPoint(x*tileW, y*tileH,0);
-//            p.setup(&world, particleKeyframes[particleKeyframe], pixelPos, tileImage, tileW, tileH, particleIndex/particleCount);
-//			particles.push_back(p);
-		}
-	}
-    
 }
 
 void testApp::loadParticleKeyframes(){
@@ -385,27 +276,11 @@ void testApp::loadParticleKeyframes(){
     exit.durationMax=500;
     exit.interpolation = PARTICLE_INTERPOLATE_ELASTIC_EASE_IN;
     particleKeyframes.push_back(exit);
-    
-    
-    // For "bird cloud/leave" exit
-    // This currently needs some hardcoded stuff Particle::goToPostion so leave it out for now
-    //    Particle::keyframe exit;
-    //    exit.type = ofPoint(PARTICLE_POS_ABS, PARTICLE_POS_ABS, PARTICLE_POS_ABS);
-    //    exit.duration = 2000;
-    //    exit.durationMin = 0;
-    //    exit.durationMax = 5000;
-    //    exit.posMin.x = -200;
-    //    exit.posMax.x = -400;
-    //    exit.pos.y = -100;
-    //    exit.posMin.z = -200;
-    //    exit.posMax.z = 200;
-    //    exit.interpolation = PARTICLE_INTERPOLATE_EXPO_EASE_OUT;
-    //    particleKeyframes.push_back(exit);
-    
-    
 }
 
 void testApp::loadCamKeyframes(){
+    
+    bCamChange=false;
     
     //sequentially loads camera positions, rate, and reached into vector of camPoint objects
     
@@ -416,23 +291,11 @@ void testApp::loadCamKeyframes(){
     newCamPoint.lookAt=ofPoint(200,400,0);
     camKeyframes.push_back(newCamPoint);
     
-    newCamPoint.pos=ofPoint(1000,600,800);
+    newCamPoint.pos=ofPoint(0,-500,100);
     newCamPoint.rate=.5;
     newCamPoint.reached=false;
     newCamPoint.lookAt=ofPoint(0,0,0);
     camKeyframes.push_back(newCamPoint);
-    
-//    newCamPoint.pos=ofPoint(1200,200,1000);
-//    newCamPoint.rate=1;
-//    newCamPoint.reached=false;
-//    newCamPoint.lookAt=ofPoint(ofGetWidth()/2,ofGetHeight()/2,0);
-//    camKeyframes.push_back(newCamPoint);
-    
-//    newCamPoint.pos=ofPoint(pic.width/2,pic.height/2,700);
-//    newCamPoint.rate=1;
-//    newCamPoint.reached=false;
-//    newCamPoint.lookAt=ofPoint(pic.width/2,pic.height/2,0);
-//    camKeyframes.push_back(newCamPoint);
     
 }
 
@@ -445,8 +308,8 @@ void testApp::setupGL(){
     light.setDiffuseColor(ofColor(255,255,255));
     light.setSpecularColor(ofColor(255,255,255));
     light.setSpotlight();
-    light.setPosition(100, 0, 300);
-    light.lookAt(ofPoint(-50,550,0));
+    light.setPosition(100, -100, 300);
+    light.lookAt(ofPoint(-50,550,-200));
     
     light2.setDiffuseColor(ofColor(255,255,255));
     light2.setSpecularColor(ofColor(255,255,255));
@@ -456,10 +319,6 @@ void testApp::setupGL(){
     
     material.setShininess(100);
     material.setSpecularColor(ofColor(255,255,100));
-//        material.setEmissiveColor(ofColor(255,0,0,30));
-    
-    whiteMat.setShininess(1000);
-    whiteMat.setSpecularColor(ofColor(255,255,255));
     
     world.setup();
     world.enableCollisionEvents();
@@ -473,20 +332,166 @@ void testApp::setupGL(){
 	groundLow.setProperties(1, 1);
 	groundLow.add();
     
+    background.create(world.world,ofVec3f(-1000.,-1000.,-500.),0.,10000.,10000.,10.);
+    background.setProperties(1, 1);
+    background.add();
+    
 }
 
-void testApp::mouseDragged(int x, int y, int button) {
-	printf("Position: %f, %f, %f\n", camera.getX(), camera.getY(), camera.getZ());
-	printf("Target: %f, %f, %f\n", camera.getTarget().getX(), camera.getTarget().getY(), camera.getTarget().getZ());
-	printf("Roll: %f\n", camera.getRoll());
-	printf("Distance: %f\n", camera.getDistance());
+void testApp::loadTextMeshes(){
+    hashtag.loadModel("OBJ_letters/hashtag/hashtag.3ds",100);
+    hashtag.setRotation(1, 180, 1, 0, 0);
+    C_upper.loadModel("OBJ_letters/C_upper/C_upper.3ds",100);
+    C_upper.setRotation(1, 180, 1, 0, 0);
+    A_lower.loadModel("OBJ_letters/A_lower/A_lower.3ds",100);
+    A_lower.setRotation(1, 180, 1, 0, 0);
+    N_lower.loadModel("OBJ_letters/N_lower/N_lower.3ds",100);
+    N_lower.setRotation(1, 180, 1, 0, 0);
+    E_lower.loadModel("OBJ_letters/E_lower/E_lower.3ds",100);
+    E_lower.setRotation(1, 180, 1, 0, 0);
+    S_lower.loadModel("OBJ_letters/S_lower/S_lower.3ds",100);
+    S_lower.setRotation(1, 180, 1, 0, 0);
+    L_upper.loadModel("OBJ_letters/L_upper/L_upper.3ds",100);
+    L_upper.setRotation(1, 180, 1, 0, 0);
+    I_lower.loadModel("OBJ_letters/I_lower/I_lower.3ds",100);
+    I_lower.setRotation(1, 180, 1, 0, 0);
+    O_lower.loadModel("OBJ_letters/O_lower/O_lower.3ds",100);
+    O_lower.setRotation(1, 180, 1, 0, 0);
+}
+
+void testApp::initParticles(){
+    
+    shapes.clear();
+    
+    //particle bools
+    bDrawPhysics=true;
+    bSwitchPhysics=false;
+    bStart=true;
+    
+    boxShape = ofBtGetBoxCollisionShape(tileW, tileH, tileW);
+    
+    for (int x = 0; x < pic.width / tileW; x++){
+		for (int y = 0; y < pic.height / tileH; y++){
+            //crop image for texture on particle
+			ofImage tileImage;
+            tileImage.allocate(tileW, tileH, OF_IMAGE_COLOR);
+			tileImage.cropFrom(pic, x*tileW, y*tileH, tileW, tileH);
+            shapes.push_back( new ofxBulletBox() );
+            ((ofxBulletBox*)shapes[shapes.size()-1])->init(boxShape);
+            ((ofxBulletBox*)shapes[shapes.size()-1])->create(world.world, ofVec3f(ofRandom(0, ofGetWidth()), ofRandom(-200,-600), ofRandom(150,160)), 1);
+            shapes[shapes.size()-1]->setActivationState( DISABLE_DEACTIVATION );
+            shapes[shapes.size()-1]->add();
+            tileImage.mirror(false,true);
+            ofEnableNormalizedTexCoords();
+            ofTexture newFace;
+            newFace.allocate(tileW,tileH, GL_RGB,true);
+            newFace=tileImage.getTextureReference();
+            face.push_back(newFace);
+            
+            Particle::keyframe temp;
+            temp.pos.x=x*tileW;
+            temp.pos.y=y*tileH;
+            temp.pos.z=0;
+            temp.duration=10000;
+            temp.interpolation=PARTICLE_INTERPOLATE_EXPO_EASE_OUT;
+            Particle particle;
+            particle.setup(temp,x+x*y);
+            particles.push_back(particle);
+        }
+    }
+}
+
+void testApp::drawHashtag(ofPoint pos){
+    
+    ofPushMatrix();
+    ofTranslate(pos);
+    
+    glPushMatrix();
+    glTranslatef(0,0,0);
+    hashtag.draw();
+    glPopMatrix();
+    
+    glPushMatrix();
+    glTranslatef(100,0,0);
+    C_upper.draw();
+    glPopMatrix();
+    
+    glPushMatrix();
+    glTranslatef(200,0,0);
+    A_lower.draw();
+    glPopMatrix();
+    
+    glPushMatrix();
+    glTranslatef(300,0,0);
+    N_lower.draw();
+    glPopMatrix();
+    
+    glPushMatrix();
+    glTranslatef(400,0,0);
+    N_lower.draw();
+    glPopMatrix();
+    
+    glPushMatrix();
+    glTranslatef(500,0,0);
+    E_lower.draw();
+    glPopMatrix();
+    
+    glPushMatrix();
+    glTranslatef(600,0,0);
+    S_lower.draw();
+    glPopMatrix();
+    
+    glPushMatrix();
+    glTranslatef(700,0,0);
+    L_upper.draw();
+    glPopMatrix();
+    
+    glPushMatrix();
+    glTranslatef(800,0,0);
+    I_lower.draw();
+    glPopMatrix();
+    
+    glPushMatrix();
+    glTranslatef(900,0,0);
+    O_lower.draw();
+    glPopMatrix();
+    
+    glPushMatrix();
+    glTranslatef(1000,0,0);
+    N_lower.draw();
+    glPopMatrix();
+    
+    glPushMatrix();
+    glTranslatef(1100,0,0);
+    S_lower.draw();
+    glPopMatrix();
+    
+    ofPopMatrix();
+    
+}
+
+void testApp::drawHashtag(int x, int y, int z){
+    drawHashtag(ofPoint(x,y,z));
 }
 
 //--------------------------------------------------------------
 void testApp::mousePressed(int x, int y, int button) {
 	world.setGravity(ofVec3f(0, 0, 0));
-    drawPhysics=false;
+    bDrawPhysics=false;
+    if(bStart==true){
     bSwitchPhysics=true;
-    
-    
+        bStart=false;
+    }
+}
+
+void testApp::keyReleased(int key){
+    switch(key){
+            case ' ':
+            camKeyframe++;
+            if(camKeyframe>camKeyframes.size()-1){
+                camKeyframe=0;
+            }
+            bCamChange=true;
+            return;
+    }
 }
