@@ -11,7 +11,6 @@
 void Particle::setup(keyframe pixelPos, float index) {
     
 	pixel=pixelPos;
-    pixel.rotation=ofPoint(0,0,0);
     myIndex=index;
     
 }
@@ -22,8 +21,8 @@ void Particle::update(){
     
     if (playhead >= target.duration) {
         targetReached=true;
-        current.pos=target.pos;
-        return;
+//        current.pos=target.pos;
+//        return;
     }
 
     float t = playhead;

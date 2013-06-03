@@ -4,6 +4,7 @@
 #include "particle.h"
 #include "ofxDOF.h"
 #include "ofx3DModelLoader.h"
+#include "ofxXmlSettings.h"
 
 
 
@@ -25,6 +26,7 @@ public:
     void drawHashtag(int x, int y, int z);
     void drawHashtag(ofPoint pos);
     void loadTextMeshes();
+    void keyPressed(int key);
     
     void mousePressed(int x, int y, int button);
     
@@ -92,6 +94,16 @@ public:
     bool bStart;
     
     bool bCamChange;
+    
+    ofPoint C, a, n1, n2, e, s1, l, i, o, n3, s2, hash;
+    
+    bool bUp=false, bDown=false, bLeft=false, bRight=false;
+    
+    ofxXmlSettings settings;
+    
+    ofPoint pos;
+    
+    float count;
     
     
     

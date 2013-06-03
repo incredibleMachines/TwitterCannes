@@ -23,6 +23,7 @@
 
 #define PARTICLE_PATH_LINE 0
 #define PARTICLE_PATH_CURVE 1
+#define PARTICLE_PATH_PHYSICS 1
 
 #define PARTICLE_INTERPOLATE_LINEAR 0
 #define PARTICLE_INTERPOLATE_BACK_EASE_IN 1
@@ -84,6 +85,8 @@ public:
         int path=0;
         int interpolation=0;
         bool destroy=false;
+        
+        ofPoint dimensions;
         
     };
     
