@@ -115,8 +115,7 @@ public:
     
     content image;
     
-    vector<hashletter> hashCollisionPos;
-    vector<hashletter> hashMeshPos;
+    vector<vector<hashletter> > hashletters;
     hashtag hash;
 //    ofx3DModelLoader tempMesh[12];
     ofxAssimpModelLoader hashModel[12];
@@ -149,6 +148,10 @@ public:
 
     
     ofPoint boxScale;
+    
+    void updateMesh(int i);
+    
+    bool bDebug=false;
     
 };
 

@@ -3,9 +3,9 @@
         <NAME>HASH</NAME>
         <MESH>
             <POS>
-                <X>662</X>
-                <Y>325</Y>
-                <Z>-730</Z>
+                <X>370.000000000</X>
+                <Y>230.000000000</Y>
+                <Z>-730.000000000</Z>
             </POS>
             <ROTATION>
                 <X>0</X>
@@ -15,9 +15,9 @@
         </MESH>
         <COLLISION>
             <POS>
-                <X>0</X>
-                <Y>0.000000000</Y>
-                <Z>-40</Z>
+                <X>-11.000000000</X>
+                <Y>-57.000000000</Y>
+                <Z>-40.000000000</Z>
             </POS>
             <ROTATION>
                 <X>0</X>
@@ -27,14 +27,13 @@
         </COLLISION>
         <OBJ>OBJ_letters/hashtag/hashtag.3ds</OBJ>
     </LETTER>
-    
     <LETTER>
         <NAME>C</NAME>
         <MESH>
             <POS>
-                <X>0.000000000</X>
-                <Y>0.000000000</Y>
-                <Z>0.000000000</Z>
+                <X>500.000000000</X>
+                <Y>220.000000000</Y>
+                <Z>-730.000000000</Z>
             </POS>
             <ROTATION>
                 <X>0</X>
@@ -45,8 +44,8 @@
         <COLLISION>
             <POS>
                 <X>0.000000000</X>
-                <Y>0.000000000</Y>
-                <Z>0.000000000</Z>
+                <Y>-7.000000000</Y>
+                <Z>-40.000000000</Z>
             </POS>
             <ROTATION>
                 <X>0</X>
@@ -56,7 +55,6 @@
         </COLLISION>
         <OBJ>OBJ_letters/C_upper/C_upper.3ds</OBJ>
     </LETTER>
-    
     <LETTER>
         <NAME>a</NAME>
         <MESH>
@@ -85,7 +83,6 @@
         </COLLISION>
         <OBJ>OBJ_letters/A_lower/A_lower.3ds</OBJ>
     </LETTER>
-    
     <LETTER>
         <NAME>n1</NAME>
         <MESH>
@@ -114,7 +111,6 @@
         </COLLISION>
         <OBJ>OBJ_letters/N_lower/N_lower.3ds</OBJ>
     </LETTER>
-    
     <LETTER>
         <NAME>n2</NAME>
         <MESH>
@@ -143,7 +139,6 @@
         </COLLISION>
         <OBJ>OBJ_letters/N_lower/N_lower.3ds</OBJ>
     </LETTER>
-    
     <LETTER>
         <NAME>e</NAME>
         <MESH>
@@ -160,8 +155,8 @@
         </MESH>
         <COLLISION>
             <POS>
-                <X>0.000000000</X>
-                <Y>0.000000000</Y>
+                <X>290.000000000</X>
+                <Y>24.000000000</Y>
                 <Z>0.000000000</Z>
             </POS>
             <ROTATION>
@@ -172,7 +167,6 @@
         </COLLISION>
         <OBJ>OBJ_letters/E_lower/E_lower.3ds</OBJ>
     </LETTER>
-    
     <LETTER>
         <NAME>s1</NAME>
         <MESH>
@@ -189,8 +183,8 @@
         </MESH>
         <COLLISION>
             <POS>
-                <X>0.000000000</X>
-                <Y>0.000000000</Y>
+                <X>290.000000000</X>
+                <Y>24.000000000</Y>
                 <Z>0.000000000</Z>
             </POS>
             <ROTATION>
@@ -201,7 +195,6 @@
         </COLLISION>
         <OBJ>OBJ_letters/S_lower/S_lower.3ds</OBJ>
     </LETTER>
-    
     <LETTER>
         <NAME>L</NAME>
         <MESH>
@@ -218,8 +211,8 @@
         </MESH>
         <COLLISION>
             <POS>
-                <X>0.000000000</X>
-                <Y>0.000000000</Y>
+                <X>290.000000000</X>
+                <Y>24.000000000</Y>
                 <Z>0.000000000</Z>
             </POS>
             <ROTATION>
@@ -227,10 +220,9 @@
                 <Y>0</Y>
                 <Z>0</Z>
             </ROTATION>
-            </COLLISION>
+        </COLLISION>
         <OBJ>OBJ_letters/L_upper/L_upper.3ds</OBJ>
     </LETTER>
-    
     <LETTER>
         <NAME>i</NAME>
         <MESH>
@@ -247,7 +239,23 @@
         </MESH>
         <COLLISION>
             <POS>
-                <X>0.000000000</X>
+                <X>290.000000000</X>
+                <Y>34.000000000</Y>
+                <Z>0.000000000</Z>
+            </POS>
+            <ROTATION>
+                <X>0</X>
+                <Y>0</Y>
+                <Z>0</Z>
+            </ROTATION>
+        </COLLISION>
+        <OBJ>OBJ_letters/I_lower/I_lower.3ds</OBJ>
+    </LETTER>
+    <LETTER>
+        <NAME>o</NAME>
+        <MESH>
+            <POS>
+                <X>300.000000000</X>
                 <Y>0.000000000</Y>
                 <Z>0.000000000</Z>
             </POS>
@@ -256,40 +264,21 @@
                 <Y>0</Y>
                 <Z>0</Z>
             </ROTATION>
-            </COLLISION>
-            <OBJ>OBJ_letters/I_lower/I_lower.3ds</OBJ>
-    </LETTER>
-    
-    <LETTER>
-        <NAME>o</NAME>
-            <MESH>
-                <POS>
-                    <X>300.000000000</X>
-                    <Y>0.000000000</Y>
-                    <Z>0.000000000</Z>
-                </POS>
-                <ROTATION>
-                    <X>0</X>
-                    <Y>0</Y>
-                    <Z>0</Z>
-                </ROTATION>
-            </MESH>
-            <COLLISION>
-                <POS>
-                    <X>0.000000000</X>
-                    <Y>0.000000000</Y>
-                    <Z>0.000000000</Z>
-                </POS>
-                <ROTATION>
-                    <X>0</X>
-                    <Y>0</Y>
-                    <Z>0</Z>
-                </ROTATION>
-
+        </MESH>
+        <COLLISION>
+            <POS>
+                <X>290.000000000</X>
+                <Y>24.000000000</Y>
+                <Z>0.000000000</Z>
+            </POS>
+            <ROTATION>
+                <X>0</X>
+                <Y>0</Y>
+                <Z>0</Z>
+            </ROTATION>
         </COLLISION>
-    <OBJ>OBJ_letters/O_lower/O_lower.3ds</OBJ>
+        <OBJ>OBJ_letters/O_lower/O_lower.3ds</OBJ>
     </LETTER>
-    
     <LETTER>
         <NAME>n2</NAME>
         <MESH>
@@ -306,8 +295,8 @@
         </MESH>
         <COLLISION>
             <POS>
-                <X>0.000000000</X>
-                <Y>0.000000000</Y>
+                <X>369.000000000</X>
+                <Y>-120.000000000</Y>
                 <Z>0.000000000</Z>
             </POS>
             <ROTATION>
@@ -318,7 +307,6 @@
         </COLLISION>
         <OBJ>OBJ_letters/N_lower/N_lower.3ds</OBJ>
     </LETTER>
-
     <LETTER>
         <NAME>s2</NAME>
         <MESH>
@@ -335,8 +323,8 @@
         </MESH>
         <COLLISION>
             <POS>
-                <X>0.000000000</X>
-                <Y>0.000000000</Y>
+                <X>290.000000000</X>
+                <Y>24.000000000</Y>
                 <Z>0.000000000</Z>
             </POS>
             <ROTATION>
@@ -347,8 +335,10 @@
         </COLLISION>
         <OBJ>OBJ_letters/S_lower/S_lower.3ds</OBJ>
     </LETTER>
+    <X>300.000000000</X>
+    <Y>0.000000000</Y>
+    <Z>0.000000000</Z>
 </LETTERS>
-
 <HASHTAG>
     <POS>
         <X>0.000000000</X>
@@ -361,3 +351,6 @@
         <Z>1</Z>
     </SCALE>
 </HASHTAG>
+<X>0.000000000</X>
+<Y>220.000000000</Y>
+<Z>0.000000000</Z>

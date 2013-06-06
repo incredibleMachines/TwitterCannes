@@ -14,6 +14,8 @@ void testApp::setup(){
     
     //CALIBRATION VARIABLES -- TODO: ADD TO GUI
     
+    bDebug==false;
+    
     meshCollisionScale=ofPoint(.45,.45,1);
     meshDrawScale=ofPoint(5,5,10);
     image.pos=ofPoint(0,0,0);
@@ -61,7 +63,6 @@ void testApp::setup(){
     camera.setPosition(camPos);
     camera.lookAt(look);
 //    camera.setFov(120);
-    cout<<"aspect:"<<camera.getAspectRatio()<<endl;
     camera.setFarClip(1000.);
     }
     
@@ -77,7 +78,6 @@ void testApp::setup(){
         camera.setPosition(camPos);
         camera.lookAt(look);
         //    camera.setFov(120);
-        cout<<"aspect:"<<camera.getAspectRatio()<<endl;
         camera.setFarClip(1000.);
     }
     else if(camState==2){
@@ -92,7 +92,6 @@ void testApp::setup(){
         camera.setPosition(camPos);
         camera.lookAt(look);
         //    camera.setFov(120);
-        cout<<"aspect:"<<camera.getAspectRatio()<<endl;
         camera.setFarClip(1000.);
     }
     
@@ -115,7 +114,6 @@ void testApp::setup(){
 //--------------------------------------------------------------
 void testApp::update(){
     
-    cout<<camera.getPosition()<<endl;
 //    camera2.rotate(1,10,0,0);
     
 //    hashMeshPos[0].pos.x--;
@@ -265,7 +263,6 @@ void testApp::update(){
                 shapes[i]->remove();
                 shapes[i]->init(boxShape);
                 shapes[i]->create(world.world,trans, 10.);
-                //                shapes[i]->setProperties(1, 1);
                 shapes[i]->add();
                 particles[i].goToPosition(particleKeyframes[particleKeyframe]);
             }
@@ -334,8 +331,10 @@ void testApp::draw(){
     }
     
     //      enable to see physics collision wireframes
-    
-    world.drawDebug();
+
+    if(bDebug==true){
+        world.drawDebug();
+    }
     
     //draw lighting
     
@@ -548,13 +547,11 @@ void testApp::initParticles(){
             
             //create Bullet shapes for image visualization
             shapes.push_back( new ofxBulletBox() );
+            
             ((ofxBulletBox*)shapes[shapes.size()-1])->init(boxShape);
             btTransform trans;
-
             ((ofxBulletBox*)shapes[shapes.size()-1])->create(world.world,particleKeyframes[particleKeyframe].pos,10.);
-
             shapes[shapes.size()-1]->add();
-
             shapes[shapes.size()-1]->enableKinematic();
             
             //crop and allocate image boxes to tiles
@@ -603,13 +600,13 @@ void testApp::drawHashtag(){
     
     //align hashtag ofMeshes (only non-bullet items used) with bullet collision shapes
     
-    for(int i = 0; i < 12; i++) {
+    for(int i = 0; i < hashletters.size(); i++) {
         ofPushMatrix();
         
 //        btScalar	m[16];
 //        ofGetOpenGLMatrixFromRigidBody( hashCollision[i]->getRigidBody(), m );
         glPushMatrix();
-        glTranslatef(hashMeshPos[i].pos.x,hashMeshPos[i].pos.y,hashMeshPos[i].pos.z);
+        glTranslatef(hashletters[i][1].pos.x,hashletters[i][1].pos.y,hashletters[i][1].pos.z);
         ofScale(scale.x,scale.y,scale.z);
         glRotatef(180,0,0,1);
         hashModel[i].getMesh(0).drawFaces();
@@ -654,6 +651,7 @@ void testApp::loadHashtagGUI()
     settings.pushTag("LETTERS");
     int numberOfSavedPoints = settings.getNumTags("LETTER");
     
+    int idCount=0;
 //    ofDisableArbTex();
     for(int i = 0; i < 12; i++){
         
@@ -694,23 +692,30 @@ void testApp::loadHashtagGUI()
         newHashMesh.size=max-min;
         ofQuaternion startRot = ofQuaternion(1., 0., 0., PI);
         
-        hashMeshPos.push_back(newHashMesh);
-        hashCollisionPos.push_back(newHashCollision);
+        vector<hashletter> pushMeshes;
+       
+        pushMeshes.push_back(newHashCollision);
+        pushMeshes.push_back(newHashMesh);
         
-        cout<<newHashCollision.pos<<endl;
+        hashletters.push_back(pushMeshes);
+        
+        cout<<hashletters[i][1].pos<<endl;
         
         hashCollision.push_back( new ofxBulletCustomShape() );
 //        hashCollision[i]->init(new btCompoundShape, ofVec3f(hashModel[i].getSceneCenter()));
 //        hashCollision[i]->setProperties(.3, 1.);
-        hashCollision[i]->addMesh(hashModel[i].getMesh(0), scale, true);
+
         hashCollision[i]->create( world.world, ofVec3f(newHashCollision.pos.x,newHashCollision.pos.y,newHashCollision.pos.z),startRot,0.);
+                hashCollision[i]->addMesh(hashModel[i].getMesh(0), scale, true);
         hashCollision[i]->add();
         cout<< hashCollision[i]->getRestitution()<<endl;
         
         //ADD HASHTAG SETTINGS TO GUI
         
-        hashtagGUI->addWidgetDown(new ofxUIToggle( dim, dim, false, newHashMesh.key))->setID(i);
-        hashtagGUI->addWidgetDown(new ofxUIToggle( dim, dim, false, newHashCollision.key))->setID(i);
+        hashtagGUI->addWidgetDown(new ofxUIToggle( dim, dim, false, newHashCollision.key))->setID(idCount);
+        idCount++;
+        hashtagGUI->addWidgetDown(new ofxUIToggle( dim, dim, false, newHashMesh.key))->setID(idCount);
+                idCount++;
     }
 //    ofEnableArbTex();
     settings.popTag();
@@ -723,15 +728,13 @@ void testApp::guiEvent(ofxUIEventArgs &e)
     string name = e.widget->getName();
     int kind = e.widget->getKind();
     int num=e.widget->getID();
+    
     ofxUIToggle *toggle = (ofxUIToggle *) e.widget;
-    if(num!=-1&&num%2==0){
-        hashCollisionPos[num].active=toggle->getValue();
-    }
     
-    else if(num!=-1&&num%2==1){
-        hashMeshPos[num].active=toggle->getValue();
+    if(num!=-1){
+        hashletters[num/2][num%2].active=toggle->getValue();
+        cout<<num%2<<endl;
     }
-    
     else{
         hash.active=toggle->getValue();
     }
@@ -745,17 +748,6 @@ void testApp::mousePressed(int x, int y, int button) {
 }
 
 void testApp::keyPressed(int key){
-//    for(int i = 0; i < 12; i++){
-//        
-//        btTransform trans;
-//        ofPoint temp=hashCollisionPos.pos+hash.pos;
-//        trans.setOrigin( btVector3( btScalar(temp.x), btScalar(temp.y), btScalar(temp.z)) );
-//        ofQuaternion rotQuat = hashCollision[i]->getRotationQuat();
-//        float newRot = rotQuat.w();
-//        trans.setRotation( btQuaternion(btVector3(rotQuat.x(), rotQuat.y(), rotQuat.z()), newRot) );
-//        hashCollision[i]->getRigidBody()->getMotionState()->setWorldTransform( trans );
-//        cout<<"move"<<endl;
-//    }
     switch(key){
             
         case 'f':
@@ -772,26 +764,25 @@ void testApp::keyPressed(int key){
             
         case ' ':
             settings.pushTag("LETTERS");
-            for(int i = 0; i < hashCollisionPos.size(); i++){
+            for(int i = 0; i < hashletters.size(); i++){
                 settings.pushTag("LETTER", i);
                 settings.pushTag("MESH");
                 settings.pushTag("POS");
-                settings.setValue("X", hashMeshPos[i].pos.x);
-                settings.setValue("Y", hashMeshPos[i].pos.y);
-                settings.setValue("Z", hashMeshPos[i].pos.z);
+                settings.setValue("X", hashletters[i][1].pos.x);
+                settings.setValue("Y", hashletters[i][1].pos.y);
+                settings.setValue("Z", hashletters[i][1].pos.z);
                 settings.popTag();
                 settings.popTag();
-                settings.pushTag("MESH");
                 settings.pushTag("COLLISION");
-                settings.setValue("X", hashCollisionPos[i].pos.x);
-                settings.setValue("Y", hashCollisionPos[i].pos.y);
-                settings.setValue("Z", hashCollisionPos[i].pos.z);
+                settings.pushTag("POS");
+                settings.setValue("X", hashletters[i][0].pos.x);
+                settings.setValue("Y", hashletters[i][0].pos.y);
+                settings.setValue("Z", hashletters[i][0].pos.z);
                 settings.popTag();
                 settings.popTag();
                 settings.popTag();
             }
             settings.popTag();
-            
             settings.pushTag("HASHTAG");
             settings.pushTag("POS");
             settings.setValue("X", hash.pos.x);
@@ -813,17 +804,21 @@ void testApp::keyPressed(int key){
                 }
                 
             }
-//            for(int i=0;i<hashletters.size();i++){
-//                if(hashletters[i].active){
-//                    if(!bSingle){
-//                        hashletters[i].pos.y-=10;
-//                    }
-//                    else{
-//                        hashletters[i].pos.y--;
-//                    }
-//                    
-//                }
-//            }
+            for(int i=0;i<hashletters.size();i++){
+                for(int j=0;j<2;j++){
+                    if(hashletters[i][j].active){
+                        if(!bSingle){
+                            hashletters[i][j].pos.y-=10;
+                        }
+                        else{
+                            hashletters[i][j].pos.y--;
+                        }
+                        if(j==0){
+                            updateMesh(i);
+                        }
+                    }
+                }
+            }
             return;
             
         case OF_KEY_DOWN:
@@ -836,16 +831,21 @@ void testApp::keyPressed(int key){
                 }
                 
             }
-//            for(int i=0;i<hashletters.size();i++){
-//                if(hashletters[i].active){
-//                    if(!bSingle){
-//                        hashletters[i].pos.y+=10;
-//                    }
-//                    else{
-//                        hashletters[i].pos.y++;
-//                    }
-//                }
-//            }
+            for(int i=0;i<hashletters.size();i++){
+                for(int j=0;j<2;j++){
+                    if(hashletters[i][j].active){
+                        if(!bSingle){
+                            hashletters[i][j].pos.y+=10;
+                        }
+                        else{
+                            hashletters[i][j].pos.y++;
+                        }
+                        if(j==0){
+                            updateMesh(i);
+                        }
+                    }
+                }
+            }
             return;
             
         case OF_KEY_RIGHT:
@@ -858,16 +858,21 @@ void testApp::keyPressed(int key){
                 }
                 
             }
-//            for(int i=0;i<hashletters.size();i++){
-//                if(hashletters[i].active){
-//                    if(!bSingle){
-//                        hashletters[i].pos.x+=10;
-//                    }
-//                    else{
-//                        hashletters[i].pos.x++;
-//                    }
-//                }
-//            }
+            for(int i=0;i<hashletters.size();i++){
+                for(int j=0;j<2;j++){
+                    if(hashletters[i][j].active){
+                        if(!bSingle){
+                            hashletters[i][j].pos.x+=10;
+                        }
+                        else{
+                            hashletters[i][j].pos.x++;
+                        }
+                        if(j==0){
+                            updateMesh(i);
+                        }
+                    }
+                }
+            }
             return;
             
         case OF_KEY_LEFT:
@@ -880,16 +885,21 @@ void testApp::keyPressed(int key){
                 }
                 
             }
-//            for(int i=0;i<hashletters.size();i++){
-//                if(hashletters[i].active){
-//                    if(!bSingle){
-//                        hashletters[i].pos.x-=10;
-//                    }
-//                    else{
-//                        hashletters[i].pos.x--;
-//                    }
-//                }
-//            }
+            for(int i=0;i<hashletters.size();i++){
+                for(int j=0;j<2;j++){
+                    if(hashletters[i][j].active){
+                        if(!bSingle){
+                            hashletters[i][j].pos.x-=10;
+                        }
+                        else{
+                            hashletters[i][j].pos.x--;
+                        }
+                        if(j==0){
+                            updateMesh(i);
+                        }
+                    }
+                }
+            }
             return;
     }
     
@@ -903,6 +913,20 @@ void testApp::keyReleased(int key){
         case 'h':
             hashtagGUI->toggleVisible();
             break;
+        case 'd':
+            bDebug=!bDebug;
+            break;
             
     }
+}
+
+void testApp::updateMesh(int i){
+        btTransform trans;
+        ofPoint temp=hashletters[i][0].pos;
+        trans.setOrigin( btVector3( btScalar(temp.x), btScalar(temp.y), btScalar(temp.z)) );
+        ofQuaternion rotQuat = hashCollision[i]->getRotationQuat();
+        float newRot = rotQuat.w();
+        trans.setRotation( btQuaternion(btVector3(rotQuat.x(), rotQuat.y(), rotQuat.z()), newRot) );
+        hashCollision[i]->getRigidBody()->getMotionState()->setWorldTransform( trans );
+        cout<<"move"<<endl;
 }
