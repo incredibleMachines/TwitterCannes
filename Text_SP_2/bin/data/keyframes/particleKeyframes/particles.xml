@@ -221,12 +221,12 @@
         <GRAVITY>
             <X></X>
             <Y></Y>
-            <Z>-550</Z>
+            <Z>-300</Z>
         </GRAVITY>
         <DURATION>
             <MIN></MIN>
             <MAX></MAX>
-            <ACTUAL>8000</ACTUAL>
+            <ACTUAL>4000</ACTUAL>
         </DURATION>
         <INTERPOLATIONS>
             <INTERPOLATION>19</INTERPOLATION>
