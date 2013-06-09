@@ -148,18 +148,14 @@ void testApp::drawObjects(){
     ofScale(6,6,6);
     ofRotate(90, 0, 1, 0);
     ofRotate(330,1,0,0);
-    
-    ofPushMatrix();
-    
+        
     //    ofTranslate(0, 0, -10);
     
     //    ofRect(-8, -8, 16, 16);
-    
-    ofPopMatrix();
-    
+        
     //ofBox(0,0,-8,16);
     
-    //    mesh.draw();
+        mesh.draw();
 }
 
 //--------------------------------------------------------------
@@ -380,9 +376,14 @@ void testApp::draw(){
         lightAngle += 0.25f;
     }
     
+//    shadowLight.lookAt( ofVec3f(0.0,0.0,0.0) );
+//    shadowLight.orbit( lightAngle, -30.0, 50.0f, ofVec3f(0.0,0.0,0.0) );
+    
     shadowLight.lookAt( ofVec3f(0.0,0.0,0.0) );
-    shadowLight.orbit( lightAngle, -30.0, 50.0f, ofVec3f(0.0,0.0,0.0) );
+    shadowLight.orbit( 90, -70, 90, ofVec3f(0.0,0.0,0.0) );
+    //(long, lat, radius, ofVec3f(centerpoint))
     shadowLight.enable();
+
     
     // render linear depth buffer from light view
     shadowLight.beginShadowMap();
@@ -402,6 +403,15 @@ void testApp::draw(){
     camera.begin();
     
     shadowLight.enable();
+    
+    // draw background for projecting shadows onto
+    ofPushMatrix();
+    ofScale(6,6,6);
+    ofRotate(90, 0, 1, 0);
+    ofRotate(330,1,0,0);
+    ofRect(-8, -8, 16, 16);
+    ofPopMatrix();
+    
     drawObjects(); // render to screen
     shadowLight.disable();
     
@@ -434,7 +444,7 @@ void testApp::draw(){
     ofPushMatrix();
     
     ofScale(10, 10, 10);
-    ofTranslate(60,0,65);
+    ofTranslate(60,0,60);
     
     for (int i=0;i<shapes.size();i++){
         face[i].bind();
@@ -446,7 +456,6 @@ void testApp::draw(){
     world.drawDebug();
     
     ofPopMatrix();
-    
     
     glDisable(GL_DEPTH_TEST);
     
