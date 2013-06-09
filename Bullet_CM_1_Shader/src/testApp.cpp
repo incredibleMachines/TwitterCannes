@@ -41,58 +41,7 @@ void testApp::setup(){
     imgCount=0;
     loadDir();
     loadImage();
-    
-    camState=0;
-    
-    if(camState==0){
-        camera2.enableOrtho();
-        camPos=ofPoint(10,0,0);
-        ofPoint look=ofPoint(0,0,-80);
-        //    ofPoint look = ofPoint(0,0,0);
         
-        camera2.setPosition(camPos);
-        camera2.setNearClip(-1000);
-        camera2.setFarClip(1000);
-        camera2.lookAt(look);
-        
-        //    camera.setPosition(camPos);
-        //    camera.lookAt(look);
-        //    camera.setFov(120);
-        cout<<"aspect:"<<camera.getAspectRatio()<<endl;
-        camera.setFarClip(1000.);
-    }
-    
-    else if(camState==1){
-        camera2.enableOrtho();
-        camPos=ofPoint(50,0,-40);
-        ofPoint look=ofPoint(0,0,-40);
-        camera2.setPosition(camPos);
-        camera2.setNearClip(-1000);
-        camera2.setFarClip(1000);
-        camera2.lookAt(look);
-        
-        camera.setPosition(camPos);
-        camera.lookAt(look);
-        //    camera.setFov(120);
-        cout<<"aspect:"<<camera.getAspectRatio()<<endl;
-        camera.setFarClip(1000.);
-    }
-    else if(camState==2){
-        camera2.enableOrtho();
-        camPos=ofPoint(0,0,0);
-        ofPoint look=ofPoint(0,0,-40);
-        camera2.setPosition(camPos);
-        camera2.setNearClip(-1000);
-        camera2.setFarClip(1000);
-        camera2.lookAt(look);
-        
-        camera.setPosition(camPos);
-        camera.lookAt(look);
-        //    camera.setFov(120);
-        cout<<"aspect:"<<camera.getAspectRatio()<<endl;
-        camera.setFarClip(1000.);
-    }
-    
     if (USE_DOF) {
         dof.setup(ofGetWidth(),ofGetHeight());
         dof.setFocalDistance(20);
@@ -111,7 +60,6 @@ void testApp::setup(){
     camera.lookAt( ofVec3f( 0.0f, 0.0f, 0.0f ) );
     
     shader.load( "shaders/mainScene.vert", "shaders/mainScene.frag" );
-    
     model.loadModel("models/cannes_placementCorrected.obj", true);
     
     hashModel[0].setScale(0.04, 0.04, 0.04);
@@ -149,13 +97,7 @@ void testApp::drawObjects(){
     ofRotate(90, 0, 1, 0);
     ofRotate(330,1,0,0);
         
-    //    ofTranslate(0, 0, -10);
-    
-    //    ofRect(-8, -8, 16, 16);
-        
-    //ofBox(0,0,-8,16);
-    
-        mesh.draw();
+    mesh.draw();
 }
 
 //--------------------------------------------------------------
@@ -370,21 +312,12 @@ void testApp::draw(){
 	glEnable(GL_DEPTH_TEST);
     ofDisableAlphaBlending();
     ofEnableLighting();
-    dof.begin();
-    
-    if(!lPaused){
-        lightAngle += 0.25f;
-    }
-    
-//    shadowLight.lookAt( ofVec3f(0.0,0.0,0.0) );
-//    shadowLight.orbit( lightAngle, -30.0, 50.0f, ofVec3f(0.0,0.0,0.0) );
     
     shadowLight.lookAt( ofVec3f(0.0,0.0,0.0) );
     shadowLight.orbit( 90, -70, 90, ofVec3f(0.0,0.0,0.0) );
     //(long, lat, radius, ofVec3f(centerpoint))
     shadowLight.enable();
 
-    
     // render linear depth buffer from light view
     shadowLight.beginShadowMap();
     drawObjects(); // render to shader map
@@ -426,14 +359,6 @@ void testApp::draw(){
     ofDisableLighting();
     ofDisableArbTex();
     
-    if (USE_DOF) {
-        dof.end();
-        //fbo of dof for drawing
-        ofFbo temp=dof.getFbo();
-        temp.draw(0,0,ofGetWidth(),ofGetHeight());
-    }
-    
-    
     //bind image textures and draw bullet shapes
     
     material.begin();
@@ -460,7 +385,7 @@ void testApp::draw(){
     glDisable(GL_DEPTH_TEST);
     
     //     debug view of shader scene
-    //    shadowLight.debugShadowMap();
+    //shadowLight.debugShadowMap();
     
 }
 
