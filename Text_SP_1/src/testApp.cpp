@@ -15,16 +15,20 @@ void testApp::setup(){
     //CALIBRATION VARIABLES -- TODO: ADD TO GUI
     
     bDebug=true;
-        
+    bTweet=true;
+    
     collisionPlane.loadModel("OBJ_letters/collision.obj");
     
+    tweetScale=ofPoint(.1,.1,.1);
     meshCollisionScale=ofPoint(.6,.6 ,.6);
     meshDrawScale=ofPoint(10,10,20);
     image.pos=ofPoint(-10,-10,-55);
     boxScale=ofPoint(.05,.05,.05);
     ofSetBackgroundColor(255);
     
-    camState=0;
+    gotham=*new Alphabet();
+    
+    camState=1;
     
     ofSetVerticalSync(true);
 	ofSetFrameRate(30);
@@ -44,12 +48,13 @@ void testApp::setup(){
     
     //populates vector of images off of specified directory
     imgCount=0;
-    loadDir();
-    loadImage();
+    //    loadDir();
+    //    loadImage();
+    loadTweet();
     
     if(camState==0){
         camera2.enableOrtho();
-        camPos=ofPoint(10,0,0);
+        camPos=ofPoint(0,0,0);
         ofPoint look=ofPoint(0,0,-80);
         
         camera2.setPosition(camPos);
@@ -60,7 +65,7 @@ void testApp::setup(){
         camera.setPosition(camPos);
         camera.lookAt(look);
         camera.setFarClip(1000.);
-        //        camera.setFov(50);
+        camera.setFov(50);
     }
     
     else if(camState==1){
@@ -94,9 +99,9 @@ void testApp::setup(){
     
     if (USE_DOF) {
         dof.setup(ofGetWidth(),ofGetHeight());
-        dof.setFocalDistance(10.9);
-        dof.setFocalRange(4.5);
-        dof.setBlurAmount(.7);
+        dof.setFocalDistance(10);
+        dof.setFocalRange(20);
+        dof.setBlurAmount(1);
     }
     
     if(!CAM_MOUSE){
@@ -105,6 +110,7 @@ void testApp::setup(){
     }
     
     bRot=false;
+
 }
 
 
@@ -142,7 +148,7 @@ void testApp::update(){
                 particleKeyframe=0;
             }
             if(bDebug==false){
-                loadImage();
+                //                loadImage();
             }
         }
         
@@ -225,7 +231,13 @@ void testApp::update(){
                 float newRot = rotQuat.w();
                 trans.setRotation( btQuaternion(btVector3(rotQuat.x(), rotQuat.y(), rotQuat.z()), newRot) );
                 shapes[i]->remove();
-                shapes[i]->init(boxShape);
+                if(bTweet==false){
+                    shapes[i]->init(boxShape);
+                }
+                else{
+                     btBoxShape* charBox=new btBoxShape(btVector3(btScalar(particles[i].size.x),btScalar(particles[i].size.x),btScalar(particles[i].size.x)));
+                    shapes[i]->init(charBox);
+                }
                 shapes[i]->create(world.world,trans, 10);
                 shapes[i]->setProperties(.1,1);
                 shapes[i]->add();
@@ -302,39 +314,67 @@ void testApp::draw(){
     }
     
     //draw lighting
-
-
+    
+    
     light.enable();
     light3.enable();
     if(bDebug==true){
         light.draw();
+        light3.draw();
     }
     
     material.begin();
     white.bind();
+    
+    
+    btScalar	m[16];
+    ofGetOpenGLMatrixFromRigidBody( background.getRigidBody(), m );
+    glPushMatrix();
+    glMultMatrixf( m );
+    white.bind();
     background.draw();
+    ofScale(200,200,1);
+    ofBox(0,0,0,1);
+    white.unbind();
+    glPopMatrix();
+    
+    drawHashtag();
+    
     white.unbind();
     
     //bind image textures and draw bullet shapes
     for (int i=0;i<shapes.size();i++){
         face[i].bind();
-        shapes[i]->draw();
+        //        shapes[i]->draw();
+        glPushAttrib(GL_ALL_ATTRIB_BITS);
+        glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS);
+        glEnable(GL_NORMALIZE);
+        glDisable(GL_CULL_FACE);
+        btScalar	m[16];
+        ofGetOpenGLMatrixFromRigidBody( shapes[i]->getRigidBody(), m );
+        glPushMatrix();
+        glMultMatrixf( m );
+        glTranslatef(-particles[i].size.x/2, particles[i].size.y/2, particles[i].size.z/2);
+        gotham.draw(particles[i].letter,tweetScale);
+        glPopMatrix();
+        glPopAttrib();
         face[i].unbind();
     }
     
     material.end();
-        light.disable();
+    light.disable();
     light3.disable();
     camera.end();
     
-    camera2.begin();
-        light2.enable();
-    if(bDebug==true){
-        light2.draw();
-    }
-    drawHashtag();
-    camera2.end();
-    light2.disable();
+    //    camera2.begin();
+    //        light2.enable();
+    //    if(bDebug==true){
+    //        light2.draw();
+    //    }
+    //
+    //
+    //    camera2.end();
+    //    light2.disable();
     
     ofDisableLighting();
     ofDisableArbTex();
@@ -349,40 +389,7 @@ void testApp::draw(){
     glDisable(GL_DEPTH_TEST);
     
     //show framerate
-//    ofDrawBitmapString(ofToString(ofGetFrameRate()),ofPoint(800,100,0));
-}
-
-void testApp::loadImage(){
-    
-    //go to next image in vector and create new particles
-    if(imgCount>images.size()-1){
-        imgCount=0;
-    }
-    if(particleKeyframe>particleKeyframes.size()-1){
-    particleKeyframe=0;
-    }
-    pic.loadImage(images[imgCount]);
-    pic.setImageType(OF_IMAGE_COLOR);
-    pic.resize(pic.width/2, pic.height/2);
-    pic.mirror(false, false);
-    initParticles();
-    imgCount++;
-}
-
-void testApp::loadDir(){
-    
-    //use ofDirectory to load image files into vector of strings then close dir
-    
-    string path = "images";
-    ofDirectory dir(path);
-    dir.allowExt("jpg");
-    dir.allowExt("png");
-    dir.listDir();
-    for(int i = 0; i < dir.numFiles(); i++){
-        string newImage=dir.getPath(i);
-        images.push_back(newImage);
-    }
-    dir.close();
+    //    ofDrawBitmapString(ofToString(ofGetFrameRate()),ofPoint(800,100,0));
 }
 
 void testApp::loadParticleKeyframes(){
@@ -459,30 +466,33 @@ void testApp::setupGL(){
     //    loadCamKeyframes();
     
     //set up GL lighting and materials
-    light.setDiffuseColor(ofColor(255,255,255));
-   light.setSpecularColor(ofColor(255,255,255));
-//        light.setDirectional();
-//        light.setOrientation(ofPoint(0,0,0));
+    light.setDiffuseColor(ofColor(0,50,50));
+    //   light.setSpecularColor(ofColor(200,200,100));
+    //        light.setDirectional();
+    //        light.setOrientation(ofPoint(0,0,0));
     light.setSpotlight();
-    light.setPosition(0,0,0);
-    light.lookAt(ofVec3f(0,0,-500));
-
-    light2.setDiffuseColor(ofColor(150,150,150));
-    light2.setSpecularColor(ofColor(255,255,255));
-    light2.setSpotlight();
-    light2.setPosition(1500,800,-1900);
-    light2.lookAt(ofVec3f(-100,400,-100));
+    light.setPosition(5000,150,-60);
+    light.lookAt(ofVec3f(1000,500,0));
+    light.setScale(.1);
+    
+    //    light2.setDiffuseColor(ofColor(150,150,150));
+    //    light2.setSpecularColor(ofColor(255,255,255));
+    //    light2.setSpotlight();
+    //    light2.setPosition(1500,800,-1900);
+    //    light2.lookAt(ofVec3f(-100,400,-100));
     
     //set up GL lighting and materials
-    light3.setDiffuseColor(ofColor(255,255,0));
-    light3.setSpecularColor(ofColor(255,255,0));
+    light3.setDiffuseColor(ofColor(255,255,255));
+    light3.setSpecularColor(ofColor(255,255,255));
     //        light.setDirectional();
     //        light.setOrientation(ofPoint(0,0,0));
     light3.setSpotlight();
-    light3.setPosition(0,0,-60);
+    light3.setPosition(0,0,-45);
     light3.lookAt(ofVec3f(0,0,-500));
+    light3.setScale(.1);
+    light3.setSpotlightCutOff(1000);
     
-    material.setShininess(.1);
+    material.setShininess(1);
     
     
     //initialize Bullet Physics world
@@ -491,16 +501,12 @@ void testApp::setupGL(){
     world.setCamera(&camera);
     
     //Create static collision objects
-    background.create(world.world,ofVec3f(0,0,-90.),0.,3000,3000,0.);
+    background.create(world.world,ofVec3f(0,0,-90.),0.,175,100,10.);
     background.setProperties(1, 1);
     background.add();
     
-//    ground.create(world.world,ofVec3f(0,0,-40.),0.,3000,3000,3.);
-//    ground.setProperties(.2, .2);
-//    ground.add();
     
-    
-    whiteImg.loadImage("textures/white.jpg");
+    whiteImg.loadImage("textures/whiteBig.png");
     white=whiteImg.getTextureReference();
     
 }
@@ -508,7 +514,40 @@ void testApp::setupGL(){
 
 //SETUP PARTICLES OFF IMAGE
 
-void testApp::initParticles(){
+void testApp::loadImage(){
+    
+    //go to next image in vector and create new particles
+    if(imgCount>images.size()-1){
+        imgCount=0;
+    }
+    if(particleKeyframe>particleKeyframes.size()-1){
+        particleKeyframe=0;
+    }
+    pic.loadImage(images[imgCount]);
+    pic.setImageType(OF_IMAGE_COLOR);
+    pic.resize(pic.width/2, pic.height/2);
+    pic.mirror(false, false);
+    initImgParticles();
+    imgCount++;
+}
+
+void testApp::loadDir(){
+    
+    //use ofDirectory to load image files into vector of strings then close dir
+    
+    string path = "images";
+    ofDirectory dir(path);
+    dir.allowExt("jpg");
+    dir.allowExt("png");
+    dir.listDir();
+    for(int i = 0; i < dir.numFiles(); i++){
+        string newImage=dir.getPath(i);
+        images.push_back(newImage);
+    }
+    dir.close();
+}
+
+void testApp::initImgParticles(){
     
     for(int i=0;i<shapes.size();i++){
         shapes[i]->remove();
@@ -564,17 +603,63 @@ void testApp::initParticles(){
     }
 }
 
+void testApp::loadTweet(){
+    
+    string tweet="This is the best festival ever ";
+    unsigned char * chars = (unsigned char *) tweet.c_str();
+    ofPoint pos=ofPoint(-45,0,-60);
+    cout<<tweet.length()<<endl;
+    for (int i=0;i<tweet.length();i++){
+        
+        if (chars[i]==' '){
+            pos.x+=10;
+            if(pos.x>40){
+                pos.y+=5;
+                pos.x=-45;
+            }
+        }
+        
+        else{
+            //setup position values for displaying whole image
+            Particle::keyframe temp;
+            temp.pos.x=pos.x;
+            temp.pos.y=pos.y;
+            temp.pos.z=pos.z;
+            ofVec3f boxDim;
+            boxDim=gotham.getSize(chars[i])*tweetScale;
+            btBoxShape* charBox=new btBoxShape(btVector3(btScalar(boxDim.x),btScalar(boxDim.y),btScalar(boxDim.z)));
+            //create Bullet shapes for image visualization
+            shapes.push_back( new ofxBulletBox() );
+            
+            ((ofxBulletBox*)shapes[shapes.size()-1])->init(charBox);
+            btTransform trans;
+            ((ofxBulletBox*)shapes[shapes.size()-1])->create(world.world,particleKeyframes[particleKeyframe].pos,10.);
+            shapes[shapes.size()-1]->setProperties(.1,.1);
+            shapes[shapes.size()-1]->add();
+            shapes[shapes.size()-1]->enableKinematic();
+            
+            ofTexture newFace=whiteImg.getTextureReference();
+            face.push_back(newFace);
+            
+            //create particles for controlling static shape position/rotation
+            Particle particle;
+            particle.setup(temp,i,chars[i],boxDim);
+            particles.push_back(particle);
+            pos.x+=boxDim.x+2;
+        }
+    }
+}
+
 
 //DRAW HASHTAG LETTERS
 
 void testApp::drawHashtag(){
     
-    glPushMatrix();
     
-    ofMaterial hashMat;
-    hashMat.setShininess(2);
-    
-    hashMat.begin();
+    //    ofMaterial hashMat;
+    //    hashMat.setShininess(.1);
+    //
+    //    hashMat.begin();
     //align hashtag ofMeshes (only non-bullet items used) with bullet collision shapes
     
     for(int i = 0; i < hashletters.size(); i++) {
@@ -582,40 +667,37 @@ void testApp::drawHashtag(){
         glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS);
         glEnable(GL_NORMALIZE);
         glDisable(GL_CULL_FACE);
-            ofVec3f scale=hashletters[i][0].scale;
-        //        btScalar	m[16];
-        //        ofGetOpenGLMatrixFromRigidBody( hashCollision[i]->getRigidBody(), m );
+        ofVec3f scale=hashletters[i][1].scale;
+        btScalar	m[16];
+        ofGetOpenGLMatrixFromRigidBody( hashCollision[i]->getRigidBody(), m );
         glPushMatrix();
-        glTranslatef(hashletters[i][0].pos.x,hashletters[i][0].pos.y,hashletters[i][0].pos.z);
+        glMultMatrixf( m );
+        glTranslatef(-hashletters[i][0].size.x*scale.x/2, -hashletters[i][0].size.y*scale.y/2, -hashletters[i][0].size.z*scale.z/2);
         ofScale(scale.x,scale.y,scale.z);
-        glRotatef(hashletters[i][0].rot.x,1,0,0);
-        glRotatef(hashletters[i][0].rot.y,0,1,0);
-        glRotatef(hashletters[i][0].rot.z,0,0,1);
-        white.bind();
+        //        glRotatef(180,1,0,0);
+        //        glRotatef(hashletters[i][0].rot.y,0,1,0);
+        //        glRotatef(hashletters[i][0].rot.z,0,0,1);
         hashModel[i].getMesh(0).drawFaces();
-        white .unbind();
         glPopMatrix();
         glPopAttrib();
-
-//        glPushMatrix();
-//        glClearColor(0,0,0,.5);
-//        glEnable(GL_BLEND);
-//        glBlendFunc(GL_ONE, GL_ZERO);
-//        glTranslatef(hashletters[i][0].pos.x+48,hashletters[i][0].pos.y, hashletters[i][0].pos.z+400);
-//        ofScale(scale.x,scale.y,scale.z*.1);
-//        glRotatef(hashletters[i][0].rot.x,1,0,0);
-//        glRotatef(hashletters[i][0].rot.y,0,1,0);
-//        glRotatef(hashletters[i][0].rot.z,0,0,1);
-//        hashModel[i].getMesh(0).drawFaces();
-//        ofSetColor(255,255,255,255);
-//        glPopMatrix();
+        
+        //        glPushMatrix();
+        //        glClearColor(0,0,0,.5);
+        //        glEnable(GL_BLEND);
+        //        glBlendFunc(GL_ONE, GL_ZERO);
+        //        glTranslatef(hashletters[i][0].pos.x+48,hashletters[i][0].pos.y, hashletters[i][0].pos.z+400);
+        //        ofScale(scale.x,scale.y,scale.z*.1);
+        //        glRotatef(hashletters[i][0].rot.x,1,0,0);
+        //        glRotatef(hashletters[i][0].rot.y,0,1,0);
+        //        glRotatef(hashletters[i][0].rot.z,0,0,1);
+        //        hashModel[i].getMesh(0).drawFaces();
+        //        ofSetColor(255,255,255,255);
+        //        glPopMatrix();
         
     }
-        hashMat.end();
-    glPopMatrix();
     ofEnableAlphaBlending();
     
-
+    
     //    camera.disableOrtho();
     
 }
@@ -745,10 +827,6 @@ void testApp::loadHashtagGUI()
         hashCollision[i]->create( world.world, trans,0.);
         hashCollision[i]->add();
         hashCollision[i]->setProperties(.1, 1);
-//        funnelCollision[i]->init(5,10,.5);
-//        funnelCollision[i]->create(world.world, ofVec3f(temp.x,temp.y-5.5,temp.z+2.2), ofQuaternion(1,0,0,-PI/8),0.);
-//        funnelCollision[i]->add();
-//        funnelCollision[i]->setProperties(1,.1);
         
         //ADD HASHTAG SETTINGS TO GUI
         
@@ -913,7 +991,7 @@ void testApp::keyPressed(int key){
                                 hashletters[i][j].scale.y+=.1;
                             }
                         }
-                    
+                        
                     }
                     
                     else if(hashletters[i][j].active&&bRot==true){
@@ -1019,7 +1097,7 @@ void testApp::keyPressed(int key){
                     }
                 }
             }
-
+            
             return;
             
         case OF_KEY_RIGHT:
@@ -1300,7 +1378,7 @@ void testApp::keyPressed(int key){
                     }
                 }
             }
-        return;
+            return;
             
             
         case ']':
@@ -1322,7 +1400,7 @@ void testApp::keyPressed(int key){
                             }
                             updateCollision(i);
                         }
-                
+                        
                         else{
                             if(!bSingle){
                                 hashletters[i][j].scale.x+=1;
@@ -1338,7 +1416,7 @@ void testApp::keyPressed(int key){
                     }
                 }
             }
-
+            
             return;
             
         case '[':
@@ -1414,7 +1492,7 @@ void testApp::updateCollision(int i){
     hashCollision[i]->init();
     hashCollision[i]->create(world.world,trans,0.);
     hashCollision[i]->addMesh(hashModel[i].getMesh(0), scale, false);
-//            hashCollision[i]->addMesh(collisionPlane.getMesh(0), scale, false);
+    //            hashCollision[i]->addMesh(collisionPlane.getMesh(0), scale, false);
     hashCollision[i]->add();
     hashCollision[i]->setProperties(.1, 1);
 }
