@@ -43,23 +43,23 @@ void testApp::setup(){
     loadImage();
     
     camState=0;
-
+    
     if(camState==0){
-    camera2.enableOrtho();
-    camPos=ofPoint(10,0,0);
-    ofPoint look=ofPoint(0,0,-80);
-//    ofPoint look = ofPoint(0,0,0);
+        camera2.enableOrtho();
+        camPos=ofPoint(10,0,0);
+        ofPoint look=ofPoint(0,0,-80);
+        //    ofPoint look = ofPoint(0,0,0);
         
-    camera2.setPosition(camPos);
-    camera2.setNearClip(-1000);
-    camera2.setFarClip(1000);
-    camera2.lookAt(look);
-
-//    camera.setPosition(camPos);
-//    camera.lookAt(look);
-//    camera.setFov(120);
-    cout<<"aspect:"<<camera.getAspectRatio()<<endl;
-    camera.setFarClip(1000.);
+        camera2.setPosition(camPos);
+        camera2.setNearClip(-1000);
+        camera2.setFarClip(1000);
+        camera2.lookAt(look);
+        
+        //    camera.setPosition(camPos);
+        //    camera.lookAt(look);
+        //    camera.setFov(120);
+        cout<<"aspect:"<<camera.getAspectRatio()<<endl;
+        camera.setFarClip(1000.);
     }
     
     else if(camState==1){
@@ -144,58 +144,66 @@ void testApp::drawObjects(){
     
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
-
+    
     ofScale(6,6,6);
     ofRotate(90, 0, 1, 0);
     ofRotate(330,1,0,0);
     
+    ofPushMatrix();
+    
+    //    ofTranslate(0, 0, -10);
+    
+    //    ofRect(-8, -8, 16, 16);
+    
+    ofPopMatrix();
+    
     //ofBox(0,0,-8,16);
-
-    mesh.draw();
+    
+    //    mesh.draw();
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
     
     ofSetWindowTitle( ofToString( ofGetFrameRate() ) );
-
+    
     
     cout<<camera.getPosition()<<endl;
-//    camera2.rotate(1,10,0,0);
+    //    camera2.rotate(1,10,0,0);
     
-//    hashMeshPos[0].pos.x--;
-//    hashMeshPos[0].pos.y--;
-//    hashMeshPos[0].pos.z-=10;
+    //    hashMeshPos[0].pos.x--;
+    //    hashMeshPos[0].pos.y--;
+    //    hashMeshPos[0].pos.z-=10;
     
-            world.update();
-//    cout<<camera.getPosition()<<endl;
-//cout<<    camera.getLookAtDir()<<endl;
-//    if (bCamSwitch==true&&camState==1){
-//        camPos=ofPoint(-200,0,-100);
-//        camera.setPosition(camPos);
-//        camera.lookAt(ofPoint(0,0,-100));
-//        bCamSwitch=false;
-//        cout<<"switch";
-//    }
-//    
-//    else if (bCamSwitch==true&&camState==2){
-//        camPos=ofPoint(-350,0,0);
-//        camera.setPosition(camPos);
-//        camera.lookAt(ofPoint(0,0,0));
-//        bCamSwitch=false;
-//        cout<<"switch";
-//    }
-//    
-//    else if (bCamSwitch==true&&camState==0){
-//        camPos=ofPoint(0,0,0);
-//        camera.setPosition(camPos);
-//        camera.lookAt(ofPoint(0,0,-90));
-//        bCamSwitch=false;
-//        cout<<"switch";
-//    }
+    world.update();
+    //    cout<<camera.getPosition()<<endl;
+    //cout<<    camera.getLookAtDir()<<endl;
+    //    if (bCamSwitch==true&&camState==1){
+    //        camPos=ofPoint(-200,0,-100);
+    //        camera.setPosition(camPos);
+    //        camera.lookAt(ofPoint(0,0,-100));
+    //        bCamSwitch=false;
+    //        cout<<"switch";
+    //    }
+    //
+    //    else if (bCamSwitch==true&&camState==2){
+    //        camPos=ofPoint(-350,0,0);
+    //        camera.setPosition(camPos);
+    //        camera.lookAt(ofPoint(0,0,0));
+    //        bCamSwitch=false;
+    //        cout<<"switch";
+    //    }
+    //
+    //    else if (bCamSwitch==true&&camState==0){
+    //        camPos=ofPoint(0,0,0);
+    //        camera.setPosition(camPos);
+    //        camera.lookAt(ofPoint(0,0,-90));
+    //        bCamSwitch=false;
+    //        cout<<"switch";
+    //    }
     
     //updates bullet objects
-
+    
     
     //check whether individual particles have completed the duration of their transition
     int moving=0;
@@ -362,30 +370,30 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
-        
+    
 	glEnable(GL_DEPTH_TEST);
     ofDisableAlphaBlending();
     ofEnableLighting();
-            dof.begin();
+    dof.begin();
     
     if(!lPaused){
-    lightAngle += 0.25f;
+        lightAngle += 0.25f;
     }
-
+    
     shadowLight.lookAt( ofVec3f(0.0,0.0,0.0) );
     shadowLight.orbit( lightAngle, -30.0, 50.0f, ofVec3f(0.0,0.0,0.0) );
     shadowLight.enable();
-
+    
     // render linear depth buffer from light view
     shadowLight.beginShadowMap();
     drawObjects(); // render to shader map
     shadowLight.endShadowMap();
-
+    
     // render final scene
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     
     shader.begin();
-
+    
     shadowLight.bindShadowMapTexture(0); // bind shadow map texture to unit 0
     shader.setUniform1i("u_ShadowMap", 0); // set uniform to unit 0
     shader.setUniform1f("u_LinearDepthConstant", shadowLight.getLinearDepthScalar()); // set near/far linear scalar
@@ -393,28 +401,9 @@ void testApp::draw(){
     
     camera.begin();
     
-    //enable to see physics collision wireframes
-    world.drawDebug();
-    
     shadowLight.enable();
     drawObjects(); // render to screen
     shadowLight.disable();
-    
-
-    
-    //bind image textures and draw bullet shapes
-    
-    material.begin();
-    white.bind();
-    background.draw();
-    white.unbind();
-    
-    for (int i=0;i<shapes.size();i++){
-        face[i].bind();
-            shapes[i]->draw();
-        face[i].unbind();
-    }
-    
     
     material.end();
     
@@ -422,10 +411,10 @@ void testApp::draw(){
     
     shadowLight.unbindShadowMapTexture();
     shader.end();
-
+    
     
     ofDisableLighting();
-     ofDisableArbTex();
+    ofDisableArbTex();
     
     if (USE_DOF) {
         dof.end();
@@ -435,11 +424,35 @@ void testApp::draw(){
     }
     
     
+    //bind image textures and draw bullet shapes
+    
+    material.begin();
+    white.bind();
+    background.draw();
+    white.unbind();
+    
+    ofPushMatrix();
+    
+    ofScale(10, 10, 10);
+    ofTranslate(60,0,65);
+    
+    for (int i=0;i<shapes.size();i++){
+        face[i].bind();
+        shapes[i]->draw();
+        face[i].unbind();
+    }
+    
+    //enable to see physics collision wireframes
+    world.drawDebug();
+    
+    ofPopMatrix();
+    
+    
     glDisable(GL_DEPTH_TEST);
     
-    // debug view of shader scene
-//    shadowLight.debugShadowMap();
-
+    //     debug view of shader scene
+    //    shadowLight.debugShadowMap();
+    
 }
 
 void testApp::loadImage(){
@@ -451,7 +464,7 @@ void testApp::loadImage(){
     particleKeyframe=0;
     pic.loadImage(images[imgCount]);
     pic.setImageType(OF_IMAGE_COLOR);
-//    pic.resize(pic.width, pic.height);
+    //    pic.resize(pic.width, pic.height);
     pic.mirror(false, false);
     initParticles();
     imgCount++;
@@ -543,14 +556,14 @@ void testApp::loadParticleKeyframes(){
 //--------------------------------------------------------------
 void testApp::setupGL(){
     
-//    //loads camera keyframe positions into vector
-//    loadCamKeyframes();
+    //    //loads camera keyframe positions into vector
+    //    loadCamKeyframes();
     
     //set up GL lighting and materials
     light.setDiffuseColor(ofColor(255,255,255));
     light.setSpecularColor(ofColor(255,255,255));
-//    light.setDirectional();
-//    light.setOrientation(ofPoint(0,0,-180));
+    //    light.setDirectional();
+    //    light.setOrientation(ofPoint(0,0,-180));
     light.setSpotlight();
     light.setPosition(ofGetWidth()/2,ofGetHeight()/2,500);
     light.lookAt(ofVec3f(ofGetWidth()/2,ofGetHeight()/2,-100));
@@ -559,8 +572,8 @@ void testApp::setupGL(){
     light2.setSpecularColor(ofColor(255,255,255));
     light2.setSpotlight();
     light2.setPosition(0,ofGetHeight()/2,-100);
-        light.lookAt(ofVec3f(200,ofGetHeight()/2,-40));
-
+    light.lookAt(ofVec3f(200,ofGetHeight()/2,-40));
+    
     
     material.setShininess(.1);
     
@@ -571,15 +584,15 @@ void testApp::setupGL(){
     world.setCamera(&camera);
     
     //Create static collision objects
-//    background.create(world.world,ofVec3f(0,0,-90.),0.,3000,3000,2.);
-//    background.setProperties(1, 1);
-//    background.add();    
+    //    background.create(world.world,ofVec3f(0,0,-90.),0.,3000,3000,2.);
+    //    background.setProperties(1, 1);
+    //    background.add();
     
     whiteImg.loadImage("textures/white.jpg");
     white=whiteImg.getTextureReference();
     
     
-
+    
 }
 
 
@@ -612,11 +625,11 @@ void testApp::initParticles(){
             shapes.push_back( new ofxBulletBox() );
             ((ofxBulletBox*)shapes[shapes.size()-1])->init(boxShape);
             btTransform trans;
-
+            
             ((ofxBulletBox*)shapes[shapes.size()-1])->create(world.world,particleKeyframes[particleKeyframe].pos,10.);
-
+            
             shapes[shapes.size()-1]->add();
-
+            
             shapes[shapes.size()-1]->enableKinematic();
             
             //crop and allocate image boxes to tiles
@@ -649,11 +662,11 @@ void testApp::initParticles(){
 void testApp::drawHashtag(){
     
     glPushMatrix();
-//      camera.enableOrtho();
+    //      camera.enableOrtho();
     ofVec3f scale=meshDrawScale;
     ofMaterial hashMat;
     hashMat.setShininess(99);
-        
+    
     glPushAttrib(GL_ALL_ATTRIB_BITS);
     glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS);
     glEnable(GL_NORMALIZE);
@@ -668,22 +681,22 @@ void testApp::drawHashtag(){
     for(int i = 0; i < 12; i++) {
         ofPushMatrix();
         
-//        btScalar	m[16];
-//        ofGetOpenGLMatrixFromRigidBody( hashCollision[i]->getRigidBody(), m );
+        //        btScalar	m[16];
+        //        ofGetOpenGLMatrixFromRigidBody( hashCollision[i]->getRigidBody(), m );
         glPushMatrix();
         glTranslatef(hashMeshPos[i].pos.x,hashMeshPos[i].pos.y,hashMeshPos[i].pos.z);
         ofScale(scale.x,scale.y,scale.z);
         glRotatef(180,0,0,1);
         hashModel[i].getMesh(0).draw();
         glPopMatrix();
-
+        
     }
     white .unbind();
     glPopAttrib();
     hashMat.end();
     glPopMatrix();
     
-//    camera.disableOrtho();
+    //    camera.disableOrtho();
     
 }
 
@@ -716,7 +729,7 @@ void testApp::loadHashtagGUI()
     settings.pushTag("LETTERS");
     int numberOfSavedPoints = settings.getNumTags("LETTER");
     
-//    ofDisableArbTex();
+    //    ofDisableArbTex();
     for(int i = 0; i < 12; i++){
         
         //LOAD POSITION SETTINGS FROM MASTER SETTINGS XML DOCUMENT
@@ -733,7 +746,7 @@ void testApp::loadHashtagGUI()
         newHashMesh.key=loadKey+"MESH";
         settings.popTag();
         settings.popTag();
-
+        
         settings.pushTag("COLLISION");
         settings.pushTag("POS");
         hashletter newHashCollision;
@@ -747,7 +760,7 @@ void testApp::loadHashtagGUI()
         string file=settings.getValue("MESH"," ");
         settings.popTag();
         
-//        hashModel[i].loadModel("OBJ_letters/A_lower/A_final_2.obj",true );
+        //        hashModel[i].loadModel("OBJ_letters/A_lower/A_final_2.obj",true );
         hashModel[i].loadModel("models/cannes_placementCorrected.obj", true);
         cout<<"meshes:"<<hashModel[i].getNumMeshes()<<endl;
         
@@ -763,8 +776,8 @@ void testApp::loadHashtagGUI()
         cout<<newHashCollision.pos<<endl;
         
         hashCollision.push_back( new ofxBulletCustomShape() );
-//        hashCollision[i]->init(new btCompoundShape, ofVec3f(hashModel[i].getSceneCenter()));
-//        hashCollision[i]->setProperties(.3, 1.);
+        //        hashCollision[i]->init(new btCompoundShape, ofVec3f(hashModel[i].getSceneCenter()));
+        //        hashCollision[i]->setProperties(.3, 1.);
         hashCollision[i]->addMesh(hashModel[i].getMesh(0), scale, true);
         hashCollision[i]->create( world.world, ofVec3f(newHashCollision.pos.x,newHashCollision.pos.y,newHashCollision.pos.z),startRot,0.);
         hashCollision[i]->add();
@@ -775,7 +788,7 @@ void testApp::loadHashtagGUI()
         hashtagGUI->addWidgetDown(new ofxUIToggle( dim, dim, false, newHashMesh.key))->setID(i);
         hashtagGUI->addWidgetDown(new ofxUIToggle( dim, dim, false, newHashCollision.key))->setID(i);
     }
-//    ofEnableArbTex();
+    //    ofEnableArbTex();
     settings.popTag();
     ofAddListener(hashtagGUI->newGUIEvent,this,&testApp::guiEvent);
 }
@@ -808,17 +821,17 @@ void testApp::mousePressed(int x, int y, int button) {
 }
 
 void testApp::keyPressed(int key){
-//    for(int i = 0; i < 12; i++){
-//        
-//        btTransform trans;
-//        ofPoint temp=hashCollisionPos.pos+hash.pos;
-//        trans.setOrigin( btVector3( btScalar(temp.x), btScalar(temp.y), btScalar(temp.z)) );
-//        ofQuaternion rotQuat = hashCollision[i]->getRotationQuat();
-//        float newRot = rotQuat.w();
-//        trans.setRotation( btQuaternion(btVector3(rotQuat.x(), rotQuat.y(), rotQuat.z()), newRot) );
-//        hashCollision[i]->getRigidBody()->getMotionState()->setWorldTransform( trans );
-//        cout<<"move"<<endl;
-//    }
+    //    for(int i = 0; i < 12; i++){
+    //
+    //        btTransform trans;
+    //        ofPoint temp=hashCollisionPos.pos+hash.pos;
+    //        trans.setOrigin( btVector3( btScalar(temp.x), btScalar(temp.y), btScalar(temp.z)) );
+    //        ofQuaternion rotQuat = hashCollision[i]->getRotationQuat();
+    //        float newRot = rotQuat.w();
+    //        trans.setRotation( btQuaternion(btVector3(rotQuat.x(), rotQuat.y(), rotQuat.z()), newRot) );
+    //        hashCollision[i]->getRigidBody()->getMotionState()->setWorldTransform( trans );
+    //        cout<<"move"<<endl;
+    //    }
     switch(key){
             
         case 'f':
@@ -878,19 +891,7 @@ void testApp::keyPressed(int key){
                 else{
                     hash.pos.y--;
                 }
-                
             }
-//            for(int i=0;i<hashletters.size();i++){
-//                if(hashletters[i].active){
-//                    if(!bSingle){
-//                        hashletters[i].pos.y-=10;
-//                    }
-//                    else{
-//                        hashletters[i].pos.y--;
-//                    }
-//                    
-//                }
-//            }
             return;
             
         case OF_KEY_DOWN:
@@ -901,18 +902,7 @@ void testApp::keyPressed(int key){
                 else{
                     hash.pos.y++;
                 }
-                
             }
-//            for(int i=0;i<hashletters.size();i++){
-//                if(hashletters[i].active){
-//                    if(!bSingle){
-//                        hashletters[i].pos.y+=10;
-//                    }
-//                    else{
-//                        hashletters[i].pos.y++;
-//                    }
-//                }
-//            }
             return;
             
         case OF_KEY_RIGHT:
@@ -923,18 +913,7 @@ void testApp::keyPressed(int key){
                 else{
                     hash.pos.x++;
                 }
-                
             }
-//            for(int i=0;i<hashletters.size();i++){
-//                if(hashletters[i].active){
-//                    if(!bSingle){
-//                        hashletters[i].pos.x+=10;
-//                    }
-//                    else{
-//                        hashletters[i].pos.x++;
-//                    }
-//                }
-//            }
             return;
             
         case OF_KEY_LEFT:
@@ -945,18 +924,7 @@ void testApp::keyPressed(int key){
                 else{
                     hash.pos.x--;
                 }
-                
             }
-//            for(int i=0;i<hashletters.size();i++){
-//                if(hashletters[i].active){
-//                    if(!bSingle){
-//                        hashletters[i].pos.x-=10;
-//                    }
-//                    else{
-//                        hashletters[i].pos.x--;
-//                    }
-//                }
-//            }
             return;
     }
     
@@ -973,3 +941,4 @@ void testApp::keyReleased(int key){
             
     }
 }
+
