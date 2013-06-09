@@ -81,7 +81,6 @@ public:
     
     ofxBulletBox* box;
     vector<ofTexture> face;
-    btBoxShape*					boxShape;
     
     ofImage whiteImg;
     ofTexture white;
@@ -130,6 +129,8 @@ public:
     ofTexture hashTex[12];
     ofMesh hashMesh[12];
     
+    btBoxShape*					boxShape;
+    
     ofxXmlSettings settings;
     ofxXmlSettings camXML;
     ofxXmlSettings particleXML;
@@ -174,5 +175,12 @@ public:
     
     int bTweet;
     
+    void tweetToKinematic();
+    void tweetToPhysics();
+    void imgToPhysics();
+    void imgToKinematic();
+    void updateImg();
+void updateTweet();
+
 };
 

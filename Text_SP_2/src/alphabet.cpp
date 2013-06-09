@@ -66,6 +66,5 @@ ofPoint Alphabet::getSize(char c){
 }
 
 ofMesh Alphabet::getMesh(char c){
-                letters[c]->model.setRotation(0, 180, 0, 0, 1);
     return letters[c]->model.getMesh(0);
 }

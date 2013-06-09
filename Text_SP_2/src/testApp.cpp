@@ -15,7 +15,7 @@ void testApp::setup(){
     //CALIBRATION VARIABLES -- TODO: ADD TO GUI
     
     bDebug=true;
-    bTweet=true;
+    bTweet=false;
     
     collisionPlane.loadModel("OBJ_letters/collision.obj");
     
@@ -48,9 +48,13 @@ void testApp::setup(){
     
     //populates vector of images off of specified directory
     imgCount=0;
-    //    loadDir();
-    //    loadImage();
-    loadTweet();
+    if(bTweet==false){
+        loadDir();
+        loadImage();
+    }
+    else{
+        loadTweet();
+    }
     
     if(camState==0){
         camera2.enableOrtho();
@@ -110,7 +114,7 @@ void testApp::setup(){
     }
     
     bRot=false;
-
+    
 }
 
 
@@ -147,95 +151,28 @@ void testApp::update(){
             if(particleKeyframe>particleKeyframes.size()-1){
                 particleKeyframe=0;
             }
-            if(bDebug==false){
-                //                loadImage();
+            if(bTweet==false){
+                loadImage();
             }
         }
         
-        
         else if(particleKeyframes[particleKeyframe].path!=PARTICLE_PATH_PHYSICS){
-            if(particleKeyframe!=0){
-                
-                //If Switching out of physics state...
-                
-                if(particleKeyframes[particleKeyframe-1].path==PARTICLE_PATH_PHYSICS){
-                    for (int i=0;i<letters.size();i++){
-                        particles[i].update();
-                        
-                        //set vector position/rotation to bullet object position/rotation and start rotation transition
-                        
-                        btTransform trans;
-                        ofPoint temp=letters[i]->getPosition();
-                        particles[i].current.pos=temp;
-                        trans.setOrigin( btVector3( btScalar(temp.x), btScalar(temp.y), btScalar(temp.z)) );
-                        ofQuaternion rotQuat = letters[i]->getRotationQuat();
-                        float newRot = rotQuat.w();
-                        trans.setRotation( btQuaternion(btVector3(rotQuat.x(), rotQuat.y(), rotQuat.z()), newRot) );
-                        particles[i].bRotate=true;
-                        particles[i].current.quat=rotQuat;
-                        letters[i]->getRigidBody()->getMotionState()->setWorldTransform( trans );
-                        letters[i]->getRigidBody()->setActivationState(DISABLE_DEACTIVATION);
-                        particles[i].goToPosition(particleKeyframes[particleKeyframe]);
-                        letters[i]->enableKinematic();
-                    }
-                    
-                }
-                
-                //if remaining in non-physics state (same as if not transitioning, with addition of a particles.goToPosition call
-                
-                else{
-                    for (int i=0;i<letters.size();i++){
-                        particles[i].update();
-                        btTransform trans;
-                        ofPoint temp=letters[i]->getPosition();
-                        trans.setOrigin( btVector3( btScalar(temp.x), btScalar(temp.y), btScalar(temp.z)) );
-                        ofQuaternion rotQuat = letters[i]->getRotationQuat();
-                        float newRot = rotQuat.w();
-                        trans.setRotation( btQuaternion(btVector3(rotQuat.x(), rotQuat.y(), rotQuat.z()), newRot) );
-                        letters[i]->getRigidBody()->getMotionState()->setWorldTransform( trans );
-                        letters[i]->getRigidBody()->setActivationState(DISABLE_DEACTIVATION);
-                        particles[i].goToPosition(particleKeyframes[particleKeyframe]);
-                        letters[i]->enableKinematic();
-                    }
-                }
+            if(bTweet==true){
+                tweetToKinematic();
             }
-            
-            //if on first keyframe of vector
-            
             else{
-                for (int i=0;i<letters.size();i++){
-                    particles[i].update();
-                    btTransform trans;
-                    ofPoint temp=letters[i]->getPosition();
-                    trans.setOrigin( btVector3( btScalar(temp.x), btScalar(temp.y), btScalar(temp.z)) );
-                    ofQuaternion rotQuat = letters[i]->getRotationQuat();
-                    float newRot = rotQuat.w();
-                    trans.setRotation( btQuaternion(btVector3(rotQuat.x(), rotQuat.y(), rotQuat.z()), newRot) );
-                    letters[i]->getRigidBody()->getMotionState()->setWorldTransform( trans );
-                    letters[i]->getRigidBody()->setActivationState(DISABLE_DEACTIVATION);
-                    particles[i].goToPosition(particleKeyframes[particleKeyframe]);
-                    letters[i]->enableKinematic();
-                }
+                imgToKinematic();
             }
         }
         
         //if switching into physics state
         
         else{
-            world.setGravity(ofVec3f(particleKeyframes[particleKeyframe].gravity.x,particleKeyframes[particleKeyframe].gravity.y,particleKeyframes[particleKeyframe].gravity.z));
-            for (int i=0;i<letters.size();i++){
-                btTransform trans;
-                ofPoint temp=letters[i]->getPosition();
-                trans.setOrigin( btVector3( btScalar(temp.x), btScalar(temp.y), btScalar(temp.z)) );
-                ofQuaternion rotQuat = letters[i]->getRotationQuat();
-                float newRot = rotQuat.w();
-                trans.setRotation( btQuaternion(btVector3(rotQuat.x(), rotQuat.y(), rotQuat.z()), newRot) );
-                letters[i]->remove();
-                letters[i]->addMesh(gotham.getMesh(particles[i].letter),tweetScale,false);
-                letters[i]->create(world.world,trans, 1.);
-                letters[i]->add();
-                letters[i]->setProperties(.1,1);
-                particles[i].goToPosition(particleKeyframes[particleKeyframe]);
+            if(bTweet==true){
+                tweetToPhysics();
+            }
+            else{
+                imgToPhysics();
             }
         }
         bNewParticleKey=false;
@@ -247,39 +184,15 @@ void testApp::update(){
         
         //if not in physics state
         
-        if(particleKeyframes[particleKeyframe].path!=PARTICLE_PATH_PHYSICS){
-            for (int i=0;i<letters.size();i++){
-                particles[i].update();
-                btTransform trans;
-                ofPoint temp=particles[i].current.pos;
-                trans.setOrigin( btVector3( btScalar(temp.x), btScalar(temp.y), btScalar(temp.z)) );
-                ofQuaternion rotQuat = letters[i]->getRotationQuat();
-                float newRot = rotQuat.w();
-                if(particles[i].bRotate==true){
-                    float newRot = rotQuat.w();
-                    newRot -= .05f;
-                    if (newRot<0){
-                        newRot=0;
-                        particles[i].bRotate=false;
-                    }
-                    trans.setRotation( btQuaternion(btVector3(rotQuat.x(), rotQuat.y(), rotQuat.z()), newRot) );
-                }
-                else{
-                    trans.setRotation( btQuaternion(btVector3(rotQuat.x(), rotQuat.y(), rotQuat.z()), 0) );
-                }
-                letters[i]->getRigidBody()->getMotionState()->setWorldTransform( trans );
-                letters[i]->activate();
-            }
+        if(bTweet==true){
+            updateTweet();
         }
-        
-        //if in physics state - do nothing other than keep track of duration
         
         else{
-            for (int i=0;i<letters.size();i++){
-                particles[i].update();
-            }
+            updateImg();
         }
     }
+    cout<<background.getRestitution()<<endl;
     
 }
 
@@ -337,22 +250,31 @@ void testApp::draw(){
     white.unbind();
     
     //bind image textures and draw bullet letters
-    for (int i=0;i<letters.size();i++){
-        face[i].bind();
-        //        letters[i]->draw();
-        glPushAttrib(GL_ALL_ATTRIB_BITS);
-        glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS);
-        glEnable(GL_NORMALIZE);
-        glDisable(GL_CULL_FACE);
-        btScalar	m[16];
-        ofGetOpenGLMatrixFromRigidBody( letters[i]->getRigidBody(), m );
-        glPushMatrix();
-        glMultMatrixf( m );
-        glTranslatef(-particles[i].size.x/2, -particles[i].size.y/2, -particles[i].size.z/2);
-        gotham.draw(particles[i].letter,tweetScale);
-        glPopMatrix();
-        glPopAttrib();
-        face[i].unbind();
+    if(bTweet==true){
+        for (int i=0;i<letters.size();i++){
+            face[i].bind();
+            //        letters[i]->draw();
+            glPushAttrib(GL_ALL_ATTRIB_BITS);
+            glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS);
+            glEnable(GL_NORMALIZE);
+            glDisable(GL_CULL_FACE);
+            btScalar	m[16];
+            ofGetOpenGLMatrixFromRigidBody( letters[i]->getRigidBody(), m );
+            glPushMatrix();
+            glMultMatrixf( m );
+            glTranslatef(-particles[i].size.x/2, -particles[i].size.y/2, -particles[i].size.z/2);
+            gotham.draw(particles[i].letter,tweetScale);
+            glPopMatrix();
+            glPopAttrib();
+            face[i].unbind();
+        }
+    }
+    else{
+        for (int i=0;i<shapes.size();i++){
+            face[i].bind();
+            shapes[i]->draw();
+            face[i].unbind();
+        }
     }
     
     material.end();
@@ -496,8 +418,8 @@ void testApp::setupGL(){
     
     //Create static collision objects
     background.create(world.world,ofVec3f(0,0,-90.),0.,175,100,10.);
-    background.setProperties(.5, 1);
     background.add();
+    background.setProperties(.1,1);
     
     
     whiteImg.loadImage("textures/whiteBig.png");
@@ -543,14 +465,12 @@ void testApp::loadDir(){
 
 void testApp::initImgParticles(){
     
-    for(int i=0;i<letters.size();i++){
-        letters[i]->remove();
+    for(int i=0;i<shapes.size();i++){
+        shapes[i]->remove();
     }
-    letters.clear();
+    shapes.clear();
     particles.clear();
     face.clear();
-    
-    
     
     boxShape = ofBtGetBoxCollisionShape(boxScale.x*tileW, boxScale.y*tileH, boxScale.z*tileD);
     
@@ -567,9 +487,8 @@ void testApp::initImgParticles(){
             shapes.push_back( new ofxBulletBox() );
             
             ((ofxBulletBox*)shapes[shapes.size()-1])->init(boxShape);
-            btTransform trans;
-            ((ofxBulletBox*)shapes[shapes.size()-1])->create(world.world,particleKeyframes[particleKeyframe].pos,10.);
-            shapes[shapes.size()-1]->setProperties(.1,.1);
+            ((ofxBulletBox*)shapes[shapes.size()-1])->create(world.world,particleKeyframes[particleKeyframe].pos,0.);
+            shapes[shapes.size()-1]->setProperties(.1,1);
             shapes[shapes.size()-1]->add();
             shapes[shapes.size()-1]->enableKinematic();
             
@@ -599,7 +518,7 @@ void testApp::initImgParticles(){
 
 void testApp::loadTweet(){
     
-    string tweet="This is the best festival ever ";
+    string tweet="RRRRRRR RRRRRRR";
     unsigned char * chars = (unsigned char *) tweet.c_str();
     ofPoint pos=ofPoint(-45,0,-60);
     cout<<tweet.length()<<endl;
@@ -621,19 +540,17 @@ void testApp::loadTweet(){
             temp.pos.z=pos.z;
             ofVec3f boxDim;
             boxDim=gotham.getSize(chars[i])*tweetScale;
-            btBoxShape* charBox=new btBoxShape(btVector3(btScalar(boxDim.x),btScalar(boxDim.y),btScalar(boxDim.z)));
-            //create Bullet shapes for image visualization
+            //create Bullet letters for image visualization
             letters.push_back( new ofxBulletCustomShape() );
             
-            ofQuaternion startRot=ofQuaternion(0.,0.,1.,PI);
-           
+            ofQuaternion startRot=ofQuaternion(0,0,1,PI);
             letters[letters.size()-1]->addMesh(gotham.getMesh(chars[i]),tweetScale,true);
-           letters[letters.size()-1]->create(world.world,particleKeyframes[particleKeyframe].pos,startRot,10.);
-//          letters[letters.size()-1]->setProperties(.1,.1);
+            letters[letters.size()-1]->create(world.world,particleKeyframes[particleKeyframe].pos,startRot,10.);
             letters[letters.size()-1]->add();
+            letters[letters.size()-1]->setProperties(.1,.1);
             letters[letters.size()-1]->enableKinematic();
-
-
+            
+            
             
             ofTexture newFace=whiteImg.getTextureReference();
             face.push_back(newFace);
@@ -1477,6 +1394,171 @@ void testApp::keyReleased(int key){
     }
 }
 
+void testApp::tweetToKinematic(){
+    for (int i=0;i<letters.size();i++){
+        particles[i].update();
+        
+        //set vector position/rotation to bullet object position/rotation and start rotation transition
+        btTransform trans;
+        ofPoint temp=letters[i]->getPosition();
+        if(particleKeyframe!=0){
+            if(particleKeyframes[particleKeyframe-1].path==PARTICLE_PATH_PHYSICS){
+                particles[i].current.pos=temp;
+            }
+        }
+        trans.setOrigin( btVector3( btScalar(temp.x), btScalar(temp.y), btScalar(temp.z)) );
+        ofQuaternion rotQuat = letters[i]->getRotationQuat();
+        float newRot = rotQuat.w();
+        trans.setRotation( btQuaternion(btVector3(rotQuat.x(), rotQuat.y(), rotQuat.z()), newRot) );
+        if(particleKeyframe!=0){
+            if(particleKeyframes[particleKeyframe-1].path==PARTICLE_PATH_PHYSICS){
+                particles[i].bRotate=true;
+                particles[i].current.quat=rotQuat;
+            }
+        }
+        letters[i]->getRigidBody()->getMotionState()->setWorldTransform( trans );
+        letters[i]->getRigidBody()->setActivationState(DISABLE_DEACTIVATION);
+        particles[i].goToPosition(particleKeyframes[particleKeyframe]);
+        letters[i]->enableKinematic();
+    }
+}
+
+void testApp::imgToKinematic(){
+    for (int i=0;i<shapes.size();i++){
+        particles[i].update();
+        btTransform trans;
+        ofPoint temp;
+        if(particleKeyframe!=0){
+            if(particleKeyframes[particleKeyframe-1].path==PARTICLE_PATH_PHYSICS){
+                particles[i].current.pos=temp;
+            }
+        }
+        trans.setOrigin( btVector3( btScalar(temp.x), btScalar(temp.y), btScalar(temp.z)) );
+        ofQuaternion rotQuat = shapes[i]->getRotationQuat();
+        float newRot = rotQuat.w();
+        trans.setRotation( btQuaternion(btVector3(rotQuat.x(), rotQuat.y(), rotQuat.z()), newRot) );
+        if(particleKeyframe!=0){
+            if(particleKeyframes[particleKeyframe-1].path==PARTICLE_PATH_PHYSICS){
+                particles[i].bRotate=true;
+                particles[i].current.quat=rotQuat;
+            }
+        }
+        shapes[i]->getRigidBody()->getMotionState()->setWorldTransform( trans );
+        shapes[i]->getRigidBody()->setActivationState(DISABLE_DEACTIVATION);
+        particles[i].goToPosition(particleKeyframes[particleKeyframe]);
+        shapes[i]->enableKinematic();
+    }
+}
+
+void testApp::tweetToPhysics(){
+    world.setGravity(ofVec3f(particleKeyframes[particleKeyframe].gravity.x,particleKeyframes[particleKeyframe].gravity.y,particleKeyframes[particleKeyframe].gravity.z));
+    for (int i=0;i<letters.size();i++){
+        btTransform trans;
+        ofPoint temp=letters[i]->getPosition();
+        trans.setOrigin( btVector3( btScalar(temp.x), btScalar(temp.y), btScalar(temp.z)) );
+        ofQuaternion rotQuat = letters[i]->getRotationQuat();
+        float newRot = rotQuat.w();
+        trans.setRotation( btQuaternion(btVector3(rotQuat.x(), rotQuat.y(), rotQuat.z()), newRot) );
+        letters[i]->remove();
+        letters[i]->addMesh(gotham.getMesh(particles[i].letter),tweetScale,false);
+        letters[i]->create(world.world,trans, 1.);
+        letters[i]->add();
+        letters[i]->setProperties(.1,1);
+        particles[i].goToPosition(particleKeyframes[particleKeyframe]);
+    }
+}
+
+void testApp::imgToPhysics(){
+    world.setGravity(ofVec3f(particleKeyframes[particleKeyframe].gravity.x,particleKeyframes[particleKeyframe].gravity.y,particleKeyframes[particleKeyframe].gravity.z));
+    for (int i=0;i<shapes.size();i++){
+        btTransform trans;
+        ofPoint temp=shapes[i]->getPosition();
+        trans.setOrigin( btVector3( btScalar(temp.x), btScalar(temp.y), btScalar(temp.z)) );
+        ofQuaternion rotQuat = shapes[i]->getRotationQuat();
+        float newRot = rotQuat.w();
+        trans.setRotation( btQuaternion(btVector3(rotQuat.x(), rotQuat.y(), rotQuat.z()), newRot) );
+        shapes[i]->remove();
+        shapes[i]->init(boxShape);
+        
+        shapes[i]->create(world.world,trans, 10);
+        shapes[i]->setProperties(.1,1);
+        shapes[i]->add();
+        particles[i].goToPosition(particleKeyframes[particleKeyframe]);
+    }
+    
+}
+
+void testApp::updateTweet(){
+    if(particleKeyframes[particleKeyframe].path!=PARTICLE_PATH_PHYSICS){
+        for (int i=0;i<letters.size();i++){
+            particles[i].update();
+            btTransform trans;
+            ofPoint temp=particles[i].current.pos;
+            trans.setOrigin( btVector3( btScalar(temp.x), btScalar(temp.y), btScalar(temp.z)) );
+            ofQuaternion rotQuat = letters[i]->getRotationQuat();
+            float newRot = rotQuat.w();
+            if(particles[i].bRotate==true){
+                float newRot = rotQuat.w();
+                newRot -= .05f;
+                if (newRot<0){
+                    newRot=0;
+                    particles[i].bRotate=false;
+                }
+                trans.setRotation( btQuaternion(btVector3(rotQuat.x(), rotQuat.y(), rotQuat.z()), newRot) );
+            }
+            else{
+                trans.setRotation( btQuaternion(btVector3(rotQuat.x(), rotQuat.y(), rotQuat.z()), 0) );
+            }
+            letters[i]->getRigidBody()->getMotionState()->setWorldTransform( trans );
+            letters[i]->activate();
+        }
+    }
+    
+    //if in physics state - do nothing other than keep track of duration
+    
+    else{
+        for (int i=0;i<letters.size();i++){
+            particles[i].update();
+        }
+    }
+}
+
+void testApp::updateImg(){
+    if(particleKeyframes[particleKeyframe].path!=PARTICLE_PATH_PHYSICS){
+        for (int i=0;i<shapes.size();i++){
+            particles[i].update();
+            btTransform trans;
+            ofPoint temp=particles[i].current.pos;
+            trans.setOrigin( btVector3( btScalar(temp.x), btScalar(temp.y), btScalar(temp.z)) );
+            ofQuaternion rotQuat = shapes[i]->getRotationQuat();
+            float newRot = rotQuat.w();
+            if(particles[i].bRotate==true){
+                float newRot = rotQuat.w();
+                newRot -= .05f;
+                if (newRot<0){
+                    newRot=0;
+                    particles[i].bRotate=false;
+                }
+                trans.setRotation( btQuaternion(btVector3(rotQuat.x(), rotQuat.y(), rotQuat.z()), newRot) );
+            }
+            else{
+                trans.setRotation( btQuaternion(btVector3(rotQuat.x(), rotQuat.y(), rotQuat.z()), 0) );
+            }
+            shapes[i]->getRigidBody()->getMotionState()->setWorldTransform( trans );
+            shapes[i]->activate();
+        }
+    }
+    
+    //if in physics state - do nothing other than keep track of duration
+    
+    else{
+        for (int i=0;i<shapes.size();i++){
+            particles[i].update();
+        }
+    }
+
+}
+
 void testApp::updateCollision(int i){
     btTransform trans;
     ofPoint temp=hashletters[i][1].pos;
@@ -1492,4 +1574,6 @@ void testApp::updateCollision(int i){
     //            hashCollision[i]->addMesh(collisionPlane.getMesh(0), scale, false);
     hashCollision[i]->add();
     hashCollision[i]->setProperties(.1, 1);
+    
+    
 }
