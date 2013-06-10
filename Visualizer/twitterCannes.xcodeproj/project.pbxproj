@@ -1144,13 +1144,13 @@
 		E4B69E1C0A3A1BDC003C02F2 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				D373C8DB17653ED700A5C7CF /* shadowMapLight.cpp */,
-				D373C8DC17653ED700A5C7CF /* shadowMapLight.h */,
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
-				D3301D651762D62E000D3B03 /* alphabet.cpp */,
-				D3301D661762D62E000D3B03 /* alphabet.h */,
 				E4B69E1F0A3A1BDC003C02F2 /* testApp.h */,
 				E4B69E1E0A3A1BDC003C02F2 /* testApp.cpp */,
+				D373C8DC17653ED700A5C7CF /* shadowMapLight.h */,
+				D373C8DB17653ED700A5C7CF /* shadowMapLight.cpp */,
+				D3301D651762D62E000D3B03 /* alphabet.cpp */,
+				D3301D661762D62E000D3B03 /* alphabet.h */,
 				D3FBE8E51756CC6600294DC9 /* particle.h */,
 				D3FBE8E41756CC6600294DC9 /* particle.cpp */,
 				D3FBE8E71756CC6B00294DC9 /* ofPennerEasing */,

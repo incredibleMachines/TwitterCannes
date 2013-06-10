@@ -18,17 +18,17 @@ void testApp::setup(){
     
     bDebug=true;
     bTweet=true;
+    bGUI=false;
     
     tweetScale=ofPoint(.1,.1,.1);
     meshCollisionScale=ofPoint(5,5 ,5);
     meshDrawScale=ofPoint(10,10,20);
     image.pos=ofPoint(-10,-10,-55);
     boxScale=ofPoint(.05,.05,.05);
-//    ofSetBackgroundColor(255);
     
     gotham=*new Alphabet();
     
-    camState=1;
+    camState=0;
     
     ofSetVerticalSync(true);
 	ofSetFrameRate(30);
@@ -54,7 +54,7 @@ void testApp::setup(){
     camera.setGlobalPosition( 30.0f, 15.0f, 00.0f );
     
     camera.lookAt( ofVec3f( 0.0f, 0.0f, 0.0f ) );
-    
+        
     shader.load( "shaders/mainScene.vert", "shaders/mainScene.frag" );
 //    model.loadModel("models/cannes_placementCorrected.obj", true);
 //    
@@ -66,12 +66,10 @@ void testApp::setup(){
     bRot=false;
     
     //GUI and hashtag mesh loading
-    loadHashtagGUI();
-    hashtagGUI->loadSettings("GUI/hashtagGUI.xml");
+    loadHashtag();
     
     //camKeyframe cycles through camPoints vector which includes x,y,z coords and rate of movement between them
     //particle keyframes animate sequence of particle behaviors for individual image or tweet
-    camKeyframe=0;
     particleKeyframe=0;
     loadParticleKeyframes();
     
@@ -85,7 +83,7 @@ void testApp::setup(){
         loadTweet();
     }
     
-    
+    gui.loadFont("verdana.ttf", 200);
     
     
 }
@@ -110,14 +108,14 @@ void testApp::setupLights() {
 //--------------------------------------------------------------
 void testApp::drawObjects(){
     
-//    glEnable(GL_CULL_FACE);
+    glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
     
 //    ofScale(6,6,6);
     ofRotate(90, 0, 1, 0);
     ofRotate(330,1,0,0);
     
-    for(int i = 0; i < 11  ; i++) {
+    for(int i = 0; i < 12  ; i++) {
         glPushAttrib(GL_ALL_ATTRIB_BITS);
         glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS);
         glEnable(GL_NORMALIZE);
@@ -126,11 +124,18 @@ void testApp::drawObjects(){
         btScalar	m[16];
         ofGetOpenGLMatrixFromRigidBody( hashCollision[i]->getRigidBody(), m );
         glPushMatrix();
+        ofSetColor(255,255,255);
         glMultMatrixf( m );
         glTranslatef(-hashletters[i].size.x*scale.x/2, -hashletters[i].size.y*scale.y/2, -hashletters[i].size.z*scale.z/2);
         ofScale(scale.x,scale.y,scale.z);
+        if(bGUI==true&&hashletters[i].active==true){
+            ofSetColor(0,255,0);
+            ofSphere(hashModel[i].getMesh(0).getCentroid().x,hashModel[i].getMesh(0).getCentroid().y+30,hashModel[i].getMesh(0).getCentroid().z,10);
+        }
         hashModel[i].getMesh(0).draw();
+        ofSetColor(255,255,255);
         glPopMatrix();
+        glPopClientAttrib();
         glPopAttrib();
     }
     
@@ -215,15 +220,17 @@ void testApp::update(){
         }
     }
     
+
+    
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
     
-    
 	glEnable(GL_DEPTH_TEST);
     ofDisableAlphaBlending();
     ofEnableLighting();
+    ofPushMatrix();
     
     shadowLight.lookAt( ofVec3f(0.0,0.0,0.0) );
     shadowLight.orbit( 90, -70, 90, ofVec3f(0.0,0.0,0.0) );
@@ -282,10 +289,12 @@ void testApp::draw(){
             glTranslatef(-particles[i].size.x/2, -particles[i].size.y/2, -particles[i].size.z/2);
             gotham.draw(particles[i].letter,tweetScale);
             glPopMatrix();
+            glPopClientAttrib();
             glPopAttrib();
             face[i].unbind();
         }
     }
+    
     
     else{
         for (int i=0;i<shapes.size();i++){
@@ -295,18 +304,18 @@ void testApp::draw(){
         }
     }
     
-    material.end();
     
     shadowLight.disable();
+        material.end();
     
-   
+    
     
     //enable to see physics collision wireframes
     if(bDebug==true){
+        glPushMatrix();
         world.drawDebug();
+        glPopMatrix();
     }
-    
-    
     
     camera.end();
     
@@ -315,151 +324,16 @@ void testApp::draw(){
     
     
     ofDisableLighting();
-
-    
-
-    
-    glDisable(GL_DEPTH_TEST);
-    
-    //     debug view of shader scene
-//    shadowLight.debugShadowMap();
-    
-/*
-    
-    
-	glEnable(GL_DEPTH_TEST);
-    ofDisableAlphaBlending();
-//    glShadeModel(GL_SMOOTH);
-    ofEnableLighting();
-    
-    shadowLight.lookAt( ofVec3f(0.0,0.0,0.0) );
-    shadowLight.orbit( 90, -70, 90, ofVec3f(0.0,0.0,0.0) );
-    //(long, lat, radius, ofVec3f(centerpoint))
-    shadowLight.enable();
-    
-    // render linear depth buffer from light view
-    shadowLight.beginShadowMap();
-    drawObjects(); // render to shader map
-    shadowLight.endShadowMap();
-    
-    // render final scene
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-    
-    shader.begin();
-    
-    shadowLight.bindShadowMapTexture(0); // bind shadow map texture to unit 0
-    shader.setUniform1i("u_ShadowMap", 0); // set uniform to unit 0
-    shader.setUniform1f("u_LinearDepthConstant", shadowLight.getLinearDepthScalar()); // set near/far linear scalar
-    shader.setUniformMatrix4f("u_ShadowTransMatrix", shadowLight.getShadowMatrix(camera)); // specify shadow matrix
-    
-    camera.begin();
-    
-    shadowLight.enable();
-    
-    // draw background for projecting shadows onto
-    ofPushMatrix();
-    ofScale(6,6,6);
-    ofRotate(90, 0, 1, 0);
-    ofRotate(330,1,0,0);
-    ofRect(-8, -8, 16, 16);
     ofPopMatrix();
     
-    drawObjects(); // render to screen
-    shadowLight.disable();
-    
-    material.end();
-    
-    camera.end();
-    
-    shadowLight.unbindShadowMapTexture();
-    shader.end();
-    
-    ofDisableLighting();
-    ofDisableArbTex();
-    
-    
-    //      enable to see physics collision wireframes
-//    if(bDebug==true){
-//        world.drawDebug();
-//    }
-    
-    material.begin();
-    white.bind();
-    
-//    btScalar	m[16];
-//    ofGetOpenGLMatrixFromRigidBody( background.getRigidBody(), m );
-//    glPushMatrix();
-//    glMultMatrixf( m );
-//    white.bind();
-//    background.draw();
-//    ofScale(200,200,1);
-//    ofBox(0,0,0,1);
-//    white.unbind();
-//    glPopMatrix();
-    
-//    drawHashtag();
-    
-    white.unbind();
-    
-    
-    //bind image textures and draw bullet letters
-    if(bTweet==true){
-        for (int i=0;i<letters.size();i++){
-            face[i].bind();
-            //        letters[i]->draw();
-            glPushAttrib(GL_ALL_ATTRIB_BITS);
-            glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS);
-            glEnable(GL_NORMALIZE);
-            glDisable(GL_CULL_FACE);
-            btScalar	m[16];
-            ofGetOpenGLMatrixFromRigidBody( letters[i]->getRigidBody(), m );
-            glPushMatrix();
-            glMultMatrixf( m );
-            glTranslatef(-particles[i].size.x/2, -particles[i].size.y/2, -particles[i].size.z/2);
-            gotham.draw(particles[i].letter,tweetScale);
-            glPopMatrix();
-            glPopAttrib();
-            face[i].unbind();
-        }
-    }
-    else{
-        for (int i=0;i<shapes.size();i++){
-            face[i].bind();
-            shapes[i]->draw();
-            face[i].unbind();
-        }
-    }
-     
-    
-//    material.end();
-//    light.disable();
-//    light3.disable();
-//    camera.end();
-    
-    //    camera2.begin();
-    //        light2.enable();
-    //    if(bDebug==true){
-    //        light2.draw();
-    //    }
-    //
-    //
-    //    camera2.end();
-    //    light2.disable();
-
-    
-//    if (USE_DOF) {
-//        dof.end();
-//        //fbo of dof for drawing
-//        ofFbo temp=dof.getFbo();
-//        temp.draw(0,0,ofGetWidth(),ofGetHeight());
-//    }
-    
     glDisable(GL_DEPTH_TEST);
     
-    //show framerate
-    //    ofDrawBitmapString(ofToString(ofGetFrameRate()),ofPoint(800,100,0));
+    if(bGUI==true){
+        drawGUI();
+    }
+                gui.drawString("hi!!", 100,100);
     
-    */
+    
 }
 
 void testApp::loadParticleKeyframes(){
@@ -524,29 +398,11 @@ void testApp::loadParticleKeyframes(){
     
     particleXML.popTag();
     
-    //trigger GUI update
-    ofAddListener(hashtagGUI->newGUIEvent,this,&testApp::guiEvent);
 }
 
 
 //--------------------------------------------------------------
-void testApp::setupGL(){
-//    
-//    //set up GL lighting and materials
-//    light.setDiffuseColor(ofColor(255,255,255));
-//    light.setSpecularColor(ofColor(255,255,255));
-//    //    light.setDirectional();
-//    //    light.setOrientation(ofPoint(0,0,-180));
-//    light.setSpotlight();
-//    light.setPosition(ofGetWidth()/2,ofGetHeight()/2,500);
-//    light.lookAt(ofVec3f(ofGetWidth()/2,ofGetHeight()/2,-100));
-//    
-//    light2.setDiffuseColor(ofColor(255,255,255));
-//    light2.setSpecularColor(ofColor(255,255,255));
-//    light2.setSpotlight();
-//    light2.setPosition(0,ofGetHeight()/2,-100);
-//    light.lookAt(ofVec3f(200,ofGetHeight()/2,-40));
-    
+void testApp::setupGL(){    
     
     material.setShininess(.1);
     
@@ -559,7 +415,6 @@ void testApp::setupGL(){
     background.create(world.world,ofVec3f(0,0,-90.),0.,175,100,10.);
     background.add();
     background.setProperties(.1,1);
-    
     
     whiteImg.loadImage("textures/whiteBig.png");
     white=whiteImg.getTextureReference();
@@ -704,11 +559,12 @@ void testApp::loadTweet(){
             pos.x+=boxDim.x+2;
         }
     }
+    
 }
 
 //GUI INIT CODE - LOADS MASTER SETTINGS DOCS AND POPULATES GUI OF THEIR CONTENT
 
-void testApp::loadHashtagGUI()
+void testApp::loadHashtag()
 {
     //gui variables
     
@@ -719,8 +575,6 @@ void testApp::loadHashtagGUI()
     
     settings.loadFile("settings.xml");
     
-    hashtagGUI = new ofxUICanvas(0, 0, ofGetWidth(), ofGetHeight());
-    
     //LOAD MASTER SETTINGS FOR HASHTAG PLACEMENT
     
     settings.pushTag("HASHTAG");
@@ -730,7 +584,6 @@ void testApp::loadHashtagGUI()
     hash.pos.z = settings.getValue("Z", 0);
     settings.popTag();
     settings.popTag();
-    hashtagGUI->addWidgetDown(new ofxUIToggle( dim, dim, false, "Entire Hashtag"))->setID(-1);
     
     settings.pushTag("LETTERS");
     int numberOfSavedPoints = settings.getNumTags("LETTER");
@@ -783,6 +636,7 @@ void testApp::loadHashtagGUI()
     
         newHashCollision.active=false;
         newHashCollision.size=hashModel[i].getSceneMax()-hashModel[i].getSceneMin();
+        newHashCollision.checkbox=ofRectangle(10,i*20,10,10);
         
         hashletters.push_back(newHashCollision);
         
@@ -801,37 +655,22 @@ void testApp::loadHashtagGUI()
         hashCollision[i]->setProperties(.1, 1);
         
         //ADD HASHTAG SETTINGS TO GUI
-        
-        hashtagGUI->addToggle( newHashCollision.key, false, dim, dim)->setID(idCount);
-        idCount++;
     }
     //    ofEnableArbTex();
     settings.popTag();
-    ofAddListener(hashtagGUI->newGUIEvent,this,&testApp::guiEvent);
-}
-
-//--------------------------------------------------------------
-void testApp::guiEvent(ofxUIEventArgs &e)
-{
-    string name = e.widget->getName();
-    int kind = e.widget->getKind();
-    int num=e.widget->getID();
-    
-    ofxUIToggle *toggle = (ofxUIToggle *) e.widget;
-    
-    if(num!=-1){
-        hashletters[num].active=toggle->getValue();
-    }
-    else{
-        hash.active=toggle->getValue();
-    }
 }
 
 
 //USER INPUT FUNCTIONS
 
 void testApp::mousePressed(int x, int y, int button) {
-    
+    if(bGUI==true){
+        for(int i=0;i<hashletters.size();i++){
+            if(hashletters[i].checkbox.inside(mouseX,mouseY)){
+                hashletters[i].active=!hashletters[i].active;
+            }
+        }
+    }
 }
 
 void testApp::keyPressed(int key){
@@ -899,7 +738,6 @@ void testApp::keyPressed(int key){
             settings.popTag();
             settings.popTag();
             settings.saveFile("settings.xml");
-            hashtagGUI->saveSettings("GUI/hashtagGUI.xml");
             return;
             
         case OF_KEY_UP:
@@ -1183,14 +1021,14 @@ void testApp::keyPressed(int key){
                     
                     if(hashletters[i].active){
                             if(!bSingle){
-                                hashletters[i].scale.x+=.1;
-                                hashletters[i].scale.y+=.1;
-                                hashletters[i].scale.z+=.1;
-                            }
-                            else{
                                 hashletters[i].scale.x+=.01;
                                 hashletters[i].scale.y+=.01;
                                 hashletters[i].scale.z+=.01;
+                            }
+                            else{
+                                hashletters[i].scale.x+=.001;
+                                hashletters[i].scale.y+=.001;
+                                hashletters[i].scale.z+=.001;
                             }
                             updateCollision(i);
                         }
@@ -1202,19 +1040,20 @@ void testApp::keyPressed(int key){
         case '[':
         case '{':
             for(int i=0;i<hashletters.size();i++){
-
+                if(hashletters[i].active){
                             if(!bSingle){
-                                hashletters[i].scale.x-=.1;
-                                hashletters[i].scale.y-=.1;
-                                hashletters[i].scale.z-=.1;
-                            }
-                            else{
                                 hashletters[i].scale.x-=.01;
                                 hashletters[i].scale.y-=.01;
                                 hashletters[i].scale.z-=.01;
                             }
+                            else{
+                                hashletters[i].scale.x-=.001;
+                                hashletters[i].scale.y-=.001;
+                                hashletters[i].scale.z-=.001;
+                            }
                             updateCollision(i);
                         }
+            }
     
             return;
     }
@@ -1233,7 +1072,7 @@ void testApp::keyReleased(int key){
             bScale=false;
             return;
         case 'h':
-            hashtagGUI->toggleVisible();
+            bGUI=!bGUI;
             break;
         case 'd':
             bDebug=!bDebug;
@@ -1425,3 +1264,19 @@ void testApp::updateCollision(int i){
     
     
 }
+
+void testApp::drawGUI(){
+    ofNoFill();
+    ofSetColor(255,255,255);
+    for(int i=0;i<hashletters.size();i++){
+        if (hashletters[i].active){
+            ofSetColor(0,255,0);
+        }
+        ofRect(hashletters[i].checkbox);
+        gui.drawString(hashletters[i].key,hashletters[i].checkbox.position.x+10,hashletters[i].checkbox.position.y-200);
+        cout<<hashletters[i].checkbox.position.y<<endl;
+        ofSetColor(225,255,255);
+    }
+    ofFill();
+}
+

@@ -38,8 +38,8 @@ public:
     void initTweetParticles();
     
     void drawHashtag();
-    void loadHashtagGUI();
-    void guiEvent(ofxUIEventArgs &e);
+    void loadHashtag();
+    void drawGUI();
     
     void keyPressed(int key);
     void mousePressed(int x, int y, int button);
@@ -57,7 +57,7 @@ public:
     vector <Particle::keyframe> particleKeyframes;
     int particleKeyframe;
 	
-	ofEasyCam camera,camera2;
+	ofEasyCam camera,camera2,guiCamera;
 	ofxDOF dof;
     ofLight light;
     ofLight light2;
@@ -114,6 +114,8 @@ public:
         bool active;
     };
     
+        ofFbo drawScreen;
+    
     class hashletter{
     public:
         ofPoint pos;
@@ -122,6 +124,7 @@ public:
         bool active;
         string key;
         ofPoint size;
+        ofRectangle checkbox;
     };
     
     class content{
@@ -199,6 +202,14 @@ void updateTweet();
     float   lightAngle;
     bool    bDrawDepth;
     bool    bDrawLight;
+    
+    ofFbo guiDraw;
+    
+    void drawSelectBoxes();
+    
+    void drawFbo();
+    
+    ofTrueTypeFont gui;
 
 };
 

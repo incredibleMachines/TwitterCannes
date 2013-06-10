@@ -28,7 +28,7 @@ Alphabet::~Alphabet(){}
 void Alphabet::draw(int c, ofPoint scale){
     ofPushMatrix();
     ofScale(scale.x,scale.y,scale.z);
-    letters[c]->model.getMesh(0).drawFaces();
+    letters[c]->model.getMesh(0).draw();
     ofPopMatrix();
 }
 

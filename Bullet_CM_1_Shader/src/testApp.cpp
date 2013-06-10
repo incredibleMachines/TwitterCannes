@@ -51,7 +51,6 @@ void testApp::setup(){
     
     if(!CAM_MOUSE){
         camera.disableMouseInput();
-        camera2.disableMouseInput();
     }
     
     camera.setDistance(40.0f);
