@@ -110,7 +110,7 @@ void testApp::drawObjects(){
     ofRotate(90, 0, 1, 0);
     ofRotate(330,1,0,0);
     
-    for(int i = 0; i < 12  ; i++) {
+    for(int i = 0; i < 13  ; i++) {
         glPushAttrib(GL_ALL_ATTRIB_BITS);
         glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS);
         glEnable(GL_NORMALIZE);
@@ -585,7 +585,7 @@ void testApp::loadHashtag()
     
     int idCount=0;
     //    ofDisableArbTex();
-    for(int i = 0; i < 12; i++){
+    for(int i = 0; i < 13; i++){
         
         //LOAD POSITION SETTINGS FROM MASTER SETTINGS XML DOCUMENT
         
@@ -733,7 +733,7 @@ void testApp::keyPressed(int key){
             settings.saveFile("settings.xml");
             return;
             
-        case OF_KEY_UP:
+        case OF_KEY_DOWN:
             if(hash.active&&bRot==false){
                 if(!bSingle){
                     hash.pos.y-=10;
@@ -780,7 +780,7 @@ void testApp::keyPressed(int key){
             }
             return;
             
-        case OF_KEY_DOWN:
+        case OF_KEY_UP:
             if(hash.active){
                 if(!bSingle){
                     hash.pos.y+=10;

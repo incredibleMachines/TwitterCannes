@@ -137,7 +137,7 @@ public:
     vector<hashletter> hashletters;
     hashtag hash;
 //    ofx3DModelLoader tempMesh[12];
-    ofxAssimpModelLoader hashModel[12];
+    ofxAssimpModelLoader hashModel[13];
     vector<ofxBulletCustomShape*> hashCollision;
     vector<ofxBulletBox*> funnelCollision;
     
