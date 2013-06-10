@@ -10,6 +10,8 @@ int main(){
     // uncomment this line for antialiasing
     window.setGlutDisplayString("rgba double samples>=4");
     
-	ofSetupOpenGL(&window, 1920, 1080, OF_FULLSCREEN);
+    ofSetupOpenGL(&window, 1280, 610, OF_FULLSCREEN);
+
+//	ofSetupOpenGL(&window, 1920, 1080, OF_FULLSCREEN);
 	ofRunApp(new testApp()); // start the app
 }

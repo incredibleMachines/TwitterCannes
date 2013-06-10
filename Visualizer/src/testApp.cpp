@@ -20,21 +20,50 @@ void testApp::setup(){
     bTweet=true;
     
     tweetScale=ofPoint(.1,.1,.1);
-    meshCollisionScale=ofPoint(.6,.6 ,.6);
+    meshCollisionScale=ofPoint(5,5 ,5);
     meshDrawScale=ofPoint(10,10,20);
     image.pos=ofPoint(-10,-10,-55);
     boxScale=ofPoint(.05,.05,.05);
-    ofSetBackgroundColor(255);
+//    ofSetBackgroundColor(255);
     
     gotham=*new Alphabet();
     
-    camState=0;
+    camState=1;
     
     ofSetVerticalSync(true);
 	ofSetFrameRate(30);
     
     //camera, lighting, dof setup
     setupGL();
+    
+    if (USE_DOF) {
+        dof.setup(ofGetWidth(),ofGetHeight());
+        dof.setFocalDistance(10);
+        dof.setFocalRange(20);
+        dof.setBlurAmount(1);
+    }
+    
+    
+    if(!CAM_MOUSE){
+        camera.disableMouseInput();
+        camera2.disableMouseInput();
+    }
+     
+    
+    camera.setDistance(40.0f);
+    camera.setGlobalPosition( 30.0f, 15.0f, 00.0f );
+    
+    camera.lookAt( ofVec3f( 0.0f, 0.0f, 0.0f ) );
+    
+    shader.load( "shaders/mainScene.vert", "shaders/mainScene.frag" );
+//    model.loadModel("models/cannes_placementCorrected.obj", true);
+//    
+//    hashModel[0].setScale(0.04, 0.04, 0.04);
+//    mesh = hashModel[1].getMesh(0);
+    
+    setupLights();
+    
+    bRot=false;
     
     //GUI and hashtag mesh loading
     loadHashtagGUI();
@@ -56,70 +85,63 @@ void testApp::setup(){
         loadTweet();
     }
     
-    if(camState==0){
-        camera2.enableOrtho();
-        camPos=ofPoint(0,0,0);
-        ofPoint look=ofPoint(0,0,-80);
-        
-        camera2.setPosition(camPos);
-        camera2.setNearClip(-1000);
-        camera2.setFarClip(2000);
-        camera2.lookAt(look);
-        
-        camera.setPosition(camPos);
-        camera.lookAt(look);
-        camera.setFarClip(1000.);
-        camera.setFov(50);
+    
+    
+    
+}
+
+//--------------------------------------------------------------
+void testApp::setupLights() {
+    
+    // shadow map resolution (must be power of 2), field of view, near, far
+    // the larger the shadow map resolution, the better the detail, but slower
+    shadowLight.setup( 2048, 45.0f, 0.1f, 100.0f );
+    shadowLight.setBlurLevel(4.0f); // amount to blur to soften the shadows
+    
+    shadowLight.setAmbientColor( ofFloatColor( 0.0f, 0.0f, 0.0f, 1.0f ) );
+    shadowLight.setDiffuseColor( ofFloatColor( 0.9f, 0.9f, 0.9f, 1.0f ) );
+    shadowLight.setSpecularColor( ofFloatColor( 0.1f, 0.1f, 0.8f, 1.0f ) );
+    
+    shadowLight.setPosition( 200.0f, 0.0f, 45.0f );
+    
+    ofSetGlobalAmbientColor( ofFloatColor( 0.05f, 0.05f, 0.05f ) );
+}
+
+//--------------------------------------------------------------
+void testApp::drawObjects(){
+    
+//    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
+    
+//    ofScale(6,6,6);
+    ofRotate(90, 0, 1, 0);
+    ofRotate(330,1,0,0);
+    
+    for(int i = 0; i < 11  ; i++) {
+        glPushAttrib(GL_ALL_ATTRIB_BITS);
+        glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS);
+        glEnable(GL_NORMALIZE);
+        glDisable(GL_CULL_FACE);
+        ofVec3f scale=hashletters[i].scale;
+        btScalar	m[16];
+        ofGetOpenGLMatrixFromRigidBody( hashCollision[i]->getRigidBody(), m );
+        glPushMatrix();
+        glMultMatrixf( m );
+        glTranslatef(-hashletters[i].size.x*scale.x/2, -hashletters[i].size.y*scale.y/2, -hashletters[i].size.z*scale.z/2);
+        ofScale(scale.x,scale.y,scale.z);
+        hashModel[i].getMesh(0).draw();
+        glPopMatrix();
+        glPopAttrib();
     }
     
-    else if(camState==1){
-        camera2.enableOrtho();
-        camPos=ofPoint(50,0,-40);
-        ofPoint look=ofPoint(0,0,-40);
-        camera2.setPosition(camPos);
-        camera2.setNearClip(-1000);
-        camera2.setFarClip(1000);
-        camera2.lookAt(look);
-        
-        camera.setPosition(camPos);
-        camera.lookAt(look);
-        //    camera.setFov(120);
-        //        camera.setFarClip(1000.);
-    }
-    else if(camState==2){
-        camera2.enableOrtho();
-        camPos=ofPoint(0,0,0);
-        ofPoint look=ofPoint(0,0,-40);
-        camera2.setPosition(camPos);
-        camera2.setNearClip(-1000);
-        camera2.setFarClip(1000);
-        camera2.lookAt(look);
-        
-        camera.setPosition(camPos);
-        camera.lookAt(look);
-        //    camera.setFov(120);
-        camera.setFarClip(1000.);
-    }
-    
-    if (USE_DOF) {
-        dof.setup(ofGetWidth(),ofGetHeight());
-        dof.setFocalDistance(10);
-        dof.setFocalRange(20);
-        dof.setBlurAmount(1);
-    }
-    
-    if(!CAM_MOUSE){
-        camera.disableMouseInput();
-        camera2.disableMouseInput();
-    }
-    
-    bRot=false;
-    
+//    mesh.draw();
 }
 
 
 //--------------------------------------------------------------
 void testApp::update(){
+    
+    ofSetWindowTitle( ofToString( ofGetFrameRate() ) );
     
     world.update();    //updates bullet objects
     
@@ -198,55 +220,187 @@ void testApp::update(){
 //--------------------------------------------------------------
 void testApp::draw(){
     
-    ofEnableBlendMode(OF_BLENDMODE_ALPHA);
     
 	glEnable(GL_DEPTH_TEST);
-    glShadeModel(GL_SMOOTH);
+    ofDisableAlphaBlending();
     ofEnableLighting();
-    dof.begin();
     
+    shadowLight.lookAt( ofVec3f(0.0,0.0,0.0) );
+    shadowLight.orbit( 90, -70, 90, ofVec3f(0.0,0.0,0.0) );
+    //(long, lat, radius, ofVec3f(centerpoint))
+    shadowLight.enable();
     
-    if (USE_DOF) {
-        
-        camera.begin(dof.getDimensions());
-    } else {
-        camera.begin();
+    // render linear depth buffer from light view
+    shadowLight.beginShadowMap();
+    drawObjects(); // render to shader map
+    shadowLight.endShadowMap();
+    
+    // render final scene
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    
+    shader.begin();
+    
+    shadowLight.bindShadowMapTexture(0); // bind shadow map texture to unit 0
+    shader.setUniform1i("u_ShadowMap", 0); // set uniform to unit 0
+    shader.setUniform1f("u_LinearDepthConstant", shadowLight.getLinearDepthScalar()); // set near/far linear scalar
+    shader.setUniformMatrix4f("u_ShadowTransMatrix", shadowLight.getShadowMatrix(camera)); // specify shadow matrix
+    
+    camera.begin();
+    
+    shadowLight.enable();
+    
+    // draw background for projecting shadows onto
+    ofPushMatrix();
+    ofScale(6,6,6);
+    ofRotate(90, 0, 1, 0);
+    ofRotate(330,1,0,0);
+    ofRect(-8, -8, 16, 16);
+    ofPopMatrix();
+    
+    material.begin();
+    white.bind();
+    drawObjects(); // render to screen
+    white.unbind();
+    material.end();
+    
+    //bind image textures and draw bullet shapes
+    
+    material.begin();
+    
+    if(bTweet==true){
+        for (int i=0;i<letters.size();i++){
+            face[i].bind();
+            //        letters[i]->draw();
+            glPushAttrib(GL_ALL_ATTRIB_BITS);
+            glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS);
+            glEnable(GL_NORMALIZE);
+            glDisable(GL_CULL_FACE);
+            btScalar	m[16];
+            ofGetOpenGLMatrixFromRigidBody( letters[i]->getRigidBody(), m );
+            glPushMatrix();
+            glMultMatrixf( m );
+            glTranslatef(-particles[i].size.x/2, -particles[i].size.y/2, -particles[i].size.z/2);
+            gotham.draw(particles[i].letter,tweetScale);
+            glPopMatrix();
+            glPopAttrib();
+            face[i].unbind();
+        }
     }
     
-    //      enable to see physics collision wireframes
+    else{
+        for (int i=0;i<shapes.size();i++){
+            face[i].bind();
+            shapes[i]->draw();
+            face[i].unbind();
+        }
+    }
     
+    material.end();
+    
+    shadowLight.disable();
+    
+   
+    
+    //enable to see physics collision wireframes
     if(bDebug==true){
         world.drawDebug();
     }
     
-    //draw lighting
     
     
-    light.enable();
-    light3.enable();
-    if(bDebug==true){
-        light.draw();
-        light3.draw();
-    }
+    camera.end();
+    
+    shadowLight.unbindShadowMapTexture();
+    shader.end();
+    
+    
+    ofDisableLighting();
+
+    
+
+    
+    glDisable(GL_DEPTH_TEST);
+    
+    //     debug view of shader scene
+//    shadowLight.debugShadowMap();
+    
+/*
+    
+    
+	glEnable(GL_DEPTH_TEST);
+    ofDisableAlphaBlending();
+//    glShadeModel(GL_SMOOTH);
+    ofEnableLighting();
+    
+    shadowLight.lookAt( ofVec3f(0.0,0.0,0.0) );
+    shadowLight.orbit( 90, -70, 90, ofVec3f(0.0,0.0,0.0) );
+    //(long, lat, radius, ofVec3f(centerpoint))
+    shadowLight.enable();
+    
+    // render linear depth buffer from light view
+    shadowLight.beginShadowMap();
+    drawObjects(); // render to shader map
+    shadowLight.endShadowMap();
+    
+    // render final scene
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    
+    shader.begin();
+    
+    shadowLight.bindShadowMapTexture(0); // bind shadow map texture to unit 0
+    shader.setUniform1i("u_ShadowMap", 0); // set uniform to unit 0
+    shader.setUniform1f("u_LinearDepthConstant", shadowLight.getLinearDepthScalar()); // set near/far linear scalar
+    shader.setUniformMatrix4f("u_ShadowTransMatrix", shadowLight.getShadowMatrix(camera)); // specify shadow matrix
+    
+    camera.begin();
+    
+    shadowLight.enable();
+    
+    // draw background for projecting shadows onto
+    ofPushMatrix();
+    ofScale(6,6,6);
+    ofRotate(90, 0, 1, 0);
+    ofRotate(330,1,0,0);
+    ofRect(-8, -8, 16, 16);
+    ofPopMatrix();
+    
+    drawObjects(); // render to screen
+    shadowLight.disable();
+    
+    material.end();
+    
+    camera.end();
+    
+    shadowLight.unbindShadowMapTexture();
+    shader.end();
+    
+    ofDisableLighting();
+    ofDisableArbTex();
+    
+    
+    //      enable to see physics collision wireframes
+//    if(bDebug==true){
+//        world.drawDebug();
+//    }
     
     material.begin();
     white.bind();
     
+//    btScalar	m[16];
+//    ofGetOpenGLMatrixFromRigidBody( background.getRigidBody(), m );
+//    glPushMatrix();
+//    glMultMatrixf( m );
+//    white.bind();
+//    background.draw();
+//    ofScale(200,200,1);
+//    ofBox(0,0,0,1);
+//    white.unbind();
+//    glPopMatrix();
     
-    btScalar	m[16];
-    ofGetOpenGLMatrixFromRigidBody( background.getRigidBody(), m );
-    glPushMatrix();
-    glMultMatrixf( m );
-    white.bind();
-    background.draw();
-    ofScale(200,200,1);
-    ofBox(0,0,0,1);
+//    drawHashtag();
+    
     white.unbind();
-    glPopMatrix();
     
-    drawHashtag();
-    
-    white.unbind();
     
     //bind image textures and draw bullet letters
     if(bTweet==true){
@@ -275,11 +429,12 @@ void testApp::draw(){
             face[i].unbind();
         }
     }
+     
     
-    material.end();
-    light.disable();
-    light3.disable();
-    camera.end();
+//    material.end();
+//    light.disable();
+//    light3.disable();
+//    camera.end();
     
     //    camera2.begin();
     //        light2.enable();
@@ -290,21 +445,21 @@ void testApp::draw(){
     //
     //    camera2.end();
     //    light2.disable();
+
     
-    ofDisableLighting();
-    ofDisableArbTex();
-    
-    if (USE_DOF) {
-        dof.end();
-        //fbo of dof for drawing
-        ofFbo temp=dof.getFbo();
-        temp.draw(0,0,ofGetWidth(),ofGetHeight());
-    }
+//    if (USE_DOF) {
+//        dof.end();
+//        //fbo of dof for drawing
+//        ofFbo temp=dof.getFbo();
+//        temp.draw(0,0,ofGetWidth(),ofGetHeight());
+//    }
     
     glDisable(GL_DEPTH_TEST);
     
     //show framerate
     //    ofDrawBitmapString(ofToString(ofGetFrameRate()),ofPoint(800,100,0));
+    
+    */
 }
 
 void testApp::loadParticleKeyframes(){
@@ -376,39 +531,24 @@ void testApp::loadParticleKeyframes(){
 
 //--------------------------------------------------------------
 void testApp::setupGL(){
+//    
+//    //set up GL lighting and materials
+//    light.setDiffuseColor(ofColor(255,255,255));
+//    light.setSpecularColor(ofColor(255,255,255));
+//    //    light.setDirectional();
+//    //    light.setOrientation(ofPoint(0,0,-180));
+//    light.setSpotlight();
+//    light.setPosition(ofGetWidth()/2,ofGetHeight()/2,500);
+//    light.lookAt(ofVec3f(ofGetWidth()/2,ofGetHeight()/2,-100));
+//    
+//    light2.setDiffuseColor(ofColor(255,255,255));
+//    light2.setSpecularColor(ofColor(255,255,255));
+//    light2.setSpotlight();
+//    light2.setPosition(0,ofGetHeight()/2,-100);
+//    light.lookAt(ofVec3f(200,ofGetHeight()/2,-40));
     
-    //    //loads camera keyframe positions into vector
-    //    loadCamKeyframes();
     
-    //set up GL lighting and materials
-    light.setDiffuseColor(ofColor(0,50,50));
-    //   light.setSpecularColor(ofColor(200,200,100));
-    //        light.setDirectional();
-    //        light.setOrientation(ofPoint(0,0,0));
-    light.setSpotlight();
-    light.setPosition(5000,150,-60);
-    light.lookAt(ofVec3f(1000,500,0));
-    light.setScale(.1);
-    
-    //    light2.setDiffuseColor(ofColor(150,150,150));
-    //    light2.setSpecularColor(ofColor(255,255,255));
-    //    light2.setSpotlight();
-    //    light2.setPosition(1500,800,-1900);
-    //    light2.lookAt(ofVec3f(-100,400,-100));
-    
-    //set up GL lighting and materials
-    light3.setDiffuseColor(ofColor(255,255,255));
-    light3.setSpecularColor(ofColor(255,255,255));
-    //        light.setDirectional();
-    //        light.setOrientation(ofPoint(0,0,0));
-    light3.setSpotlight();
-    light3.setPosition(0,0,-45);
-    light3.lookAt(ofVec3f(0,0,-500));
-    light3.setScale(.1);
-    light3.setSpotlightCutOff(1000);
-    
-    material.setShininess(1);
-    
+    material.setShininess(.1);
     
     //initialize Bullet Physics world
     world.setup();
@@ -423,6 +563,7 @@ void testApp::setupGL(){
     
     whiteImg.loadImage("textures/whiteBig.png");
     white=whiteImg.getTextureReference();
+     
     
 }
 
@@ -565,31 +706,6 @@ void testApp::loadTweet(){
     }
 }
 
-
-//DRAW HASHTAG LETTERS
-
-void testApp::drawHashtag(){
-    
-    for(int i = 0; i < hashletters.size(); i++) {
-        glPushAttrib(GL_ALL_ATTRIB_BITS);
-        glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS);
-        glEnable(GL_NORMALIZE);
-        glDisable(GL_CULL_FACE);
-        ofVec3f scale=hashletters[i].scale;
-        btScalar	m[16];
-        ofGetOpenGLMatrixFromRigidBody( hashCollision[i]->getRigidBody(), m );
-        glPushMatrix();
-        glMultMatrixf( m );
-        glTranslatef(-hashletters[i].size.x*scale.x/2, -hashletters[i].size.y*scale.y/2, -hashletters[i].size.z*scale.z/2);
-        ofScale(scale.x,scale.y,scale.z);
-        hashModel[i].getMesh(0).drawFaces();
-        glPopMatrix();
-        glPopAttrib();
-    }
-    ofEnableAlphaBlending();
-    
-}
-
 //GUI INIT CODE - LOADS MASTER SETTINGS DOCS AND POPULATES GUI OF THEIR CONTENT
 
 void testApp::loadHashtagGUI()
@@ -630,13 +746,14 @@ void testApp::loadHashtagGUI()
         string loadKey = settings.getValue("NAME","0");
         
         settings.pushTag("COLLISION");
-        
+    
         settings.pushTag("POS");
         hashletter newHashCollision;
         newHashCollision.pos.x = settings.getValue("X", 0.);
         newHashCollision.pos.y = settings.getValue("Y", 0.);
         newHashCollision.pos.z = settings.getValue("Z", 0.);
-        newHashCollision.key=loadKey+" COLLISION:";
+        newHashCollision.key=loadKey;
+        cout<<loadKey<<endl;
         settings.popTag();
         
         settings.pushTag("ROTATION");
@@ -659,6 +776,9 @@ void testApp::loadHashtagGUI()
         
         hashModel[i].loadModel(file,true );
         
+//        hashModel[i].loadModel("models/cannes_placementCorrected.obj", true);
+        cout<<"meshes:"<<hashModel[i].getNumMeshes()<<endl;
+        
         ofPoint scale=newHashCollision.scale;
     
         newHashCollision.active=false;
@@ -667,7 +787,6 @@ void testApp::loadHashtagGUI()
         hashletters.push_back(newHashCollision);
         
         hashCollision.push_back( new ofxBulletCustomShape() );
-        funnelCollision.push_back (new ofxBulletBox() );
         
         btTransform trans;
         ofPoint temp=hashletters[i].pos;
@@ -676,7 +795,6 @@ void testApp::loadHashtagGUI()
         btQuaternion rotate=btQuaternion(rot.x,rot.y,rot.z,ofDegToRad(1));
         trans.setRotation(rotate);
         
-        ofQuaternion startRot=ofQuaternion(newHashCollision.rot.x,newHashCollision.rot.y,newHashCollision.rot.z,ofDegToRad(1));
         hashCollision[i]->addMesh(hashModel[i].getMesh(0), scale, false);
         hashCollision[i]->create( world.world, trans,0.);
         hashCollision[i]->add();

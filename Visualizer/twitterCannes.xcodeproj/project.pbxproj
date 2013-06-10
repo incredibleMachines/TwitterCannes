@@ -26,6 +26,7 @@
 		D34624821759813100462956 /* tinyxmlerror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D346247C1759813100462956 /* tinyxmlerror.cpp */; };
 		D34624831759813100462956 /* tinyxmlparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D346247D1759813100462956 /* tinyxmlparser.cpp */; };
 		D34624841759813100462956 /* ofxXmlSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D346247F1759813100462956 /* ofxXmlSettings.cpp */; };
+		D373C8DD17653ED700A5C7CF /* shadowMapLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D373C8DB17653ED700A5C7CF /* shadowMapLight.cpp */; };
 		D3880AA5175E28A4008AD5AD /* assimp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D3880A9C175E28A4008AD5AD /* assimp.a */; };
 		D3880AA6175E28A4008AD5AD /* ofxAssimpAnimation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D3880A9E175E28A4008AD5AD /* ofxAssimpAnimation.cpp */; };
 		D3880AA7175E28A4008AD5AD /* ofxAssimpMeshHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D3880AA0175E28A4008AD5AD /* ofxAssimpMeshHelper.cpp */; };
@@ -149,6 +150,8 @@
 		D346247D1759813100462956 /* tinyxmlparser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tinyxmlparser.cpp; sourceTree = "<group>"; };
 		D346247F1759813100462956 /* ofxXmlSettings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxXmlSettings.cpp; sourceTree = "<group>"; };
 		D34624801759813100462956 /* ofxXmlSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxXmlSettings.h; sourceTree = "<group>"; };
+		D373C8DB17653ED700A5C7CF /* shadowMapLight.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = shadowMapLight.cpp; sourceTree = "<group>"; };
+		D373C8DC17653ED700A5C7CF /* shadowMapLight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = shadowMapLight.h; sourceTree = "<group>"; };
 		D3880A71175E28A4008AD5AD /* install.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = install.xml; sourceTree = "<group>"; };
 		D3880A75175E28A4008AD5AD /* aiAnim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aiAnim.h; sourceTree = "<group>"; };
 		D3880A76175E28A4008AD5AD /* aiAssert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aiAssert.h; sourceTree = "<group>"; };
@@ -362,7 +365,7 @@
 		E45BE9770E8CC7DD009D7055 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = /System/Library/Frameworks/CoreServices.framework; sourceTree = "<absolute>"; };
 		E45BE9790E8CC7DD009D7055 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
 		E45BE97A0E8CC7DD009D7055 /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = /System/Library/Frameworks/QuickTime.framework; sourceTree = "<absolute>"; };
-		E4B69B5B0A3A1756003C02F2 /* ofxBullet Empty ExampleDebug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ofxBullet Empty ExampleDebug.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E4B69B5B0A3A1756003C02F2 /* twitterCannesDebug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = twitterCannesDebug.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4B69E1D0A3A1BDC003C02F2 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = src/main.cpp; sourceTree = SOURCE_ROOT; };
 		E4B69E1E0A3A1BDC003C02F2 /* testApp.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = testApp.cpp; path = src/testApp.cpp; sourceTree = SOURCE_ROOT; };
 		E4B69E1F0A3A1BDC003C02F2 /* testApp.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = testApp.h; path = src/testApp.h; sourceTree = SOURCE_ROOT; };
@@ -1133,7 +1136,7 @@
 				BB4B014C10F69532006C3DED /* addons */,
 				E45BE5980E8CC70C009D7055 /* frameworks */,
 				D391E6FA175B062700350556 /* settings.xml */,
-				E4B69B5B0A3A1756003C02F2 /* ofxBullet Empty ExampleDebug.app */,
+				E4B69B5B0A3A1756003C02F2 /* twitterCannesDebug.app */,
 				D3E9A85E1761207B003DD4B9 /* OBJ_letters */,
 			);
 			sourceTree = "<group>";
@@ -1141,6 +1144,8 @@
 		E4B69E1C0A3A1BDC003C02F2 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				D373C8DB17653ED700A5C7CF /* shadowMapLight.cpp */,
+				D373C8DC17653ED700A5C7CF /* shadowMapLight.h */,
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
 				D3301D651762D62E000D3B03 /* alphabet.cpp */,
 				D3301D661762D62E000D3B03 /* alphabet.h */,
@@ -1167,9 +1172,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		E4B69B5A0A3A1756003C02F2 /* ofxBullet Empty Example */ = {
+		E4B69B5A0A3A1756003C02F2 /* twitterCannes */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E4B69B5F0A3A1757003C02F2 /* Build configuration list for PBXNativeTarget "ofxBullet Empty Example" */;
+			buildConfigurationList = E4B69B5F0A3A1757003C02F2 /* Build configuration list for PBXNativeTarget "twitterCannes" */;
 			buildPhases = (
 				E4B69B580A3A1756003C02F2 /* Sources */,
 				E4B69B590A3A1756003C02F2 /* Frameworks */,
@@ -1181,9 +1186,9 @@
 			dependencies = (
 				E4EEB9AC138B136A00A80321 /* PBXTargetDependency */,
 			);
-			name = "ofxBullet Empty Example";
+			name = twitterCannes;
 			productName = myOFApp;
-			productReference = E4B69B5B0A3A1756003C02F2 /* ofxBullet Empty ExampleDebug.app */;
+			productReference = E4B69B5B0A3A1756003C02F2 /* twitterCannesDebug.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -1191,7 +1196,7 @@
 /* Begin PBXProject section */
 		E4B69B4C0A3A1720003C02F2 /* Project object */ = {
 			isa = PBXProject;
-			buildConfigurationList = E4B69B4D0A3A1720003C02F2 /* Build configuration list for PBXProject "ofxBullet Empty Example" */;
+			buildConfigurationList = E4B69B4D0A3A1720003C02F2 /* Build configuration list for PBXProject "twitterCannes" */;
 			compatibilityVersion = "Xcode 2.4";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -1212,7 +1217,7 @@
 			);
 			projectRoot = "";
 			targets = (
-				E4B69B5A0A3A1756003C02F2 /* ofxBullet Empty Example */,
+				E4B69B5A0A3A1756003C02F2 /* twitterCannes */,
 			);
 		};
 /* End PBXProject section */
@@ -1287,6 +1292,7 @@
 				D3460B7E17651EEA0075FF73 /* ofTextConverter.cpp in Sources */,
 				D3460B7F17651EEA0075FF73 /* ofUnicode.cpp in Sources */,
 				D3460B8017651EEA0075FF73 /* ofUTF8.cpp in Sources */,
+				D373C8DD17653ED700A5C7CF /* shadowMapLight.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1463,7 +1469,7 @@
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3 = "\"$(SRCROOT)/../../../addons/ofxAssimpModelLoader/libs/assimp/lib/osx\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_4 = "\"$(SRCROOT)/../../../addons/ofxAssimpModelLoader/libs/assimp/lib/osx\"";
 				PREBINDING = NO;
-				PRODUCT_NAME = "ofxBullet Empty ExampleDebug";
+				PRODUCT_NAME = twitterCannesDebug;
 				STRIP_INSTALLED_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};
@@ -1558,7 +1564,7 @@
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3 = "\"$(SRCROOT)/../../../addons/ofxAssimpModelLoader/libs/assimp/lib/osx\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_4 = "\"$(SRCROOT)/../../../addons/ofxAssimpModelLoader/libs/assimp/lib/osx\"";
 				PREBINDING = NO;
-				PRODUCT_NAME = "ofxBullet Empty Example";
+				PRODUCT_NAME = twitterCannes;
 				STRIP_INSTALLED_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};
@@ -1567,7 +1573,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		E4B69B4D0A3A1720003C02F2 /* Build configuration list for PBXProject "ofxBullet Empty Example" */ = {
+		E4B69B4D0A3A1720003C02F2 /* Build configuration list for PBXProject "twitterCannes" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E4B69B4E0A3A1720003C02F2 /* Debug */,
@@ -1576,7 +1582,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E4B69B5F0A3A1757003C02F2 /* Build configuration list for PBXNativeTarget "ofxBullet Empty Example" */ = {
+		E4B69B5F0A3A1757003C02F2 /* Build configuration list for PBXNativeTarget "twitterCannes" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E4B69B600A3A1757003C02F2 /* Debug */,

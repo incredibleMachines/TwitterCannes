@@ -18,6 +18,7 @@
 #include "ofUnicode.h"
 #include "ofTextConverter.h"
 
+#include "shadowMapLight.h"
 
 
 class testApp : public ofBaseApp {
@@ -43,6 +44,9 @@ public:
     void keyPressed(int key);
     void mousePressed(int x, int y, int button);
     void keyReleased(int key);
+    
+    void setupLights();
+    void drawObjects();
     
     vector<string> images;
     ofImage pic;
@@ -186,6 +190,15 @@ public:
     void imgToKinematic();
     void updateImg();
 void updateTweet();
+    
+    ofShader shader;
+    ShadowMapLight shadowLight;
+    ofxAssimpModelLoader model;
+    ofMesh mesh;
+    
+    float   lightAngle;
+    bool    bDrawDepth;
+    bool    bDrawLight;
 
 };
 

@@ -161,8 +161,6 @@ public:
     bool    bDrawDepth;
     bool    bDrawLight;
     
-    bool lPaused;
-
     
 };
 

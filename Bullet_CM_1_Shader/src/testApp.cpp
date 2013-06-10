@@ -66,7 +66,6 @@ void testApp::setup(){
     mesh = hashModel[1].getMesh(0);
     
     setupLights();
-    lPaused = false;
     
 }
 
@@ -781,7 +780,7 @@ void testApp::keyPressed(int key){
             return;
             
         case 'l':
-            lPaused = !lPaused;
+//            lPaused = !lPaused;
             return;
             
         case ' ':
