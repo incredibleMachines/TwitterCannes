@@ -9,15 +9,14 @@
 #include "alphabet.h"
 
 Alphabet::Alphabet(){
-    for(int i=0;i<142;i++){
-        if(i!=127&&i!=158&&i!=169&&i!=171&&i!=172){
+    for(int i=0;i<256;i++){
             Letter *newLetter=new Letter();
             newLetter->ascii=i;
+        if(i>32){
             string modelPath="GothamAsciiMeshes/"+ofToString(i)+".obj";
-            
             newLetter->model.loadModel(modelPath);
-            letters.push_back(newLetter);
         }
+            letters.push_back(newLetter);
     }
 }
 

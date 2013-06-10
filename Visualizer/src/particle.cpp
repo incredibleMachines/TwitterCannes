@@ -15,7 +15,7 @@ void Particle::setup(keyframe pixelPos, float index) {
     
 }
 
-void Particle::setup(keyframe pixelPos, float index, char c, ofPoint _size) {
+void Particle::setup(keyframe pixelPos, float index, int c, ofPoint _size) {
         
 	pixel=pixelPos;
     myIndex=index;

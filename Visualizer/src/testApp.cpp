@@ -56,10 +56,6 @@ void testApp::setup(){
     camera.lookAt( ofVec3f( 0.0f, 0.0f, 0.0f ) );
         
     shader.load( "shaders/mainScene.vert", "shaders/mainScene.frag" );
-//    model.loadModel("models/cannes_placementCorrected.obj", true);
-//    
-//    hashModel[0].setScale(0.04, 0.04, 0.04);
-//    mesh = hashModel[1].getMesh(0);
     
     setupLights();
     
@@ -82,8 +78,7 @@ void testApp::setup(){
     else{
         loadTweet();
     }
-    
-    gui.loadFont("verdana.ttf", 200);
+
     
     
 }
@@ -513,13 +508,13 @@ void testApp::initImgParticles(){
 
 void testApp::loadTweet(){
     assert(ofTextConverter::toUTF8(0x30A1) == "\u30A1");
-    string tweetRaw="ABCDEFG HIJKLMNOP";
+    string tweetRaw="ÉÅîñ";
+    
     ofUniString tweet= ofTextConverter::toUTF32(tweetRaw);
     
     ofPoint pos=ofPoint(-45,0,-60);
     for (int i=0;i<tweet.length();i++){
-//        
-//        cout<<int(chars[i])<<endl;
+        cout<<tweet[i]<<endl;
         
         if (tweet[i]==32){
             pos.x+=10;
@@ -606,7 +601,6 @@ void testApp::loadHashtag()
         newHashCollision.pos.y = settings.getValue("Y", 0.);
         newHashCollision.pos.z = settings.getValue("Z", 0.);
         newHashCollision.key=loadKey;
-        cout<<loadKey<<endl;
         settings.popTag();
         
         settings.pushTag("ROTATION");
@@ -630,7 +624,6 @@ void testApp::loadHashtag()
         hashModel[i].loadModel(file,true );
         
 //        hashModel[i].loadModel("models/cannes_placementCorrected.obj", true);
-        cout<<"meshes:"<<hashModel[i].getNumMeshes()<<endl;
         
         ofPoint scale=newHashCollision.scale;
     
@@ -1274,7 +1267,6 @@ void testApp::drawGUI(){
         }
         ofRect(hashletters[i].checkbox);
         gui.drawString(hashletters[i].key,hashletters[i].checkbox.position.x+10,hashletters[i].checkbox.position.y-200);
-        cout<<hashletters[i].checkbox.position.y<<endl;
         ofSetColor(225,255,255);
     }
     ofFill();

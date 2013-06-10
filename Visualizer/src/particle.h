@@ -97,7 +97,7 @@ public:
     };
     
     void setup(keyframe pixel, float index);
-        void setup(keyframe pixel, float index, char c, ofPoint _size);
+        void setup(keyframe pixel, float index, int c, ofPoint _size);
     void update();
     void draw();
     
@@ -126,7 +126,7 @@ public:
     
     bool bRotate=true;
     
-    char letter;
+    int letter;
     ofPoint size;
 
     
