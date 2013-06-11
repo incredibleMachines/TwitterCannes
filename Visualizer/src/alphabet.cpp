@@ -58,7 +58,7 @@ ofPoint Alphabet::getSize(int c){
     }
         ofPoint scale=letters[c]->model.getScale();
         ofPoint size=max-min;
-        return max;
+        return size;
     }
     else{
         return ofPoint(0,0,0);

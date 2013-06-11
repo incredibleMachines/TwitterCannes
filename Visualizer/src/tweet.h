@@ -19,12 +19,12 @@ class Tweet {
     
 public:
     
-    void update(ofxBulletWorldRigid* world);
+    void update();
     void draw();
     void tweetToKinematic();
     void imgToKinematic();
     void userToKinematic();
-    void tweetToPhysics(ofxBulletWorldRigid world);
+    void tweetToPhysics();
     void imgToPhysics();
     void userToPhysics();
     void updateTweet();

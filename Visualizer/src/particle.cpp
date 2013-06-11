@@ -40,6 +40,7 @@ void Particle::update(){
     ofPoint c = target.pos - start.pos;
     float d = target.duration;
     
+    cout<<"trigger"<<endl;
     if (target.path == "line") {
         
         if (target.interpolation == "linear")
@@ -131,11 +132,12 @@ void Particle::calcPosition(keyframe goTo){
     
     if(goTo.type.x=="pixel"){
         calc.pos.x=pixel.pos.x;
+        cout<<"trigger"<<endl;
     }
     else if(goTo.type.x=="previous"){
         calc.pos.x=current.pos.x;
     }
-    else if(goTo.posMin.x!=0||goTo.posMax.x!=0){
+    else if(goTo.posMin.x!=NULL||goTo.posMax.x!=NULL){
         if(calc.type.x=="pixel_relative"){
             calc.pos.x=pixel.pos.x+ofRandom(goTo.posMin.x, goTo.posMax.x);
         }
@@ -164,7 +166,7 @@ void Particle::calcPosition(keyframe goTo){
     else if(goTo.type.y=="previous"){
         calc.pos.y=current.pos.y;
     }
-    else if(goTo.posMin.y!=0&&goTo.posMax.y!=0){
+    else if(goTo.posMin.y!=NULL&&goTo.posMax.y!=NULL){
         if(goTo.type.y=="pixel_relative"){
             calc.pos.y=pixel.pos.y+ofRandom(goTo.posMin.y, goTo.posMax.y);
         }
@@ -193,7 +195,7 @@ void Particle::calcPosition(keyframe goTo){
     else if(goTo.type.z=="previous"){
         calc.pos.z=current.pos.z;
     }
-    else if(goTo.posMin.z!=0&&goTo.posMax.z!=0){
+    else if(goTo.posMin.z!=NULL&&goTo.posMax.z!=NULL){
         if(goTo.type.z=="pixel_relative"){
             calc.pos.z=pixel.pos.z+ofRandom(goTo.posMin.z, goTo.posMax.z);
         }
@@ -216,7 +218,7 @@ void Particle::calcPosition(keyframe goTo){
         }
     }
     
-    if(goTo.durationMin!=0&&goTo.durationMax!=0){
+    if(goTo.durationMin!=NULL&&goTo.durationMax!=NULL){
         calc.duration=ofRandom(goTo.durationMin,goTo.durationMax);
     }
     else{

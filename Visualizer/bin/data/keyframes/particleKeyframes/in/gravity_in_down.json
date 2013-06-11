@@ -39,12 +39,10 @@
                "duration":{
                    "min":"",
                    "max":"",
-                   "actual":"2000"
+                   "actual":"100"
                },
                "interpolations":[
-                    {
-                    "interpolation":"linear",
-                    "interpolation":"bounce_in"}
+                                 {"interpolation":"linear"}
                 ]
                },
                
@@ -86,7 +84,7 @@
                "duration":{
                    "min":"",
                    "max":"",
-                   "actual":"2000"
+                   "actual":"100"
                },
                "interpolations":[{
                     "interpolation":"linear"}
@@ -128,7 +126,7 @@
                "duration":{
                    "min":"",
                    "max":"",
-                   "actual":"5000"
+                   "actual":"8000"
                },
                "interpolations":[{
                                  "interpolation":"linear"}
@@ -137,11 +135,11 @@
                
                
                {
-               "path": "gravity",
+               "path": "line",
                "type":{
                    "x":"pixel",
                    "y":"pixel",
-                   "z":"previous"
+                   "z":"pixel"
                },
                "pos":{
                    "set":{
@@ -173,7 +171,48 @@
                "interpolations":[{
                                  "interpolation":"linear"}
                                  ]
+               },
+               
+               {
+               "path": "gravity",
+               "type":{
+               "x":"pixel",
+               "y":"pixel",
+               "z":"previous"
+               },
+               "pos":{
+               "set":{
+               "x":"",
+               "y":"",
+               "z":""
+               },
+               "min":{
+               "x":"",
+               "y":"",
+               "z":""
+               },
+               "max":{
+               "x":"",
+               "y":"",
+               "z":""
                }
+               },
+               "gravity":{
+               "x":"0",
+               "y":"150",
+               "z":"0"
+               },
+               "duration":{
+               "min":"",
+               "max":"",
+               "actual":"5000"
+               },
+               "interpolations":[{
+                                 "interpolation":"linear"}
+                                 ]
+               }
+    
+               
                
                
                ]

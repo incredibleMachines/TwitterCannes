@@ -13,14 +13,22 @@
 #define tileD 10
 
 void Tweet::loadTweet(string _text, string _ID, string _img, string _username, string _handle, string _profileimage, ofxBulletWorldRigid* _world){
+    
+    tweetPos=ofPoint(-45,20,-65);
+    boxScale;
+    imagePos;
+    tweetScale=ofPoint(1,1,1);
+    userPos;
+    userScale;
+    handleScale;
+    
     keyframe=0;
-    bNewKey=0;
+    bNewKey=true;
     world=_world;
     
     boxShape = ofBtGetBoxCollisionShape(boxScale.x*tileW, boxScale.y*tileH, boxScale.z*tileD);
     ofxJSONElement animation;
     bool success=animation.open("keyframes/contentBlockKeyframes/test.json");
-    cout<<success<<endl;
     int i=0;
     tweetIn="keyframes/particleKeyframes/in/"+animation["animations"][i]["tweet"]["in"].asString();
     tweetOut="keyframes/particleKeyframes/out/"+animation["animations"][i]["tweet"]["out"].asString();
@@ -28,17 +36,14 @@ void Tweet::loadTweet(string _text, string _ID, string _img, string _username, s
     imgOut="keyframes/particleKeyframes/out/"+animation["animations"][i]["image"]["out"].asString();
     userIn="keyframes/particleKeyframes/in/"+animation["animations"][i]["user"]["in"].asString();
     userOut="keyframes/particleKeyframes/out/"+animation["animations"][i]["user"]["out"].asString();
-    Tweet newTweet;
-    newTweet.keyframe=0;
-    newTweet.imageKeyframe=0;
-    newTweet.userKeyframe=0;
+    
     ofPoint pos=tweetPos;
     
     loadParticleKeyframes(tweetIn, 0);
     loadParticleKeyframes(tweetOut,0);
     
     
-    ofUniString tweetText= ofTextConverter::toUTF32(newTweet.text);
+    ofUniString tweetText= ofTextConverter::toUTF32(_text);
     
     for (int i=0;i<tweetText.length();i++){
         
@@ -59,19 +64,20 @@ void Tweet::loadTweet(string _text, string _ID, string _img, string _username, s
             ofVec3f boxDim;
             boxDim=gotham.getSize(tweetText[i])*tweetScale;
             //create Bullet letters for image visualization
-            newTweet.letters.push_back( new ofxBulletCustomShape() );
+            letters.push_back( new ofxBulletCustomShape() );
             ofQuaternion startRot=ofQuaternion(0,0,1,PI);
-            newTweet.letters[newTweet.letters.size()-1]->addMesh(gotham.getMesh(tweetText[i]),tweetScale,true);
-            newTweet.letters[newTweet.letters.size()-1]->create(_world->world,ofPoint(0,0,0),startRot,0.);
-            newTweet.letters[newTweet.letters.size()-1]->add();
-            newTweet.letters[newTweet.letters.size()-1]->setProperties(.1,.1);
-            newTweet.letters[newTweet.letters.size()-1]->enableKinematic();
+            letters[letters.size()-1]->addMesh(gotham.getMesh(tweetText[i]),tweetScale,true);
+            letters[letters.size()-1]->create(world->world,tweetKeyframes[keyframe].pos,startRot,0.);
+            letters[letters.size()-1]->add();
+            letters[letters.size()-1]->setProperties(.1,.1);
+            letters[letters.size()-1]->enableKinematic();
             
             //create particles for controlling static shape position/rotation
             Particle particle;
             particle.setup(temp,i,tweetText[i],boxDim);
-            newTweet.particles.push_back(particle);
+            particles.push_back(particle);
             pos.x+=boxDim.x+2;
+            particle.goToPosition(tweetKeyframes[keyframe]);
         }
     }
     
@@ -86,11 +92,10 @@ void Tweet::loadTweet(string _text, string _ID, string _img, string _username, s
     //    }
     //    newTweet.user=loadUser(_username, _handle, _profileimage, _world, gotham);
     //    return newTweet;
-//        world->destroy();
     
 }
 
-void Tweet::update(ofxBulletWorldRigid* world){
+void Tweet::update(){
     
     //check whether individual particles have completed the duration of their transition
     int moving=0;
@@ -124,7 +129,7 @@ void Tweet::update(ofxBulletWorldRigid* world){
         
         //if switching into physics state
         else{
-            tweetToPhysics(*world);
+            tweetToPhysics();
         }
         bNewKey=false;
     }
@@ -132,10 +137,8 @@ void Tweet::update(ofxBulletWorldRigid* world){
     //if not new keyframe
     
     else{
-        cout<<tweetKeyframes.size()<<endl;
         updateTweet();
     }
-    cout<<keyframe<<endl;
 }
 
 
@@ -151,7 +154,7 @@ void Tweet::draw(){
             ofGetOpenGLMatrixFromRigidBody( letters[i]->getRigidBody(), m );
             glPushMatrix();
             glMultMatrixf( m );
-            glTranslatef(-particles[i].size.x/2, -particles[i].size.y/2, -particles[i].size.z/2);
+            glTranslatef(-particles[i].size.x/2*tweetScale.x, -particles[i].size.y/2*tweetScale.y, -particles[i].size.z/2*tweetScale.z);
             gotham.draw(particles[i].letter,tweetScale);
             glPopMatrix();
             glPopClientAttrib();
@@ -321,7 +324,6 @@ void Tweet::loadParticleKeyframes(string filePath, int which){
             Particle::keyframe temp;
             temp.path=json["particles"][i]["path"].asString();
             
-            cout<<temp.path<<endl;
             temp.type.x=json["particles"][i]["type"]["x"].asString();
             temp.type.y=json["particles"][i]["type"]["y"].asString();
             temp.type.z=json["particles"][i]["type"]["z"].asString();
@@ -493,8 +495,8 @@ void Tweet::userToKinematic(){
     }
 }
 
-void Tweet::tweetToPhysics(ofxBulletWorldRigid world){
-    world.setGravity(ofVec3f(tweetKeyframes[keyframe].gravity.x,tweetKeyframes[keyframe].gravity.y,tweetKeyframes[keyframe].gravity.z));
+void Tweet::tweetToPhysics(){
+    world->setGravity(ofVec3f(tweetKeyframes[keyframe].gravity.x,tweetKeyframes[keyframe].gravity.y,tweetKeyframes[keyframe].gravity.z));
     for (int i=0;i<letters.size();i++){
         btTransform trans;
         ofPoint temp=letters[i]->getPosition();
@@ -504,7 +506,7 @@ void Tweet::tweetToPhysics(ofxBulletWorldRigid world){
         trans.setRotation( btQuaternion(btVector3(rotQuat.x(), rotQuat.y(), rotQuat.z()), newRot) );
         letters[i]->remove();
         letters[i]->addMesh(gotham.getMesh(particles[i].letter),tweetScale,false);
-        letters[i]->create(world.world,trans, 1.);
+        letters[i]->create(world->world,trans, 1.);
         letters[i]->add();
         letters[i]->setProperties(.1,1);
         particles[i].goToPosition(tweetKeyframes[keyframe]);
@@ -549,7 +551,6 @@ void Tweet::userToPhysics(){
 }
 
 void Tweet::updateTweet(){
-    cout<<tweetKeyframes.size()<<endl;
     if(tweetKeyframes[keyframe].path!="gravity"){
         for (int i=0;i<letters.size();i++){
             particles[i].update();

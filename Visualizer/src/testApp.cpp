@@ -2,7 +2,7 @@
 
 #define USE_DOF true
 #define CAM_MOVE false
-#define CAM_MOUSE false
+#define CAM_MOUSE true
 #define FACES false
 
 
@@ -21,7 +21,7 @@ void testApp::setup(){
     bDebug=true;
     bGUI=false;
     
-    camState=1;
+    camState=0;
     
     camera.setDistance(40.0f);
     camera.setGlobalPosition( 30.0f, 15.0f, 00.0f );
@@ -85,7 +85,6 @@ void testApp::drawObjects(){
     ofRotate(330,1,0,0);
     
     for(int i = 0; i < hashCollision.size()  ; i++) {
-        cout<<hashCollision.size()<<endl;
         glPushAttrib(GL_ALL_ATTRIB_BITS);
         glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS);
         glEnable(GL_NORMALIZE);
@@ -119,9 +118,9 @@ void testApp::update(){
     ofSetWindowTitle( ofToString( ofGetFrameRate() ) );
     
 //updates bullet objects
-    tweet.world->update();
+    world.update();
     
-    tweet.update(&world);
+    tweet.update();
     
 }
 
@@ -174,18 +173,17 @@ void testApp::draw(){
     //bind image textures and draw bullet shapes
     
     material.begin();
-    
+    white.bind();
     tweet.draw();
+    white.unbind();
+    material.end();
     
     shadowLight.disable();
-        material.end();
-    
-    
     
     //enable to see physics collision wireframes
     if(bDebug==true){
         glPushMatrix();
-//        world.drawDebug();
+        world.drawDebug();
         glPopMatrix();
     }
     
@@ -309,7 +307,6 @@ void testApp::loadHashtag()
         
         
         string file=settings.getValue("OBJ"," ");
-        cout<<file<<endl;
         settings.popTag();
         
         hashModel[i].loadModel(file,true );
