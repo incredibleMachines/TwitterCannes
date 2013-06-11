@@ -5,12 +5,6 @@
 #define CAM_MOUSE true
 #define FACES false
 
-string debugTweet="Rockin' it out at #CannesLions with Twitter, yeah! ¿¡åüéî!?";
-string debugID="1";
-string debugImg="debug/chanel.jpg";
-string debugUser="IncredibleMachines";
-string debugHandle="@IncMachines";
-string debugUserImg="debug/eac28a9e3fcd979d83fe0dddf74f4e15_normal.png";
 
 //--------------------------------------------------------------
 void testApp::setup(){

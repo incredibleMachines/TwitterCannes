@@ -17,7 +17,7 @@ void Tweet::loadTweet(string _text, string _ID, string _img, string _username, s
     tweetPos=ofPoint(-45,20,-55);
     boxScale=ofPoint(.2,.2,.2);
     imagePos=ofPoint(-10,-10,-70);
-        tweetScale=ofPoint(.1,.1,.1);
+    tweetScale=ofPoint(.1,.1,.1);
     userPos=ofPoint(-80,-20,-25);
     userScale=ofPoint(.1,.1,.1);
     handleScale=ofPoint(.1,.09,.1);
@@ -41,101 +41,63 @@ void Tweet::loadTweet(string _text, string _ID, string _img, string _username, s
     tweetIn.path="keyframes/particleKeyframes/in/"+json["animations"][i]["tweet"]["in"]["animation"].asString();
     
     speed=json["animations"][i]["tweet"]["in"]["speed"].asString();
-    if(speed!=""){
-        tweetIn.speed=ofToInt(speed);
-    }
-    else{
-        tweetIn.speed=1;
-    }
+    if(speed!="") tweetIn.speed=ofToInt(speed);
+    else tweetIn.speed=1;
+    
     
     delay=json["animations"][i]["tweet"]["in"]["delay"].asString();
-    if(delay!=""){
-        tweetIn.delay=ofToInt(delay);
-    }
-    else{
-        tweetIn.delay=0;
-    }
+    if(delay!="") tweetIn.delay=ofToInt(delay);
+    else tweetIn.delay=0;
+    
     
     tweetOut.path="keyframes/particleKeyframes/out/"+json["animations"][i]["tweet"]["out"]["animation"].asString();
     
     speed=json["animations"][i]["tweet"]["out"]["speed"].asString();
-    if(speed!=""){
-        tweetOut.speed=ofToInt(speed);
-    }
-    else{
-        tweetOut.speed=1;
-    }
+    if(speed!="") tweetOut.speed=ofToInt(speed);
+    else tweetOut.speed=1;
+    
     delay=json["animations"][i]["tweet"]["out"]["delay"].asString();
-    if(delay!=""){
-        tweetOut.delay=ofToInt(delay);
-    }
-    else{
-        tweetOut.delay=0;
-    }
+    if(delay!="") tweetOut.delay=ofToInt(delay);
+    else tweetOut.delay=0;
     
     imgIn.path="keyframes/particleKeyframes/in/"+json["animations"][i]["image"]["in"]["animation"].asString();
     speed=json["animations"][i]["image"]["in"]["speed"].asString();
-    if(speed!=""){
-        imgIn.speed=ofToInt(speed);
-    }
-    else{
-        imgIn.speed=1;
-    }
+    if(speed!="") imgIn.speed=ofToInt(speed);
+    else imgIn.speed=1;
+    
     delay=json["animations"][i]["image"]["in"]["delay"].asString();
-    if(delay!=""){
-        imgIn.delay=ofToInt(delay);
-    }
-    else{
-        imgIn.delay=0;
-    }
+    if(delay!="") imgIn.delay=ofToInt(delay);
+    else imgIn.delay=0;
+    
     
     imgOut.path="keyframes/particleKeyframes/out/"+json["animations"][i]["image"]["out"]["animation"].asString();
     speed=json["animations"][i]["image"]["out"]["speed"].asString();
-    if(speed!=""){
-        imgOut.speed=ofToInt(speed);
-    }
-    else{
-        imgOut.speed=1;
-    }
+    if(speed!="") imgOut.speed=ofToInt(speed);
+    else imgOut.speed=1;
+    
     delay=json["animations"][i]["image"]["out"]["delay"].asString();
-    if(delay!=""){
-        imgOut.delay=ofToInt(delay);
-    }
-    else{
-        imgOut.delay=0;
-    }
+    if(delay!="") imgOut.delay=ofToInt(delay);
+    else imgOut.delay=0;
+    
     
     userIn.path="keyframes/particleKeyframes/in/"+json["animations"][i]["user"]["in"]["animation"].asString();
     speed=json["animations"][i]["user"]["in"]["speed"].asString();
-    if(speed!=""){
-        userIn.speed=ofToInt(speed);
-    }
-    else{
-        userIn.speed=1;
-    }
+    if(speed!="") userIn.speed=ofToInt(speed);
+    else userIn.speed=1;
+    
     delay=json["animations"][i]["user"]["in"]["delay"].asString();
-    if(delay!=""){
-        userIn.delay=ofToInt(delay);
-    }
-    else{
-        userIn.delay=0;
-    }
+    if(delay!="") userIn.delay=ofToInt(delay);
+    else userIn.delay=0;
+    
     
     userOut.path="keyframes/particleKeyframes/out/"+json["animations"][i]["user"]["out"]["animation"].asString();
     speed=json["animations"][i]["user"]["out"]["speed"].asString();
-    if(speed!=""){
-        userOut.speed=ofToInt(speed);
-    }
-    else{
-        userOut.speed=1;
-    }
+    if(speed!="") userOut.speed=ofToInt(speed);
+    else userOut.speed=1;
+    
     delay=json["animations"][i]["user"]["out"]["delay"].asString();
-    if(delay!=""){
-        userOut.delay=ofToInt(delay);
-    }
-    else{
-        userOut.delay=0;
-    }
+    if(delay!="") userOut.delay=ofToInt(delay);
+    else userOut.delay=0;
     
     ofPoint pos=tweetPos;
     
@@ -157,9 +119,7 @@ void Tweet::loadTweet(string _text, string _ID, string _img, string _username, s
                 pos.y-=5;
                 pos.x=-45;
             }
-        }
-        
-        else{
+        }else{
             //setup position values for displaying whole image
             Particle::Keyframe temp;
             temp.pos.x=pos.x;
