@@ -15,22 +15,24 @@ string debugUserImg="debug/eac28a9e3fcd979d83fe0dddf74f4e15_normal.png";
 //--------------------------------------------------------------
 void testApp::setup(){
     
+        gotham=Alphabet();
+    
     sqlite = new ofxSQLite("blank.db");
-//    sqlite->simpleQuery(""\
-//                        "CREATE TABLE IF NOT EXISTS tweets (" \
-//                        " id TEXT" \
-//                        " ,approved_at TEXT" \
-//                        " ,category TEXT" \
-//                        " ,created_at TEXT" \
-//                        " ,media_url TEXT" \
-//                        ", starred INTEGER" \
-//                        " ,text TEXT" \
-//                        " ,user_id TEXT" \
-//                        " ,user_image TEXT" \
-//                        " ,user_name TEXT" \
-//                        " ,user_screen_name TEXT" \
-//                        ");"
-//                        );
+    sqlite->simpleQuery(""\
+                        "CREATE TABLE IF NOT EXISTS tweets (" \
+                        " id TEXT" \
+                        " ,approved_at TEXT" \
+                        " ,category TEXT" \
+                        " ,created_at TEXT" \
+                        " ,media_url TEXT" \
+                        ", starred INTEGER" \
+                        " ,text TEXT" \
+                        " ,user_id TEXT" \
+                        " ,user_image TEXT" \
+                        " ,user_name TEXT" \
+                        " ,user_screen_name TEXT" \
+                        ");"
+                        );
     
 //    // in bin, not data
 //    sqlite = new ofxSQLite("twitterCannesLions.db");
@@ -108,7 +110,6 @@ void testApp::setup(){
     //GUI and hashtag mesh loading
     loadHashtag();
     
-    gotham=Alphabet();
     tweet.loadTweet(debugTweet, debugID, debugImg, debugUser, debugHandle, debugUserImg, &world, &gotham);
     
     
@@ -172,11 +173,11 @@ void testApp::draw(){
 	glEnable(GL_DEPTH_TEST);
     ofDisableAlphaBlending();
     ofEnableLighting();
+    ofDisableArbTex();
     ofPushMatrix();
     
     shadowLight.lookAt( ofVec3f(0.0,0.0,0.0) );
     shadowLight.orbit( 90, -70, 90, ofVec3f(0.0,0.0,0.0) );
-    //(long, lat, radius, ofVec3f(centerpoint))
     shadowLight.enable();
     
     // render linear depth buffer from light view
@@ -249,15 +250,14 @@ void testApp::draw(){
 //--------------------------------------------------------------
 void testApp::setupGL(){    
     
-    material.setShininess(.1);
+    material.setShininess(.8);
     
     //Create static collision objects
-    background.create(world.world,ofVec3f(0,0,-90.),0.,175,100,10.);
+    background.create(world.world,ofVec3f(0,0,-90.),0.,175,200,10.);
     background.add();
     background.setProperties(.1,1);
     
     whiteImg.loadImage("textures/whiteBig.png");
-    
     white=whiteImg.getTextureReference();
 }
 
@@ -277,24 +277,6 @@ void testApp::setupLights() {
     
     ofSetGlobalAmbientColor( ofFloatColor( 0.05f, 0.05f, 0.05f ) );
 }
-
-void testApp::loadDir(){
-    
-//    //use ofDirectory to load image files into vector of strings then close dir
-//    
-//    string path = "images";
-//    ofDirectory dir(path);
-//    dir.allowExt("jpg");
-//    dir.allowExt("png");
-//    dir.listDir();
-//    for(int i = 0; i < dir.numFiles(); i++){
-//        string newImage=dir.getPath(i);
-//        images.push_back(newImage);
-//    }
-//    dir.close();
-}
-
-
 
 //GUI INIT CODE - LOADS MASTER SETTINGS DOCS AND POPULATES GUI OF THEIR CONTENT
 
@@ -373,7 +355,6 @@ void testApp::loadHashtag()
         hashCollision[i]->add();
         hashCollision[i]->setProperties(.1, 1);
         
-        //ADD HASHTAG SETTINGS TO GUI
     }
     //    ofEnableArbTex();
     settings.popTag();
@@ -410,10 +391,9 @@ void testApp::keyPressed(int key){
             
         case 'c':
             camState++;
-            if (camState>2){
+            if (camState>1){
                 camState=0;
             }
-            bCamSwitch=true;
             return;
             
         case ' ':
@@ -756,7 +736,6 @@ void testApp::updateCollision(int i){
     hashCollision[i]->init();
     hashCollision[i]->create(world.world,trans,0.);
     hashCollision[i]->addMesh(hashModel[i].getMesh(0), scale, false);
-    //            hashCollision[i]->addMesh(collisionPlane.getMesh(0), scale, false);
     hashCollision[i]->add();
     hashCollision[i]->setProperties(.1, 1);
     

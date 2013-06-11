@@ -10,57 +10,30 @@
 
 Alphabet::Alphabet(){
     for(int i=0;i<256;i++){
-            Letter *newLetter=new Letter();
-            newLetter->ascii=i;
+        Letter newLetter;
+        newLetter.ascii=i;
         if(i>32){
             string modelPath="GothamAsciiMeshes/"+ofToString(i)+".obj";
-            newLetter->model.loadModel(modelPath);
+            ofxAssimpModelLoader newModel;
+            newModel.loadModel(modelPath);
+            newLetter.mesh=newModel.getMesh(0);
+            newLetter.size=newModel.getSceneMax()-newModel.getSceneMin();
+            newModel.clear();
         }
             letters.push_back(newLetter);
     }
 }
 
-Alphabet::Letter::Letter(){}
-
-Alphabet::~Alphabet(){}
-
 void Alphabet::draw(int c, ofPoint scale){
     ofPushMatrix();
     ofScale(scale.x,scale.y,scale.z);
-    letters[c]->model.getMesh(0).draw();
+    letters[c].mesh.draw();
     ofPopMatrix();
 }
 
 ofPoint Alphabet::getSize(int c){
     if(c>32){
-    vector<ofPoint> vertices=letters[c]->model.getMesh(0).getVertices();
-    ofPoint max,min;
-    for (int i=0;i<vertices.size();i++)
-    {
-        if(vertices[i].x>max.x){
-            max.x=vertices[i].x;
-        }
-        if(vertices[i].y>max.y){
-            max.y=vertices[i].y;
-        }
-        if(vertices[i].z>max.z){
-            max.z=vertices[i].z;
-        }
-        if(vertices[i].x<min.x){
-            min.x=vertices[i].x;
-        }
-        if(vertices[i].y<min.y){
-            min.y=vertices[i].y;
-        }
-        if(vertices[i].z<min.z){
-            min.z=vertices[i].z;
-        }
-    }
-        ofPoint size=max-min;
-        return max;
-    }
-    else{
-        return ofPoint(0,0,0);
+        return letters[c].size;
     }
 
     
@@ -71,6 +44,6 @@ ofPoint Alphabet::getSize(int c){
 
 ofMesh Alphabet::getMesh(int c){
     if(c>32){
-    return letters[c]->model.getMesh(0);
+    return letters[c].mesh;
     }
 }

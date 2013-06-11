@@ -232,12 +232,6 @@
 		D3C9C45F1767A46700BCBC8C /* ofxSQLiteUpdate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxSQLiteUpdate.cpp; sourceTree = "<group>"; };
 		D3C9C4601767A46700BCBC8C /* ofxSQLiteUpdate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxSQLiteUpdate.h; sourceTree = "<group>"; };
 		D3C9C4611767A46700BCBC8C /* ofxSQLiteWhere.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxSQLiteWhere.h; sourceTree = "<group>"; };
-		D3CED559176694D60085D71F /* test.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = test.json; sourceTree = "<group>"; };
-		D3CED55D176694D60085D71F /* ease_in_const.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ease_in_const.json; sourceTree = "<group>"; };
-		D3CED55E176694D60085D71F /* gravity_in_down.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = gravity_in_down.json; sourceTree = "<group>"; };
-		D3CED55F176694D60085D71F /* gravity_in_up.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = gravity_in_up.json; sourceTree = "<group>"; };
-		D3CED561176694D60085D71F /* particles.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = particles.xml; sourceTree = "<group>"; };
-		D3CED562176694D60085D71F /* test.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = test.json; sourceTree = "<group>"; };
 		D3E9A8611761207B003DD4B9 /* a.3dm */ = {isa = PBXFileReference; lastKnownFileType = file; path = a.3dm; sourceTree = "<group>"; };
 		D3E9A8621761207B003DD4B9 /* a.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = a.obj; sourceTree = "<group>"; };
 		D3E9A8631761207B003DD4B9 /* A_both.3dm */ = {isa = PBXFileReference; lastKnownFileType = file; path = A_both.3dm; sourceTree = "<group>"; };
@@ -827,60 +821,6 @@
 			path = sqlite;
 			sourceTree = "<group>";
 		};
-		D3CED557176694D60085D71F /* keyframes */ = {
-			isa = PBXGroup;
-			children = (
-				D3CED55A176694D60085D71F /* masterKeyframe */,
-				D3CED558176694D60085D71F /* contentBlockKeyframes */,
-				D3CED55B176694D60085D71F /* particleKeyframes */,
-			);
-			name = keyframes;
-			path = bin/data/keyframes;
-			sourceTree = "<group>";
-		};
-		D3CED558176694D60085D71F /* contentBlockKeyframes */ = {
-			isa = PBXGroup;
-			children = (
-				D3CED559176694D60085D71F /* test.json */,
-			);
-			path = contentBlockKeyframes;
-			sourceTree = "<group>";
-		};
-		D3CED55A176694D60085D71F /* masterKeyframe */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = masterKeyframe;
-			sourceTree = "<group>";
-		};
-		D3CED55B176694D60085D71F /* particleKeyframes */ = {
-			isa = PBXGroup;
-			children = (
-				D3CED55C176694D60085D71F /* in */,
-				D3CED560176694D60085D71F /* out */,
-				D3CED561176694D60085D71F /* particles.xml */,
-				D3CED562176694D60085D71F /* test.json */,
-			);
-			path = particleKeyframes;
-			sourceTree = "<group>";
-		};
-		D3CED55C176694D60085D71F /* in */ = {
-			isa = PBXGroup;
-			children = (
-				D3CED55E176694D60085D71F /* gravity_in_down.json */,
-				D3CED55D176694D60085D71F /* ease_in_const.json */,
-				D3CED55F176694D60085D71F /* gravity_in_up.json */,
-			);
-			path = in;
-			sourceTree = "<group>";
-		};
-		D3CED560176694D60085D71F /* out */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = out;
-			sourceTree = "<group>";
-		};
 		D3E9A85E1761207B003DD4B9 /* OBJ_letters */ = {
 			isa = PBXGroup;
 			children = (
@@ -1206,7 +1146,6 @@
 			isa = PBXGroup;
 			children = (
 				E4B69E1C0A3A1BDC003C02F2 /* src */,
-				D3CED557176694D60085D71F /* keyframes */,
 				E4B69B5B0A3A1756003C02F2 /* twitterCannesDebug.app */,
 				D391E6FA175B062700350556 /* settings.xml */,
 				BB4B014C10F69532006C3DED /* addons */,

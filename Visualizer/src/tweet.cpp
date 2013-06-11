@@ -728,7 +728,7 @@ void Tweet::userToPhysics(){
         float newRot = rotQuat.w();
         trans.setRotation( btQuaternion(btVector3(rotQuat.x(), rotQuat.y(), rotQuat.z()), newRot) );
         user.letters[i]->remove();
-        user.letters[i]->addMesh(gotham->getMesh(particles[i].letter),tweetScale,false);
+        user.letters[i]->addMesh(gotham->getMesh(user.particles[i].letter),tweetScale,false);
         user.letters[i]->create(world->world,trans, 1.);
         user.letters[i]->add();
         user.letters[i]->setProperties(.1,1);

@@ -13,17 +13,15 @@ class Alphabet {
 public:
     
     Alphabet();
-    ~Alphabet();
     
     class Letter{
     public:
-        Letter();
-        ~Letter();
         int ascii;
-        ofxAssimpModelLoader model;
+        ofMesh mesh;
+        ofPoint size;
     };
     
-    vector<Letter*> letters;
+    vector<Letter> letters;
     
 
     

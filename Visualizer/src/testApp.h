@@ -21,15 +21,7 @@ public:
     
     void setupGL();
     void loadMasterKeyframe();
-    void loadContentKeyframes();
-    void loadParticleKeyframes();
 
-
-    void loadDir();
-    
-    void initImgParticles();
-    void initTweetParticles();
-    
     void loadHashtag();
     void drawGUI();
     
@@ -39,16 +31,11 @@ public:
     
     void setupLights();
     void drawObjects();
-        
-       
-    vector<Tweet::Tweet> tweets;
     
+    vector<Tweet::Tweet> tweets;
     Tweet::Tweet tweet;
     int tweetCount;
     
-    vector<vector <Particle::Keyframe> > particleKeyframes;
-    int particleKeyframe;
-	
 	ofEasyCam camera;
 	ofxDOF dof;
     ofMaterial material;
@@ -80,7 +67,6 @@ public:
     };
     
     Content image;
-    
     vector<Hashletter> hashletters;
     ofxAssimpModelLoader hashModel[14];
     vector<ofxBulletCustomShape*> hashCollision;
@@ -90,20 +76,8 @@ public:
     
     ofxXmlSettings settings;
     
-    float count;
-    
-    ofPoint meshCollisionScale;
-    ofPoint meshDrawScale;
-    
     bool bGUI;
-    
     int camState;
-    
-    bool bCamSwitch;
-    
-    ofPoint meshOffset;
-
-    ofPoint boxScale;
     
     void updateCollision(int i);
     
@@ -111,26 +85,7 @@ public:
 
     bool bRot;
     bool bScale;
-    
-    
-    ofxAssimpModelLoader collisionPlane;
-    ofTexture multiply;
-    
-    ofPoint tweetScale;
-    ofPoint tweetPos;
-    ofPoint userScale;
-    ofPoint userPos;
-    ofPoint handleScale;
-    int bTweet;
-    
-    
-    void tweetToKinematic();
-    void tweetToPhysics();
-    void imgToPhysics();
-    void imgToKinematic();
-    void updateImg();
-    void updateTweet();
-    
+        
     ofShader shader;
     ShadowMapLight shadowLight;
     ofxAssimpModelLoader model;
