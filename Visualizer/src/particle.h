@@ -67,7 +67,7 @@
 class Particle{
 public:
     
-    class keyframe{
+    class Keyframe{
     public:
         
         class keyPoint{
@@ -102,21 +102,21 @@ public:
         
     };
     
-    void setup(keyframe pixel, float index);
-        void setup(keyframe pixel, float index, int c, ofPoint _size);
+    void setup(Keyframe pixel, float index);
+        void setup(Keyframe pixel, float index, int c, ofPoint _size);
     void update();
     void draw();
     
-    void goToPosition(keyframe goTo);
+    void goToPosition(Keyframe goTo);
     void goToPixels();
     
-    void calcPosition(keyframe goTo);
+    void calcPosition(Keyframe goTo);
     
-    keyframe current;
-    keyframe start;
-    keyframe target;
-    keyframe pixel;
-    keyframe calc;
+    Keyframe current;
+    Keyframe start;
+    Keyframe target;
+    Keyframe pixel;
+    Keyframe calc;
     
     bool targetReached;
     
@@ -134,6 +134,8 @@ public:
     
     int letter;
     ofPoint size;
+    
+    bool handle=false;
 
     
 };

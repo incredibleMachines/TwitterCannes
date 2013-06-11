@@ -8,7 +8,7 @@
 
 #include "particle.h"
 
-void Particle::setup(keyframe pixelPos, float index) {
+void Particle::setup(Keyframe pixelPos, float index) {
     
 	pixel=pixelPos;
     myIndex=index;
@@ -16,7 +16,7 @@ void Particle::setup(keyframe pixelPos, float index) {
     
 }
 
-void Particle::setup(keyframe pixelPos, float index, int c, ofPoint _size) {
+void Particle::setup(Keyframe pixelPos, float index, int c, ofPoint _size) {
         
 	pixel=pixelPos;
     myIndex=index;
@@ -119,7 +119,7 @@ void Particle::update(){
     
 }
 
-void Particle::goToPosition(keyframe goTo){
+void Particle::goToPosition(Keyframe goTo){
     calcPosition(goTo);
     targetReached=false;
     start=current;
@@ -128,7 +128,7 @@ void Particle::goToPosition(keyframe goTo){
     playhead = 0;
 }
 
-void Particle::calcPosition(keyframe goTo){
+void Particle::calcPosition(Keyframe goTo){
     
     if(goTo.type.x=="pixel"){
         calc.pos.x=pixel.pos.x;

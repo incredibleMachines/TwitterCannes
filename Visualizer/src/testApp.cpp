@@ -64,7 +64,7 @@ void testApp::setup(){
 //		sel.next();
 //	}
     
-    bDebug=true;
+    bDebug=false;
     bGUI=false;
     
     camState=0;
@@ -108,7 +108,8 @@ void testApp::setup(){
     //GUI and hashtag mesh loading
     loadHashtag();
     
-    tweet.loadTweet(debugTweet, debugID, debugImg, debugUser, debugHandle, debugUserImg, &world);
+    gotham=Alphabet();
+    tweet.loadTweet(debugTweet, debugID, debugImg, debugUser, debugHandle, debugUserImg, &world, &gotham);
     
     
 }
@@ -322,7 +323,7 @@ void testApp::loadHashtag()
         settings.pushTag("COLLISION");
     
         settings.pushTag("POS");
-        hashletter newHashCollision;
+        Hashletter newHashCollision;
         newHashCollision.pos.x = settings.getValue("X", 0.);
         newHashCollision.pos.y = settings.getValue("Y", 0.);
         newHashCollision.pos.z = settings.getValue("Z", 0.);

@@ -42,9 +42,7 @@
                    "actual":"100"
                },
                "interpolations":[
-                    {
-                    "interpolation":"linear",
-                    "interpolation":"bounce_in"}
+                                 {"interpolation":"linear"}
                 ]
                },
                
@@ -128,7 +126,7 @@
                "duration":{
                    "min":"",
                    "max":"",
-                   "actual":"5000"
+                   "actual":"8000"
                },
                "interpolations":[{
                                  "interpolation":"linear"}
@@ -137,11 +135,11 @@
                
                
                {
-               "path": "gravity",
+               "path": "line",
                "type":{
                    "x":"pixel",
                    "y":"pixel",
-                   "z":"previous"
+                   "z":"pixel"
                },
                "pos":{
                    "set":{
@@ -161,19 +159,100 @@
                    }
                },
                "gravity":{
-                   "x":"",
-                   "y":"50",
-                   "z":""
+                   "x":"0",
+                   "y":"0",
+                   "z":"0"
                },
                "duration":{
                    "min":"",
                    "max":"",
                    "actual":"5000"
                },
+               "interpolations":[
+                                 {"interpolation":"linear"}
+                                 ]
+               },
+
+               {
+               "path": "line",
+               "type":{
+               "x":"pixel",
+               "y":"pixel",
+               "z":"pixel"
+               },
+               "pos":{
+               "set":{
+               "x":"",
+               "y":"",
+               "z":""
+               },
+               "min":{
+               "x":"",
+               "y":"",
+               "z":""
+               },
+               "max":{
+               "x":"",
+               "y":"",
+               "z":""
+               }
+               },
+               "gravity":{
+               "x":"0",
+               "y":"0",
+               "z":"0"
+               },
+               "duration":{
+               "min":"",
+               "max":"",
+               "actual":"5000"
+               },
+               "interpolations":[
+                                 {"interpolation":"linear"}
+                                 ]
+               },
+
+               
+               {
+               "path": "gravity",
+               "type":{
+               "x":"previous",
+               "y":"previous",
+               "z":"previous"
+               },
+               "pos":{
+               "set":{
+               "x":"",
+               "y":"",
+               "z":""
+               },
+               "min":{
+               "x":"",
+               "y":"",
+               "z":""
+               },
+               "max":{
+               "x":"",
+               "y":"",
+               "z":""
+               }
+               },
+               "gravity":{
+               "x":"0",
+               "y":"150",
+               "z":"0"
+               },
+               "duration":{
+               "min":"",
+               "max":"",
+               "actual":"5000"
+               },
                "interpolations":[{
                                  "interpolation":"linear"}
                                  ]
                }
+    
+               
                
                
                ]

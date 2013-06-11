@@ -46,7 +46,7 @@ public:
     Tweet::Tweet tweet;
     int tweetCount;
     
-    vector<vector <Particle::keyframe> > particleKeyframes;
+    vector<vector <Particle::Keyframe> > particleKeyframes;
     int particleKeyframe;
 	
 	ofEasyCam camera;
@@ -61,7 +61,9 @@ public:
     ofImage whiteImg;
     ofTexture white;
     
-    class hashletter{
+    Alphabet gotham;
+    
+    class Hashletter{
     public:
         ofPoint pos;
         ofPoint rot;
@@ -72,14 +74,14 @@ public:
         ofRectangle checkbox;
     };
     
-    class content{
+    class Content{
     public:
         ofPoint pos;
     };
     
-    content image;
+    Content image;
     
-    vector<hashletter> hashletters;
+    vector<Hashletter> hashletters;
     ofxAssimpModelLoader hashModel[14];
     vector<ofxBulletCustomShape*> hashCollision;
     bool bSingle=false;
@@ -113,9 +115,6 @@ public:
     
     ofxAssimpModelLoader collisionPlane;
     ofTexture multiply;
-    
-    
-    Alphabet gotham;
     
     ofPoint tweetScale;
     ofPoint tweetPos;

@@ -31,7 +31,7 @@ public:
     void updateImg();
     void updateUser();
     
-    class tweetImage {
+    class TweetImage {
     public:
         vector<ofxBulletBox*> shapes;
         vector <Particle> particles;
@@ -41,7 +41,7 @@ public:
         
     };
     
-    class tweetUser{
+    class TweetUser{
     public:
         ofTexture profileImgTex;
         vector<ofxBulletCustomShape*> letters;
@@ -49,37 +49,37 @@ public:
         bool bNewKey;
     };
     
-    class animation{
+    class Animation{
     public:
-        string animation;
+        string path;
         int speed;
         int delay;
         
     };
     
-    void loadTweet(string _text, string _ID, string _img, string _username, string _handle, string _profileimage, ofxBulletWorldRigid* _world);
+    void loadTweet(string _text, string _ID, string _img, string _username, string _handle, string _profileimage, ofxBulletWorldRigid* _world, Alphabet* _gotham);
     void loadImage(string _image);
     void loadUser(string _username, string _handle, string _profileimage);
     
-    tweetImage image;
-    tweetUser user;
+    TweetImage image;
+    TweetUser user;
     vector<ofxBulletCustomShape* > letters;
     vector<Particle> particles;
-    vector <Particle::keyframe> tweetKeyframes;
-    vector <Particle::keyframe> imageKeyframes;
-    vector <Particle::keyframe> userKeyframes;
-    int keyframe, imageKeyframe, userKeyframe;
+    vector <Particle::Keyframe> tweetKeyframes;
+    vector <Particle::Keyframe> imageKeyframes;
+    vector <Particle::Keyframe> userKeyframes;
+    int tweetKeyframe, imageKeyframe, userKeyframe;
     string ID;
     string text;
     
-    Alphabet gotham;
+    Alphabet* gotham;
     
-        animation tweetIn;
-        animation tweetOut;
-        animation imgIn;
-        animation imgOut;
-        animation userIn;
-        animation userOut;
+    Animation tweetIn;
+    Animation tweetOut;
+    Animation imgIn;
+    Animation imgOut;
+    Animation userIn;
+    Animation userOut;
     bool bNewKey;
     
     btBoxShape*					boxShape;
@@ -92,7 +92,7 @@ public:
     ofPoint userPos;
     ofPoint userScale;
     ofPoint handleScale;
-    void loadParticleKeyframes(animation anim, int which);
+    void loadParticleKeyframes(Animation anim, int which);
     ofTexture white;
 };
 
