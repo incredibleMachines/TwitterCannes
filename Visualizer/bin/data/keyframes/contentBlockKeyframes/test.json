@@ -4,12 +4,12 @@
                        "tweet": {
                        "in": {
                            "speed": "1",
-                           "delay": "0",
+                           "delay": "2000",
                            "animation": "gravity_in_down.json"
                        },
                        "out": {
                            "speed": "1",
-                           "delay": "1000",
+                           "delay": "0",
                            "animation": "gravity_in_down.json"
                        }
                    },

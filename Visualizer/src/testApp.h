@@ -49,7 +49,7 @@ public:
     ofTexture white;
     
     Alphabet gotham;
-    
+       
     class Hashletter{
     public:
         ofPoint pos;
@@ -69,6 +69,7 @@ public:
     Content image;
     vector<Hashletter> hashletters;
     vector<ofMesh> hashMeshes;
+    ofxAssimpModelLoader hashModel;
     vector<ofxBulletCustomShape*> hashCollision;
     bool bSingle=false;
     
@@ -88,7 +89,7 @@ public:
         
     ofShader shader;
     ShadowMapLight shadowLight;
-    ofxAssimpModelLoader model;
+//    ofxAssimpModelLoader model;
     ofMesh mesh;
     
     float   lightAngle;

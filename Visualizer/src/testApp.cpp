@@ -15,56 +15,38 @@ string debugUserImg="debug/eac28a9e3fcd979d83fe0dddf74f4e15_normal.png";
 //--------------------------------------------------------------
 void testApp::setup(){
     
-        gotham=Alphabet();
+    // in bin, not data
+    sqlite = new ofxSQLite("twitterCannesLions.db");
     
-    sqlite = new ofxSQLite("blank.db");
-    sqlite->simpleQuery(""\
-                        "CREATE TABLE IF NOT EXISTS tweets (" \
-                        " id TEXT" \
-                        " ,approved_at TEXT" \
-                        " ,category TEXT" \
-                        " ,created_at TEXT" \
-                        " ,media_url TEXT" \
-                        ", starred INTEGER" \
-                        " ,text TEXT" \
-                        " ,user_id TEXT" \
-                        " ,user_image TEXT" \
-                        " ,user_name TEXT" \
-                        " ,user_screen_name TEXT" \
-                        ");"
-                        );
+    gotham.setup();
     
-//    // in bin, not data
-//    sqlite = new ofxSQLite("twitterCannesLions.db");
-//    
-//    ofxSQLiteSelect sel = sqlite->select("id, approved_at, created_at, user_id, user_image, user_name, user_screen_name, text, media_url, category, starred")
-//    .from("tweets")
-//    .execute().begin();
-//    
-//    
-//    string id;
-//    string user_image;
-//    string user_name;
-//    string user_screen_name;
-//    string text;
-//    string media_url;
-//    
-//	while (sel.hasNext()) {
-//        
-//         id = sel.getString();
-//        string approved_at = sel.getString();
-//        string created_at = sel.getString();
-//        string user_id = sel.getString();
-//        user_image = sel.getString();
-//        user_name = sel.getString();
-//        user_screen_name = sel.getString();
-//        text = sel.getString();
-//        media_url = sel.getString();
-//        int category = sel.getInt();
-//        int starred = sel.getInt();
-//        
-//		sel.next();
-//	}
+    ofxSQLiteSelect sel = sqlite->select("id, approved_at, created_at, user_id, user_image, user_name, user_screen_name, text, media_url, category, starred")
+    .from("tweets")
+    .execute().begin();
+    
+    
+    string id;
+    string user_image;
+    string user_name;
+    string user_screen_name;
+    string text;
+    string media_url;
+    
+	while (sel.hasNext()) {
+        
+         id = sel.getString();
+        string approved_at = sel.getString();
+        string created_at = sel.getString();
+        string user_id = sel.getString();
+        user_image = sel.getString();
+        user_name = sel.getString();
+        user_screen_name = sel.getString();
+        text = sel.getString();
+        media_url = sel.getString();
+        int category = sel.getInt();
+        int starred = sel.getInt();
+		sel.next();
+	}
     
     bDebug=false;
     bGUI=false;
@@ -110,9 +92,7 @@ void testApp::setup(){
     //GUI and hashtag mesh loading
     loadHashtag();
     
-    tweet.loadTweet(debugTweet, debugID, debugImg, debugUser, debugHandle, debugUserImg, &world, &gotham);
-    
-    
+    tweet.loadTweet(text, id, media_url, user_name, user_screen_name, user_image, &world, &gotham);
 }
 
 //--------------------------------------------------------------
@@ -330,8 +310,6 @@ void testApp::loadHashtag()
         string file=settings.getValue("OBJ"," ");
         settings.popTag();
         
-        ofxAssimpModelLoader hashModel;
-        
         hashModel.loadModel(file,true );
         
 //        hashModel[i].loadModel("models/cannes_placementCorrected.obj", true);
@@ -357,6 +335,7 @@ void testApp::loadHashtag()
         hashCollision[i]->add();
         hashCollision[i]->setProperties(.1, 1);
         hashMeshes.push_back(hashModel.getMesh(0));
+        hashModel.clear();
     }
     //    ofEnableArbTex();
     settings.popTag();

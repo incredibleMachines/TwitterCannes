@@ -25,6 +25,8 @@ void Tweet::loadTweet(string _text, string _ID, string _img, string _username, s
     gotham=_gotham;
     
     tweetKeyframe=0;
+    imageKeyframe=0;
+    userKeyframe=0;
     bNewKey=true;
     world=_world;
     
@@ -46,8 +48,6 @@ void Tweet::loadTweet(string _text, string _ID, string _img, string _username, s
         tweetIn.speed=1;
     }
     
-    cout<<speed<<endl;
-    
     delay=json["animations"][i]["tweet"]["in"]["delay"].asString();
     if(delay!=""){
         tweetIn.delay=ofToInt(delay);
@@ -61,7 +61,6 @@ void Tweet::loadTweet(string _text, string _ID, string _img, string _username, s
     speed=json["animations"][i]["tweet"]["out"]["speed"].asString();
     if(speed!=""){
         tweetOut.speed=ofToInt(speed);
-        cout<<"speed:"<<tweetOut.speed<<endl;
     }
     else{
         tweetOut.speed=1;
@@ -69,7 +68,6 @@ void Tweet::loadTweet(string _text, string _ID, string _img, string _username, s
     delay=json["animations"][i]["tweet"]["out"]["delay"].asString();
     if(delay!=""){
         tweetOut.delay=ofToInt(delay);
-        cout<<"delay:"<<tweetOut.speed<<endl;
     }
     else{
         tweetOut.delay=0;
@@ -187,9 +185,9 @@ void Tweet::loadTweet(string _text, string _ID, string _img, string _username, s
         }
     }
     
-        if(_img!=" "){
+    if(_img!=""){
+        cout<<"load"<<endl;
             loadImage(_img);
-            cout<<"load"<<endl;
         }
     loadUser(_username, _handle, _profileimage);
     
@@ -395,7 +393,7 @@ void Tweet::loadImage(string _image){
             image.shapes.push_back( new ofxBulletBox() );
             
             ((ofxBulletBox*)image.shapes[image.shapes.size()-1])->init(boxShape);
-            ((ofxBulletBox*)image.shapes[image.shapes.size()-1])->create(world->world,ofPoint(0,0,0),0.);
+            ((ofxBulletBox*)image.shapes[image.shapes.size()-1])->create(world->world,imageKeyframes[imageKeyframe].pos,0.);
             image.shapes[image.shapes.size()-1]->setProperties(.1,1);
             image.shapes[image.shapes.size()-1]->add();
             image.shapes[image.shapes.size()-1]->enableKinematic();

@@ -12,8 +12,6 @@
 class Alphabet {
 public:
     
-    Alphabet();
-    
     class Letter{
     public:
         int ascii;
@@ -21,7 +19,9 @@ public:
         ofPoint size;
     };
     
-    vector<Letter> letters;
+    void setup();
+    
+    vector<Letter*> letters;
     
 
     
@@ -29,5 +29,7 @@ public:
     
     ofPoint getSize(int c);
     ofMesh getMesh(int c);
+    
+    ofxAssimpModelLoader newModel;
 
 };

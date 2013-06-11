@@ -8,32 +8,32 @@
 
 #include "alphabet.h"
 
-Alphabet::Alphabet(){
+void Alphabet::setup(){
+    cout<<ofGetFrameNum()<<endl;
     for(int i=0;i<256;i++){
-        Letter newLetter;
-        newLetter.ascii=i;
+        Letter* newLetter=new Letter();;
+        newLetter->ascii=i;
         if(i>32){
             string modelPath="GothamAsciiMeshes/"+ofToString(i)+".obj";
-            ofxAssimpModelLoader newModel;
             newModel.loadModel(modelPath);
-            newLetter.mesh=newModel.getMesh(0);
-            newLetter.size=newModel.getSceneMax()-newModel.getSceneMin();
+            newLetter->mesh=newModel.getMesh(0);
+            newLetter->size=newModel.getSceneMax()-newModel.getSceneMin();
             newModel.clear();
         }
-            letters.push_back(newLetter);
+        letters.push_back(newLetter);
     }
 }
 
 void Alphabet::draw(int c, ofPoint scale){
     ofPushMatrix();
     ofScale(scale.x,scale.y,scale.z);
-    letters[c].mesh.draw();
+    letters[c]->mesh.draw();
     ofPopMatrix();
 }
 
 ofPoint Alphabet::getSize(int c){
     if(c>32){
-        return letters[c].size;
+        return letters[c]->size;
     }
 
     
@@ -44,6 +44,6 @@ ofPoint Alphabet::getSize(int c){
 
 ofMesh Alphabet::getMesh(int c){
     if(c>32){
-    return letters[c].mesh;
+    return letters[c]->mesh;
     }
 }
