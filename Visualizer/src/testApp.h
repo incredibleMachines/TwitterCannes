@@ -5,11 +5,9 @@
 
 #include "ofMain.h"
 #include "ofxDOF.h"
-#include "ofx3DModelLoader.h"
 #include "ofxAssimpModelLoader.h"
 #include "ofxXmlSettings.h"
 #include "ofxBullet.h"
-
 #include "shadowMapLight.h"
 #include "tweet.h"
 

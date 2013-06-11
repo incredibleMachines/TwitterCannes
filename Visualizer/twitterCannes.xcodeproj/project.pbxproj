@@ -1163,8 +1163,8 @@
 		E4B69B4A0A3A1720003C02F2 = {
 			isa = PBXGroup;
 			children = (
-				D3CED557176694D60085D71F /* keyframes */,
 				E4B69E1C0A3A1BDC003C02F2 /* src */,
+				D3CED557176694D60085D71F /* keyframes */,
 				E4B69B5B0A3A1756003C02F2 /* twitterCannesDebug.app */,
 				D391E6FA175B062700350556 /* settings.xml */,
 				BB4B014C10F69532006C3DED /* addons */,

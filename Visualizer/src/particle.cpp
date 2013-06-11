@@ -21,6 +21,7 @@ void Particle::setup(keyframe pixelPos, float index, int c, ofPoint _size) {
     myIndex=index;
     size=_size;
     letter=c;
+    targetReached=false;
     
 }
 

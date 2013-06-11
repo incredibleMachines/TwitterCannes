@@ -12,6 +12,133 @@
 #define tileH 50
 #define tileD 10
 
+void Tweet::loadTweet(string _text, string _ID, string _img, string _username, string _handle, string _profileimage, ofxBulletWorldRigid* _world){
+    keyframe=0;
+    bNewKey=0;
+    world=_world;
+    
+    boxShape = ofBtGetBoxCollisionShape(boxScale.x*tileW, boxScale.y*tileH, boxScale.z*tileD);
+    ofxJSONElement animation;
+    bool success=animation.open("keyframes/contentBlockKeyframes/test.json");
+    cout<<success<<endl;
+    int i=0;
+    tweetIn="keyframes/particleKeyframes/in/"+animation["animations"][i]["tweet"]["in"].asString();
+    tweetOut="keyframes/particleKeyframes/out/"+animation["animations"][i]["tweet"]["out"].asString();
+    imgIn="keyframes/particleKeyframes/in/"+animation["animations"][i]["image"]["in"].asString();
+    imgOut="keyframes/particleKeyframes/out/"+animation["animations"][i]["image"]["out"].asString();
+    userIn="keyframes/particleKeyframes/in/"+animation["animations"][i]["user"]["in"].asString();
+    userOut="keyframes/particleKeyframes/out/"+animation["animations"][i]["user"]["out"].asString();
+    Tweet newTweet;
+    newTweet.keyframe=0;
+    newTweet.imageKeyframe=0;
+    newTweet.userKeyframe=0;
+    ofPoint pos=tweetPos;
+    
+    loadParticleKeyframes(tweetIn, 0);
+    loadParticleKeyframes(tweetOut,0);
+    
+    
+    ofUniString tweetText= ofTextConverter::toUTF32(newTweet.text);
+    
+    for (int i=0;i<tweetText.length();i++){
+        
+        if (tweetText[i]==32){
+            pos.x+=10;
+            if(pos.x>40){
+                pos.y+=5;
+                pos.x=-45;
+            }
+        }
+        
+        else{
+            //setup position values for displaying whole image
+            Particle::keyframe temp;
+            temp.pos.x=pos.x;
+            temp.pos.y=pos.y;
+            temp.pos.z=pos.z;
+            ofVec3f boxDim;
+            boxDim=gotham.getSize(tweetText[i])*tweetScale;
+            //create Bullet letters for image visualization
+            newTweet.letters.push_back( new ofxBulletCustomShape() );
+            ofQuaternion startRot=ofQuaternion(0,0,1,PI);
+            newTweet.letters[newTweet.letters.size()-1]->addMesh(gotham.getMesh(tweetText[i]),tweetScale,true);
+            newTweet.letters[newTweet.letters.size()-1]->create(_world->world,ofPoint(0,0,0),startRot,0.);
+            newTweet.letters[newTweet.letters.size()-1]->add();
+            newTweet.letters[newTweet.letters.size()-1]->setProperties(.1,.1);
+            newTweet.letters[newTweet.letters.size()-1]->enableKinematic();
+            
+            //create particles for controlling static shape position/rotation
+            Particle particle;
+            particle.setup(temp,i,tweetText[i],boxDim);
+            newTweet.particles.push_back(particle);
+            pos.x+=boxDim.x+2;
+        }
+    }
+    
+    tweetScale=ofPoint(.1,.1,.1);
+    imagePos=ofPoint(-10,-10,-55);
+    boxScale=ofPoint(.05,.05,.05);
+    tweetPos=ofPoint(-45,0,-60);
+    gotham= *new Alphabet();
+    
+    //    if(_img!=" "){
+    //        newTweet.image=loadImage(_img, _world);
+    //    }
+    //    newTweet.user=loadUser(_username, _handle, _profileimage, _world, gotham);
+    //    return newTweet;
+        world->destroy();
+    
+}
+
+void Tweet::update(ofxBulletWorldRigid* world){
+    
+    //check whether individual particles have completed the duration of their transition
+    int moving=0;
+    for(int i=0;i<particles.size();i++){
+        if(!particles[i].targetReached){
+            moving++;
+        }
+    }
+    
+    //if all have reached, trigger next keyframe position
+    if (moving==0){
+        bNewKey=true;
+        keyframe++;
+        if(keyframe>tweetKeyframes.size()-1){
+            keyframe=0;
+        }
+    }
+    
+    //set new particle destinations
+    if(bNewKey==true){
+        
+        //Destroy particles action - triggers image switch and removes bullet objects/position vectors
+        
+        if(tweetKeyframes[keyframe].path=="destroy"){
+            
+        }
+        
+        else if(tweetKeyframes[keyframe].path!="gravity"){
+            tweetToKinematic();
+        }
+        
+        //if switching into physics state
+        else{
+            tweetToPhysics(*world);
+        }
+        bNewKey=false;
+    }
+    
+    //if not new keyframe
+    
+    else{
+        cout<<tweetKeyframes.size()<<endl;
+        updateTweet();
+    }
+    cout<<keyframe<<endl;
+}
+
+
 void Tweet::draw(){
         for (int i=0;i<letters.size();i++){
             white.bind();
@@ -25,7 +152,7 @@ void Tweet::draw(){
             glPushMatrix();
             glMultMatrixf( m );
             glTranslatef(-particles[i].size.x/2, -particles[i].size.y/2, -particles[i].size.z/2);
-            gotham->draw(particles[i].letter,tweetScale);
+            gotham.draw(particles[i].letter,tweetScale);
             glPopMatrix();
             glPopClientAttrib();
             glPopAttrib();
@@ -59,90 +186,6 @@ void Tweet::draw(){
     
 }
 
-Tweet Tweet::loadTweet(string _text, string _ID, string _img, string _username, string _handle, string _profileimage, Alphabet* _gotham, ofxBulletWorldRigid* _world){
-    gotham=_gotham;
-    ofxJSONElement animation;
-    keyframe=0;
-    bNewKey=0;
-    tweetScale=ofPoint(.1,.1,.1);
-    imagePos=ofPoint(-10,-10,-55);
-    boxScale=ofPoint(.05,.05,.05);
-    tweetPos=ofPoint(-45,0,-60);
-
-    boxShape = ofBtGetBoxCollisionShape(boxScale.x*tileW, boxScale.y*tileH, boxScale.z*tileD);
-
-    bool success=animation.open("keyframes/contentBlockKeyframes/test.json");
-    cout<<success<<endl;
-    
-    for(int i=0;i<animation["animations"].size();i++){
-        tweetJSON tempAnimation;
-        tempAnimation.tweetIn="keyframes/particleKeyframes/in/"+animation["animations"][i]["tweet"]["in"].asString();
-        tempAnimation.tweetOut="keyframes/particleKeyframes/out/"+animation["animations"][i]["tweet"]["out"].asString();
-        tempAnimation.imgIn="keyframes/particleKeyframes/in/"+animation["animations"][i]["image"]["in"].asString();
-        tempAnimation.imgOut="keyframes/particleKeyframes/out/"+animation["animations"][i]["image"]["out"].asString();
-        tempAnimation.userIn="keyframes/particleKeyframes/in/"+animation["animations"][i]["user"]["in"].asString();
-        tempAnimation.userOut="keyframes/particleKeyframes/out/"+animation["animations"][i]["user"]["out"].asString();
-        animations.push_back(tempAnimation);
-    }
-    animation.clear();
-    
-    Tweet newTweet;
-    newTweet.text=_text;
-    newTweet.keyframe=0;
-    newTweet.imageKeyframe=0;
-    newTweet.userKeyframe=0;
-    newTweet.ID=_ID;
-    ofPoint pos=tweetPos;
-    
-    loadParticleKeyframes(animations[0].tweetIn, 0);
-    loadParticleKeyframes(animations[0].tweetOut,0);
-    
-    
-    ofUniString tweetText= ofTextConverter::toUTF32(newTweet.text);
-    
-    for (int i=0;i<tweetText.length();i++){
-        
-        if (tweetText[i]==32){
-            pos.x+=10;
-            if(pos.x>40){
-                pos.y+=5;
-                pos.x=-45;
-            }
-        }
-        
-        else{
-            //setup position values for displaying whole image
-            Particle::keyframe temp;
-            temp.pos.x=pos.x;
-            temp.pos.y=pos.y;
-            temp.pos.z=pos.z;
-            ofVec3f boxDim;
-            boxDim=gotham->getSize(tweetText[i])*tweetScale;
-            //create Bullet letters for image visualization
-            newTweet.letters.push_back( new ofxBulletCustomShape() );
-            ofQuaternion startRot=ofQuaternion(0,0,1,PI);
-            newTweet.letters[newTweet.letters.size()-1]->addMesh(gotham->getMesh(tweetText[i]),tweetScale,true);
-            newTweet.letters[newTweet.letters.size()-1]->create(_world->world,ofPoint(0,0,0),startRot,10.);
-            newTweet.letters[newTweet.letters.size()-1]->add();
-            newTweet.letters[newTweet.letters.size()-1]->setProperties(.1,.1);
-            newTweet.letters[newTweet.letters.size()-1]->enableKinematic();
-            
-            //create particles for controlling static shape position/rotation
-            Particle particle;
-            particle.setup(temp,i,tweetText[i],boxDim);
-            newTweet.particles.push_back(particle);
-            pos.x+=boxDim.x+2;
-        }
-    }
-    
-//    if(_img!=" "){
-//        newTweet.image=loadImage(_img, _world);
-//    }
-//    newTweet.user=loadUser(_username, _handle, _profileimage, _world, gotham);
-//    return newTweet;
-    
-}
-
 Tweet::tweetImage Tweet::loadImage(string _image, ofxBulletWorldRigid* _world){
     ofImage pic;
     Tweet::tweetImage newImage= *new tweetImage();
@@ -155,8 +198,8 @@ Tweet::tweetImage Tweet::loadImage(string _image, ofxBulletWorldRigid* _world){
     
     int i=0;
 
-    loadParticleKeyframes(animations[i].imgIn,1);
-    loadParticleKeyframes(animations[i].imgOut,1);
+    loadParticleKeyframes(imgIn,1);
+    loadParticleKeyframes(imgOut,1);
     
     
     for (int x = 0; x < pic.width / tileW; x++){
@@ -208,11 +251,10 @@ Tweet::tweetUser Tweet::loadUser(string _username, string _handle, string _profi
     tweetUser newUser = *new tweetUser();
     ofPoint pos=userPos;
     
-    ofxJSONElement in, out;
     int i=0;
  
-    loadParticleKeyframes(animations[0].userIn,2);
-    loadParticleKeyframes(animations[0].userOut,2);
+    loadParticleKeyframes(userIn,2);
+    loadParticleKeyframes(userOut,2);
     
     ofUniString nameText= ofTextConverter::toUTF32(_username);
     ofUniString handleText= ofTextConverter::toUTF32(_handle);
@@ -364,54 +406,9 @@ void Tweet::loadParticleKeyframes(string filePath, int which){
 
     
     
-void Tweet::update(ofxBulletWorldRigid* _world){
-    
-    //check whether individual particles have completed the duration of their transition
-    int moving=0;
-    for(int i=0;i<particles.size();i++){
-        if(!particles[i].targetReached){
-            moving++;
-        }
-    }
 
-    //if all have reached, trigger next keyframe position
-    if (moving==0){
-        bNewKey=true;
-        keyframe++;
-        if(keyframe>tweetKeyframes.size()-1){
-            keyframe=0;
-        }
-    }
-    
-    //set new particle destinations
-    if(bNewKey==true){
 
-        //Destroy particles action - triggers image switch and removes bullet objects/position vectors
-        
-        if(tweetKeyframes[keyframe].path=="destroy"){
-            
-        }
-        
-        else if(tweetKeyframes[keyframe].path!="gravity"){
-                tweetToKinematic(_world);
-        }
-        
-        //if switching into physics state
-        else{
-                tweetToPhysics(_world);
-        }
-        bNewKey=false;
-    }
-    
-    //if not new keyframe
-    
-    else{
-        cout<<tweetKeyframes.size()<<endl;
-            updateTweet();
-        }
-}
-
-void Tweet::tweetToKinematic(ofxBulletWorldRigid* world){
+void Tweet::tweetToKinematic(){
     for (int i=0;i<letters.size();i++){
         particles[i].update();
         
@@ -440,7 +437,7 @@ void Tweet::tweetToKinematic(ofxBulletWorldRigid* world){
     }
 }
 
-void Tweet::imgToKinematic(ofxBulletWorldRigid* world){
+void Tweet::imgToKinematic(){
     for (int i=0;i<image.shapes.size();i++){
         image.particles[i].update();
         btTransform trans;
@@ -467,7 +464,7 @@ void Tweet::imgToKinematic(ofxBulletWorldRigid* world){
     }
 }
 
-void Tweet::userToKinematic(ofxBulletWorldRigid* world){
+void Tweet::userToKinematic(){
     for (int i=0;i<user.letters.size();i++){
         user.particles[i].update();
         
@@ -496,8 +493,8 @@ void Tweet::userToKinematic(ofxBulletWorldRigid* world){
     }
 }
 
-void Tweet::tweetToPhysics(ofxBulletWorldRigid* world){
-    world->setGravity(ofVec3f(tweetKeyframes[keyframe].gravity.x,tweetKeyframes[keyframe].gravity.y,tweetKeyframes[keyframe].gravity.z));
+void Tweet::tweetToPhysics(ofxBulletWorldRigid world){
+    world.setGravity(ofVec3f(tweetKeyframes[keyframe].gravity.x,tweetKeyframes[keyframe].gravity.y,tweetKeyframes[keyframe].gravity.z));
     for (int i=0;i<letters.size();i++){
         btTransform trans;
         ofPoint temp=letters[i]->getPosition();
@@ -506,15 +503,15 @@ void Tweet::tweetToPhysics(ofxBulletWorldRigid* world){
         float newRot = rotQuat.w();
         trans.setRotation( btQuaternion(btVector3(rotQuat.x(), rotQuat.y(), rotQuat.z()), newRot) );
         letters[i]->remove();
-        letters[i]->addMesh(gotham->getMesh(particles[i].letter),tweetScale,false);
-        letters[i]->create(world->world,trans, 1.);
+        letters[i]->addMesh(gotham.getMesh(particles[i].letter),tweetScale,false);
+        letters[i]->create(world.world,trans, 1.);
         letters[i]->add();
         letters[i]->setProperties(.1,1);
         particles[i].goToPosition(tweetKeyframes[keyframe]);
     }
 }
 
-void Tweet::imgToPhysics(ofxBulletWorldRigid* world){
+void Tweet::imgToPhysics(){
     world->setGravity(ofVec3f(imageKeyframes[imageKeyframe].gravity.x,imageKeyframes[imageKeyframe].gravity.y,imageKeyframes[imageKeyframe].gravity.z));
     for (int i=0;i<image.shapes.size();i++){
         btTransform trans;
@@ -533,7 +530,7 @@ void Tweet::imgToPhysics(ofxBulletWorldRigid* world){
     
 }
 
-void Tweet::userToPhysics(ofxBulletWorldRigid* world){
+void Tweet::userToPhysics(){
     world->setGravity(ofVec3f(userKeyframes[userKeyframe].gravity.x,userKeyframes[userKeyframe].gravity.y,userKeyframes[userKeyframe].gravity.z));
     for (int i=0;i<user.letters.size();i++){
         btTransform trans;
@@ -543,7 +540,7 @@ void Tweet::userToPhysics(ofxBulletWorldRigid* world){
         float newRot = rotQuat.w();
         trans.setRotation( btQuaternion(btVector3(rotQuat.x(), rotQuat.y(), rotQuat.z()), newRot) );
         user.letters[i]->remove();
-        user.letters[i]->addMesh(gotham->getMesh(particles[i].letter),tweetScale,false);
+        user.letters[i]->addMesh(gotham.getMesh(particles[i].letter),tweetScale,false);
         user.letters[i]->create(world->world,trans, 1.);
         user.letters[i]->add();
         user.letters[i]->setProperties(.1,1);
@@ -590,7 +587,7 @@ void Tweet::updateTweet(){
 void Tweet::updateImg(){
     if(imageKeyframes[imageKeyframe].path!="gravity"){
         for (int i=0;i<image.shapes.size();i++){
-            particles[i].update();
+            image.particles[i].update();
             btTransform trans;
             ofPoint temp=particles[i].current.pos;
             trans.setOrigin( btVector3( btScalar(temp.x), btScalar(temp.y), btScalar(temp.z)) );

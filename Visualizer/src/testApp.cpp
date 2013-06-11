@@ -37,11 +37,10 @@ void testApp::setup(){
     world.enableCollisionEvents();
     world.setCamera(&camera);
     
-    gotham= *new Alphabet();
-
-    
     ofSetVerticalSync(true);
 	ofSetFrameRate(30);
+    
+    
     
     //camera, lighting, dof setup
     setupGL();
@@ -70,15 +69,7 @@ void testApp::setup(){
     //GUI and hashtag mesh loading
     loadHashtag();
     
-    //camKeyframe cycles through camPoints vector which includes x,y,z coords and rate of movement between them
-    //particle keyframes animate sequence of particle behaviors for individual image or tweet
-    particleKeyframe=0;
-    
-//    Tweet newTweet=*new Tweet();
-
-//    tweets.push_back(newTweet.loadTweet(debugTweet, debugID, debugImg, debugUser, debugHandle, debugUserImg,&gotham ,&tweetPos, &tweetScale, &world, &boxScale, &image.pos, &userPos, &userScale, &handleScale,&white));
-    
-    tweet.loadTweet(debugTweet, debugID, debugImg, debugUser, debugHandle, debugUserImg, &gotham ,&world);
+    tweet.loadTweet(debugTweet, debugID, debugImg, debugUser, debugHandle, debugUserImg, &world);
     
     
 }
@@ -93,7 +84,7 @@ void testApp::drawObjects(){
     ofRotate(90, 0, 1, 0);
     ofRotate(330,1,0,0);
     
-    for(int i = 0; i < 13  ; i++) {
+    for(int i = 0; i < 12  ; i++) {
         glPushAttrib(GL_ALL_ATTRIB_BITS);
         glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS);
         glEnable(GL_NORMALIZE);
@@ -128,6 +119,7 @@ void testApp::update(){
     
 //updates bullet objects
     world.update();
+    
     tweet.update(&world);
     
 }
@@ -192,7 +184,7 @@ void testApp::draw(){
     //enable to see physics collision wireframes
     if(bDebug==true){
         glPushMatrix();
-        world.drawDebug();
+//        world.drawDebug();
         glPopMatrix();
     }
     

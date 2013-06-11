@@ -16,19 +16,17 @@
 #include "ofxJSONElement.h"
 
 class Tweet {
+    
 public:
     
-    Tweet();
-    ~Tweet();
-    
-    void update(ofxBulletWorldRigid* _world);
+    void update(ofxBulletWorldRigid* world);
     void draw();
-    void tweetToKinematic(ofxBulletWorldRigid* world);
-    void imgToKinematic(ofxBulletWorldRigid* world);
-    void userToKinematic(ofxBulletWorldRigid* world);
-    void tweetToPhysics(ofxBulletWorldRigid* world);
-    void imgToPhysics(ofxBulletWorldRigid* world);
-    void userToPhysics(ofxBulletWorldRigid* world);
+    void tweetToKinematic();
+    void imgToKinematic();
+    void userToKinematic();
+    void tweetToPhysics(ofxBulletWorldRigid world);
+    void imgToPhysics();
+    void userToPhysics();
     void updateTweet();
     void updateImg();
     void updateUser();
@@ -51,7 +49,7 @@ public:
         bool bNewKey;
     };
     
-    Tweet loadTweet(string _text, string _ID, string _img, string _username, string _handle, string _profileimage, Alphabet* _gotham, ofxBulletWorldRigid* _world);
+    void loadTweet(string _text, string _ID, string _img, string _username, string _handle, string _profileimage, ofxBulletWorldRigid* _world);
     tweetImage loadImage(string _image, ofxBulletWorldRigid* _world);
     tweetUser loadUser(string _username, string _handle, string _profileimage, ofxBulletWorldRigid* _world, Alphabet* _gotham);
     
@@ -66,21 +64,18 @@ public:
     string ID;
     string text;
     
-    class tweetJSON{
-    public:
+    Alphabet gotham;
+    
         string tweetIn;
         string tweetOut;
         string imgIn;
         string imgOut;
         string userIn;
         string userOut;
-    };
-    
-    vector<tweetJSON> animations;
-    
     bool bNewKey;
     
     btBoxShape*					boxShape;
+    ofxBulletWorldRigid* world;
     
     ofPoint boxScale;
     ofPoint imagePos;
@@ -89,7 +84,6 @@ public:
     ofPoint userPos;
     ofPoint userScale;
     ofPoint handleScale;
-    Alphabet* gotham;
     void loadParticleKeyframes(string filePath, int which);
     ofTexture white;
 };

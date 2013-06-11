@@ -39,7 +39,7 @@
                "duration":{
                    "min":"",
                    "max":"",
-                   "actual":"100"
+                   "actual":"2000"
                },
                "interpolations":[
                     {
@@ -86,7 +86,7 @@
                "duration":{
                    "min":"",
                    "max":"",
-                   "actual":"100"
+                   "actual":"2000"
                },
                "interpolations":[{
                     "interpolation":"linear"}
@@ -161,9 +161,9 @@
                    }
                },
                "gravity":{
-                   "x":"",
+                   "x":"0",
                    "y":"50",
-                   "z":""
+                   "z":"0"
                },
                "duration":{
                    "min":"",
