@@ -140,10 +140,10 @@ void testApp::drawObjects(){
         ofScale(scale.x,scale.y,scale.z);
         if(bGUI==true&&hashletters[i].active==true){
             ofSetColor(0,255,0);
-            ofSphere(hashModel[i].getMesh(0).getCentroid().x,hashModel[i].getMesh(0).getCentroid().y+30,hashModel[i].getMesh(0).getCentroid().z,10);
+            ofSphere(hashMeshes[i].getCentroid().x,hashMeshes[i].getCentroid().y+30,hashMeshes[i].getCentroid().z,10);
         }
          white.unbind();
-        hashModel[i].getMesh(0).draw();
+        hashMeshes[i].draw();
          white.unbind();
         ofSetColor(255,255,255);
         glPopMatrix();
@@ -330,14 +330,16 @@ void testApp::loadHashtag()
         string file=settings.getValue("OBJ"," ");
         settings.popTag();
         
-        hashModel[i].loadModel(file,true );
+        ofxAssimpModelLoader hashModel;
+        
+        hashModel.loadModel(file,true );
         
 //        hashModel[i].loadModel("models/cannes_placementCorrected.obj", true);
         
         ofPoint scale=newHashCollision.scale;
     
         newHashCollision.active=false;
-        newHashCollision.size=hashModel[i].getSceneMax()-hashModel[i].getSceneMin();
+        newHashCollision.size=hashModel.getSceneMax()-hashModel.getSceneMin();
         newHashCollision.checkbox=ofRectangle(10,i*20,10,10);
         
         hashletters.push_back(newHashCollision);
@@ -350,11 +352,11 @@ void testApp::loadHashtag()
         ofPoint rot = hashletters[i].rot;
         btQuaternion rotate=btQuaternion(rot.x,rot.y,rot.z,ofDegToRad(1));
         trans.setRotation(rotate);
-        hashCollision[i]->addMesh(hashModel[i].getMesh(0), scale, false);
+        hashCollision[i]->addMesh(hashModel.getMesh(0), scale, false);
         hashCollision[i]->create( world.world, trans,0.);
         hashCollision[i]->add();
         hashCollision[i]->setProperties(.1, 1);
-        
+        hashMeshes.push_back(hashModel.getMesh(0));
     }
     //    ofEnableArbTex();
     settings.popTag();
@@ -735,7 +737,7 @@ void testApp::updateCollision(int i){
     hashCollision[i]->remove();
     hashCollision[i]->init();
     hashCollision[i]->create(world.world,trans,0.);
-    hashCollision[i]->addMesh(hashModel[i].getMesh(0), scale, false);
+    hashCollision[i]->addMesh(hashMeshes[i], scale, false);
     hashCollision[i]->add();
     hashCollision[i]->setProperties(.1, 1);
     

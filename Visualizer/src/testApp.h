@@ -68,7 +68,7 @@ public:
     
     Content image;
     vector<Hashletter> hashletters;
-    ofxAssimpModelLoader hashModel[14];
+    vector<ofMesh> hashMeshes;
     vector<ofxBulletCustomShape*> hashCollision;
     bool bSingle=false;
     
