@@ -49,9 +49,17 @@ public:
         bool bNewKey;
     };
     
+    class animation{
+    public:
+        string animation;
+        int speed;
+        int delay;
+        
+    };
+    
     void loadTweet(string _text, string _ID, string _img, string _username, string _handle, string _profileimage, ofxBulletWorldRigid* _world);
-    tweetImage loadImage(string _image, ofxBulletWorldRigid* _world);
-    tweetUser loadUser(string _username, string _handle, string _profileimage, ofxBulletWorldRigid* _world, Alphabet* _gotham);
+    void loadImage(string _image);
+    void loadUser(string _username, string _handle, string _profileimage);
     
     tweetImage image;
     tweetUser user;
@@ -66,12 +74,12 @@ public:
     
     Alphabet gotham;
     
-        string tweetIn;
-        string tweetOut;
-        string imgIn;
-        string imgOut;
-        string userIn;
-        string userOut;
+        animation tweetIn;
+        animation tweetOut;
+        animation imgIn;
+        animation imgOut;
+        animation userIn;
+        animation userOut;
     bool bNewKey;
     
     btBoxShape*					boxShape;
@@ -84,7 +92,7 @@ public:
     ofPoint userPos;
     ofPoint userScale;
     ofPoint handleScale;
-    void loadParticleKeyframes(string filePath, int which);
+    void loadParticleKeyframes(animation anim, int which);
     ofTexture white;
 };
 

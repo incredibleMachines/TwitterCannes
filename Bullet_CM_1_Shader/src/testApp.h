@@ -9,6 +9,7 @@
 #include "ofxUI.h"
 #include "ofxBullet.h"
 #include "shadowMapLight.h"
+#include "ofxSQLite.h"
 
 class testApp : public ofBaseApp {
 	
@@ -161,6 +162,7 @@ public:
     bool    bDrawDepth;
     bool    bDrawLight;
     
+    ofxSQLite * sql;
     
 };
 

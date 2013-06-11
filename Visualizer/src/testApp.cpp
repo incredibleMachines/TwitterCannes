@@ -5,18 +5,64 @@
 #define CAM_MOUSE true
 #define FACES false
 
-
+string debugTweet="Rockin' it out at #CannesLions with Twitter, yeah! ¿¡åüéî!?";
+string debugID="1";
+string debugImg="debug/chanel.jpg";
+string debugUser="IncredibleMachines";
+string debugHandle="@IncMachines";
+string debugUserImg="debug/eac28a9e3fcd979d83fe0dddf74f4e15_normal.png";
 
 //--------------------------------------------------------------
 void testApp::setup(){
     
-    //DEBUG CONTENT --- to be replaced with live stuff!
-    string debugTweet="Rockin' it out at #CannesLions with Twitter, yeah! ¿¡åüéî!?";
-    string debugID="1";
-    string debugImg="debug/chanel.jpg";
-    string debugUser="IncredibleMachines";
-    string debugHandle="@IncMachines";
-    string debugUserImg="debug/eac28a9e3fcd979d83fe0dddf74f4e15_normal.png";
+    sqlite = new ofxSQLite("blank.db");
+//    sqlite->simpleQuery(""\
+//                        "CREATE TABLE IF NOT EXISTS tweets (" \
+//                        " id TEXT" \
+//                        " ,approved_at TEXT" \
+//                        " ,category TEXT" \
+//                        " ,created_at TEXT" \
+//                        " ,media_url TEXT" \
+//                        ", starred INTEGER" \
+//                        " ,text TEXT" \
+//                        " ,user_id TEXT" \
+//                        " ,user_image TEXT" \
+//                        " ,user_name TEXT" \
+//                        " ,user_screen_name TEXT" \
+//                        ");"
+//                        );
+    
+//    // in bin, not data
+//    sqlite = new ofxSQLite("twitterCannesLions.db");
+//    
+//    ofxSQLiteSelect sel = sqlite->select("id, approved_at, created_at, user_id, user_image, user_name, user_screen_name, text, media_url, category, starred")
+//    .from("tweets")
+//    .execute().begin();
+//    
+//    
+//    string id;
+//    string user_image;
+//    string user_name;
+//    string user_screen_name;
+//    string text;
+//    string media_url;
+//    
+//	while (sel.hasNext()) {
+//        
+//         id = sel.getString();
+//        string approved_at = sel.getString();
+//        string created_at = sel.getString();
+//        string user_id = sel.getString();
+//        user_image = sel.getString();
+//        user_name = sel.getString();
+//        user_screen_name = sel.getString();
+//        text = sel.getString();
+//        media_url = sel.getString();
+//        int category = sel.getInt();
+//        int starred = sel.getInt();
+//        
+//		sel.next();
+//	}
     
     bDebug=true;
     bGUI=false;
@@ -40,8 +86,6 @@ void testApp::setup(){
     ofSetVerticalSync(true);
 	ofSetFrameRate(30);
     
-    
-    
     //camera, lighting, dof setup
     setupGL();
     
@@ -57,14 +101,9 @@ void testApp::setup(){
         camera.disableMouseInput();
     }
      
-    
-
-    
     shader.load( "shaders/mainScene.vert", "shaders/mainScene.frag" );
     
     setupLights();
-    
-    bRot=false;
     
     //GUI and hashtag mesh loading
     loadHashtag();
@@ -101,7 +140,9 @@ void testApp::drawObjects(){
             ofSetColor(0,255,0);
             ofSphere(hashModel[i].getMesh(0).getCentroid().x,hashModel[i].getMesh(0).getCentroid().y+30,hashModel[i].getMesh(0).getCentroid().z,10);
         }
+         white.unbind();
         hashModel[i].getMesh(0).draw();
+         white.unbind();
         ofSetColor(255,255,255);
         glPopMatrix();
         glPopClientAttrib();
@@ -165,17 +206,15 @@ void testApp::draw(){
     ofPopMatrix();
     
     material.begin();
-    white.bind();
+    
     drawObjects(); // render to screen
-    white.unbind();
+   
     material.end();
     
     //bind image textures and draw bullet shapes
     
-    material.begin();
-    white.bind();
+    material.begin();   
     tweet.draw();
-    white.unbind();
     material.end();
     
     shadowLight.disable();
@@ -201,7 +240,6 @@ void testApp::draw(){
     if(bGUI==true){
         drawGUI();
     }
-    
     
 }
 

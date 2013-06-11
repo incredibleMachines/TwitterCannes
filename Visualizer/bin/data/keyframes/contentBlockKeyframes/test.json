@@ -1,31 +1,82 @@
-{"animations": [
-		{
-	        "tweet": {
-	        	"in":"gravity_in_down.json",
-	        	"out":"gravity_in_down.json"
-	        	},
-	        "user":{
-		        "in":"gravity_in_down.json",
-		        "out":"gravity_in_down.json"
-	        },
-	        "image":{
-		        "in":"gravity_in_down.json",
-		        "out":"gravity_in_down.json"
-	        }
-        },
-        {
-	        "tweet": {
-	        	"in":"gravity_in_down.json",
-	        	"out":"gravity_in_down.json"
-	        	},
-	        "user":{
-		        "in":"gravity_in_down.json",
-		        "out":"gravity_in_down.json"
-	        },
-	        "image":{
-		        "in":"gravity_in_down.json",
-		        "out":"gravity_in_down.json"
-	        }
-        }
-    ]
+{
+    "animations": [
+                   {
+                   "speed": "1",
+                   "tweet": {
+                   "in": {
+                   "speed": "1",
+                   "delay": "1000",
+                   "animation": "gravity_in_down.json"
+                   },
+                   "out": {
+                   "speed": "1",
+                   "delay": "1000",
+                   "animation": "gravity_in_down.json"
+                   }
+                   },
+                   "user": {
+                   "in": {
+                   "speed": "1",
+                   "delay": "1000",
+                   "animation": "gravity_in_down.json"
+                   },
+                   "out": {
+                   "speed": "1",
+                   "delay": "1000",
+                   "animation": "gravity_in_down.json"
+                   }
+                   },
+                   "image": {
+                   "in": {
+                   "speed": "1",
+                   "delay": "1000",
+                   "animation": "gravity_in_down.json"
+                   },
+                   "out": {
+                   "speed": "1",
+                   "delay": "1000",
+                   "animation": "gravity_in_down.json"
+                   }
+                   }
+                   },
+                   {
+                   "speed": "1",
+                   "tweet": {
+                   "in": {
+                   "speed": "1",
+                   "delay": "1000",
+                   "animation": "gravity_in_down.json"
+                   },
+                   "out": {
+                   "speed": "1",
+                   "delay": "1000",
+                   "animation": "gravity_in_down.json"
+                   }
+                   },
+                   "user": {
+                   "in": {
+                   "speed": "1",
+                   "delay": "1000",
+                   "animation": "gravity_in_down.json"
+                   },
+                   "out": {
+                   "speed": "1",
+                   "delay": "1000",
+                   "animation": "gravity_in_down.json"
+                   }
+                   },
+                   "image": {
+                   "in": {
+                   "speed": "1",
+                   "delay": "1000",
+                   "animation": "gravity_in_down.json"
+                   },
+                   "out": {
+                   "speed": "1",
+                   "delay": "1000",
+                   "animation": "gravity_in_down.json"
+                   }
+                   }
+                   }
+                   ]
 }

@@ -31,6 +31,15 @@
 		D3880AA6175E28A4008AD5AD /* ofxAssimpAnimation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D3880A9E175E28A4008AD5AD /* ofxAssimpAnimation.cpp */; };
 		D3880AA7175E28A4008AD5AD /* ofxAssimpMeshHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D3880AA0175E28A4008AD5AD /* ofxAssimpMeshHelper.cpp */; };
 		D3880AA8175E28A4008AD5AD /* ofxAssimpModelLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D3880AA2175E28A4008AD5AD /* ofxAssimpModelLoader.cpp */; };
+		D3C9C4641767A46700BCBC8C /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = D3C9C44B1767A46700BCBC8C /* sqlite3.c */; };
+		D3C9C4651767A46700BCBC8C /* ofxSQLite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D3C9C44E1767A46700BCBC8C /* ofxSQLite.cpp */; };
+		D3C9C4661767A46700BCBC8C /* ofxSQLiteAbstract.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D3C9C4501767A46700BCBC8C /* ofxSQLiteAbstract.cpp */; };
+		D3C9C4671767A46700BCBC8C /* ofxSQLiteDelete.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D3C9C4521767A46700BCBC8C /* ofxSQLiteDelete.cpp */; };
+		D3C9C4681767A46700BCBC8C /* ofxSQLiteFieldValues.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D3C9C4541767A46700BCBC8C /* ofxSQLiteFieldValues.cpp */; };
+		D3C9C4691767A46700BCBC8C /* ofxSQLiteInsert.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D3C9C4571767A46700BCBC8C /* ofxSQLiteInsert.cpp */; };
+		D3C9C46A1767A46700BCBC8C /* ofxSQLiteSelect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D3C9C4591767A46700BCBC8C /* ofxSQLiteSelect.cpp */; };
+		D3C9C46B1767A46700BCBC8C /* ofxSQLiteSimpler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D3C9C45B1767A46700BCBC8C /* ofxSQLiteSimpler.cpp */; };
+		D3C9C46C1767A46700BCBC8C /* ofxSQLiteUpdate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D3C9C45F1767A46700BCBC8C /* ofxSQLiteUpdate.cpp */; };
 		D3EA0613176651F800C775AA /* tweet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D3EA0611176651F800C775AA /* tweet.cpp */; };
 		D3EA06751766896800C775AA /* json_reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D3EA06651766896800C775AA /* json_reader.cpp */; };
 		D3EA06761766896800C775AA /* json_value.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D3EA06661766896800C775AA /* json_value.cpp */; };
@@ -203,6 +212,29 @@
 		D3880AA3175E28A4008AD5AD /* ofxAssimpModelLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxAssimpModelLoader.h; sourceTree = "<group>"; };
 		D3880AA4175E28A4008AD5AD /* ofxAssimpUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxAssimpUtils.h; sourceTree = "<group>"; };
 		D391E6FA175B062700350556 /* settings.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = settings.xml; path = bin/data/settings.xml; sourceTree = "<group>"; };
+		D3C9C44B1767A46700BCBC8C /* sqlite3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sqlite3.c; sourceTree = "<group>"; };
+		D3C9C44C1767A46700BCBC8C /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlite3.h; sourceTree = "<group>"; };
+		D3C9C44D1767A46700BCBC8C /* sqlite3ext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlite3ext.h; sourceTree = "<group>"; };
+		D3C9C44E1767A46700BCBC8C /* ofxSQLite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxSQLite.cpp; sourceTree = "<group>"; };
+		D3C9C44F1767A46700BCBC8C /* ofxSQLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxSQLite.h; sourceTree = "<group>"; };
+		D3C9C4501767A46700BCBC8C /* ofxSQLiteAbstract.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxSQLiteAbstract.cpp; sourceTree = "<group>"; };
+		D3C9C4511767A46700BCBC8C /* ofxSQLiteAbstract.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxSQLiteAbstract.h; sourceTree = "<group>"; };
+		D3C9C4521767A46700BCBC8C /* ofxSQLiteDelete.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxSQLiteDelete.cpp; sourceTree = "<group>"; };
+		D3C9C4531767A46700BCBC8C /* ofxSQLiteDelete.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxSQLiteDelete.h; sourceTree = "<group>"; };
+		D3C9C4541767A46700BCBC8C /* ofxSQLiteFieldValues.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxSQLiteFieldValues.cpp; sourceTree = "<group>"; };
+		D3C9C4551767A46700BCBC8C /* ofxSQLiteFieldValues.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxSQLiteFieldValues.h; sourceTree = "<group>"; };
+		D3C9C4561767A46700BCBC8C /* ofxSQLiteHeaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxSQLiteHeaders.h; sourceTree = "<group>"; };
+		D3C9C4571767A46700BCBC8C /* ofxSQLiteInsert.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxSQLiteInsert.cpp; sourceTree = "<group>"; };
+		D3C9C4581767A46700BCBC8C /* ofxSQLiteInsert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxSQLiteInsert.h; sourceTree = "<group>"; };
+		D3C9C4591767A46700BCBC8C /* ofxSQLiteSelect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxSQLiteSelect.cpp; sourceTree = "<group>"; };
+		D3C9C45A1767A46700BCBC8C /* ofxSQLiteSelect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxSQLiteSelect.h; sourceTree = "<group>"; };
+		D3C9C45B1767A46700BCBC8C /* ofxSQLiteSimpler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxSQLiteSimpler.cpp; sourceTree = "<group>"; };
+		D3C9C45C1767A46700BCBC8C /* ofxSQLiteSimpler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxSQLiteSimpler.h; sourceTree = "<group>"; };
+		D3C9C45D1767A46700BCBC8C /* ofxSQLiteType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxSQLiteType.h; sourceTree = "<group>"; };
+		D3C9C45E1767A46700BCBC8C /* ofxSQLiteTypeNow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxSQLiteTypeNow.h; sourceTree = "<group>"; };
+		D3C9C45F1767A46700BCBC8C /* ofxSQLiteUpdate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxSQLiteUpdate.cpp; sourceTree = "<group>"; };
+		D3C9C4601767A46700BCBC8C /* ofxSQLiteUpdate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxSQLiteUpdate.h; sourceTree = "<group>"; };
+		D3C9C4611767A46700BCBC8C /* ofxSQLiteWhere.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxSQLiteWhere.h; sourceTree = "<group>"; };
 		D3CED559176694D60085D71F /* test.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = test.json; sourceTree = "<group>"; };
 		D3CED55D176694D60085D71F /* ease_in_const.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ease_in_const.json; sourceTree = "<group>"; };
 		D3CED55E176694D60085D71F /* gravity_in_down.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = gravity_in_down.json; sourceTree = "<group>"; };
@@ -469,6 +501,7 @@
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
+				D3C9C4421767A46700BCBC8C /* ofxSQLite */,
 				D3EA06221766896800C775AA /* ofxJSON */,
 				D3460B4E17651EEA0075FF73 /* ofxUnicode */,
 				D3880A70175E28A4008AD5AD /* ofxAssimpModelLoader */,
@@ -750,6 +783,61 @@
 				D3880AA4175E28A4008AD5AD /* ofxAssimpUtils.h */,
 			);
 			path = src;
+			sourceTree = "<group>";
+		};
+		D3C9C4421767A46700BCBC8C /* ofxSQLite */ = {
+			isa = PBXGroup;
+			children = (
+				D3C9C4481767A46700BCBC8C /* src */,
+			);
+			name = ofxSQLite;
+			path = ../../../addons/ofxSQLite;
+			sourceTree = "<group>";
+		};
+		D3C9C4481767A46700BCBC8C /* src */ = {
+			isa = PBXGroup;
+			children = (
+				D3C9C4491767A46700BCBC8C /* lib */,
+				D3C9C44E1767A46700BCBC8C /* ofxSQLite.cpp */,
+				D3C9C44F1767A46700BCBC8C /* ofxSQLite.h */,
+				D3C9C4501767A46700BCBC8C /* ofxSQLiteAbstract.cpp */,
+				D3C9C4511767A46700BCBC8C /* ofxSQLiteAbstract.h */,
+				D3C9C4521767A46700BCBC8C /* ofxSQLiteDelete.cpp */,
+				D3C9C4531767A46700BCBC8C /* ofxSQLiteDelete.h */,
+				D3C9C4541767A46700BCBC8C /* ofxSQLiteFieldValues.cpp */,
+				D3C9C4551767A46700BCBC8C /* ofxSQLiteFieldValues.h */,
+				D3C9C4561767A46700BCBC8C /* ofxSQLiteHeaders.h */,
+				D3C9C4571767A46700BCBC8C /* ofxSQLiteInsert.cpp */,
+				D3C9C4581767A46700BCBC8C /* ofxSQLiteInsert.h */,
+				D3C9C4591767A46700BCBC8C /* ofxSQLiteSelect.cpp */,
+				D3C9C45A1767A46700BCBC8C /* ofxSQLiteSelect.h */,
+				D3C9C45B1767A46700BCBC8C /* ofxSQLiteSimpler.cpp */,
+				D3C9C45C1767A46700BCBC8C /* ofxSQLiteSimpler.h */,
+				D3C9C45D1767A46700BCBC8C /* ofxSQLiteType.h */,
+				D3C9C45E1767A46700BCBC8C /* ofxSQLiteTypeNow.h */,
+				D3C9C45F1767A46700BCBC8C /* ofxSQLiteUpdate.cpp */,
+				D3C9C4601767A46700BCBC8C /* ofxSQLiteUpdate.h */,
+				D3C9C4611767A46700BCBC8C /* ofxSQLiteWhere.h */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		D3C9C4491767A46700BCBC8C /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				D3C9C44A1767A46700BCBC8C /* sqlite */,
+			);
+			path = lib;
+			sourceTree = "<group>";
+		};
+		D3C9C44A1767A46700BCBC8C /* sqlite */ = {
+			isa = PBXGroup;
+			children = (
+				D3C9C44B1767A46700BCBC8C /* sqlite3.c */,
+				D3C9C44C1767A46700BCBC8C /* sqlite3.h */,
+				D3C9C44D1767A46700BCBC8C /* sqlite3ext.h */,
+			);
+			path = sqlite;
 			sourceTree = "<group>";
 		};
 		D3CED557176694D60085D71F /* keyframes */ = {
@@ -1333,6 +1421,15 @@
 				D3EA06761766896800C775AA /* json_value.cpp in Sources */,
 				D3EA06771766896800C775AA /* json_writer.cpp in Sources */,
 				D3EA06781766896800C775AA /* ofxJSONElement.cpp in Sources */,
+				D3C9C4641767A46700BCBC8C /* sqlite3.c in Sources */,
+				D3C9C4651767A46700BCBC8C /* ofxSQLite.cpp in Sources */,
+				D3C9C4661767A46700BCBC8C /* ofxSQLiteAbstract.cpp in Sources */,
+				D3C9C4671767A46700BCBC8C /* ofxSQLiteDelete.cpp in Sources */,
+				D3C9C4681767A46700BCBC8C /* ofxSQLiteFieldValues.cpp in Sources */,
+				D3C9C4691767A46700BCBC8C /* ofxSQLiteInsert.cpp in Sources */,
+				D3C9C46A1767A46700BCBC8C /* ofxSQLiteSelect.cpp in Sources */,
+				D3C9C46B1767A46700BCBC8C /* ofxSQLiteSimpler.cpp in Sources */,
+				D3C9C46C1767A46700BCBC8C /* ofxSQLiteUpdate.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1375,6 +1472,8 @@
 					../../../addons/ofxJSON/libs/include/json,
 					../../../addons/ofxJSON/libs/src,
 					../../../addons/ofxJSON/libs/src/lib_json,
+					../../../addons/ofxSQlite/src/,
+					"../../../addons/ofxSQlite/src/lib*",
 				);
 				OTHER_CPLUSPLUSFLAGS = (
 					"-D__MACOSX_CORE__",
@@ -1417,6 +1516,8 @@
 					../../../addons/ofxJSON/libs/include/json,
 					../../../addons/ofxJSON/libs/src,
 					../../../addons/ofxJSON/libs/src/lib_json,
+					../../../addons/ofxSQlite/src/,
+					"../../../addons/ofxSQlite/src/lib*",
 				);
 				OTHER_CPLUSPLUSFLAGS = (
 					"-D__MACOSX_CORE__",
@@ -1453,6 +1554,8 @@
 					../../../addons/ofxJSON/libs/src,
 					../../../addons/ofxJSON/libs/src/lib_json,
 					../../../addons/ofxJSON/src,
+					../../../addons/ofxSQlite/src/,
+					"../../../addons/ofxSQlite/src/lib*",
 				);
 				INFOPLIST_FILE = "openFrameworks-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
@@ -1558,6 +1661,8 @@
 					../../../addons/ofxJSON/libs/src,
 					../../../addons/ofxJSON/libs/src/lib_json,
 					../../../addons/ofxJSON/src,
+					../../../addons/ofxSQlite/src/,
+					"../../../addons/ofxSQlite/src/lib*",
 				);
 				INFOPLIST_FILE = "openFrameworks-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";

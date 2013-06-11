@@ -12,6 +12,7 @@
 //--------------------------------------------------------------
 void testApp::setup(){
     
+    sql = new ofxSQLite("test.db");
     //CALIBRATION VARIABLES -- TODO: ADD TO GUI
     
     meshCollisionScale=ofPoint(.45,.45,1);
@@ -306,6 +307,8 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
+    
+    
     
 	glEnable(GL_DEPTH_TEST);
     ofDisableAlphaBlending();

@@ -12,6 +12,7 @@ void Particle::setup(keyframe pixelPos, float index) {
     
 	pixel=pixelPos;
     myIndex=index;
+    targetReached=false;
     
 }
 

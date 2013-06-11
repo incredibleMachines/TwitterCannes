@@ -1,7 +1,6 @@
 #pragma once
 
 #include "stdio.h"
-#include "assert.h"
 
 #include "ofMain.h"
 #include "ofxDOF.h"
@@ -10,6 +9,7 @@
 #include "ofxBullet.h"
 #include "shadowMapLight.h"
 #include "tweet.h"
+#include "ofxSQLite.h"
 
 
 class testApp : public ofBaseApp {
@@ -141,7 +141,7 @@ public:
     bool    bDrawDepth;
     bool    bDrawLight;
     
-    ofTrueTypeFont gui;
+    ofxSQLite* sqlite;
 
 
 };
