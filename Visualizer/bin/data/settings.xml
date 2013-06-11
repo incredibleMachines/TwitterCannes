@@ -273,18 +273,3 @@
         <OBJ>OBJ_letters/bird.obj</OBJ>
     </LETTER>
 </LETTERS>
-<HASHTAG>
-    <POS>
-        <X>0.000000000</X>
-        <Y>0.000000000</Y>
-        <Z>0.000000000</Z>
-    </POS>
-    <SCALE>
-        <X>1</X>
-        <Y>1</Y>
-        <Z>1</Z>
-    </SCALE>
-</HASHTAG>
-<X>0.000000000</X>
-<Y>220.000000000</Y>
-<Z>0.000000000</Z>

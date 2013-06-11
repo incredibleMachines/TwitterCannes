@@ -86,7 +86,7 @@ void Tweet::loadTweet(string _text, string _ID, string _img, string _username, s
     //    }
     //    newTweet.user=loadUser(_username, _handle, _profileimage, _world, gotham);
     //    return newTweet;
-        world->destroy();
+//        world->destroy();
     
 }
 
@@ -425,7 +425,7 @@ void Tweet::tweetToKinematic(){
         float newRot = rotQuat.w();
         trans.setRotation( btQuaternion(btVector3(rotQuat.x(), rotQuat.y(), rotQuat.z()), newRot) );
         if(keyframe!=0){
-            if(tweetKeyframes[keyframe-1].path=="destroy"){
+            if(tweetKeyframes[keyframe-1].path=="gravity"){
                 particles[i].bRotate=true;
                 particles[i].current.quat=rotQuat;
             }
@@ -481,7 +481,7 @@ void Tweet::userToKinematic(){
         float newRot = rotQuat.w();
         trans.setRotation( btQuaternion(btVector3(rotQuat.x(), rotQuat.y(), rotQuat.z()), newRot) );
         if(userKeyframe!=0){
-            if(userKeyframes[userKeyframe-1].path=="destroy"){
+            if(userKeyframes[userKeyframe-1].path=="gravity"){
                 user.particles[i].bRotate=true;
                 user.particles[i].current.quat=rotQuat;
             }

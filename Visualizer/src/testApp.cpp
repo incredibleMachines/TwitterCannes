@@ -84,7 +84,8 @@ void testApp::drawObjects(){
     ofRotate(90, 0, 1, 0);
     ofRotate(330,1,0,0);
     
-    for(int i = 0; i < 12  ; i++) {
+    for(int i = 0; i < hashCollision.size()  ; i++) {
+        cout<<hashCollision.size()<<endl;
         glPushAttrib(GL_ALL_ATTRIB_BITS);
         glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS);
         glEnable(GL_NORMALIZE);
@@ -118,7 +119,7 @@ void testApp::update(){
     ofSetWindowTitle( ofToString( ofGetFrameRate() ) );
     
 //updates bullet objects
-    world.update();
+    tweet.world->update();
     
     tweet.update(&world);
     
@@ -268,13 +269,6 @@ void testApp::loadHashtag()
     
     settings.loadFile("settings.xml");
     
-    //LOAD MASTER SETTINGS FOR HASHTAG PLACEMENT
-    
-    settings.pushTag("HASHTAG");
-    settings.pushTag("POS");
-
-    settings.popTag();
-    settings.popTag();
     
     settings.pushTag("LETTERS");
     int numberOfSavedPoints = settings.getNumTags("LETTER");
@@ -315,6 +309,7 @@ void testApp::loadHashtag()
         
         
         string file=settings.getValue("OBJ"," ");
+        cout<<file<<endl;
         settings.popTag();
         
         hashModel[i].loadModel(file,true );
@@ -337,7 +332,6 @@ void testApp::loadHashtag()
         ofPoint rot = hashletters[i].rot;
         btQuaternion rotate=btQuaternion(rot.x,rot.y,rot.z,ofDegToRad(1));
         trans.setRotation(rotate);
-        
         hashCollision[i]->addMesh(hashModel[i].getMesh(0), scale, false);
         hashCollision[i]->create( world.world, trans,0.);
         hashCollision[i]->add();

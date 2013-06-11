@@ -80,7 +80,7 @@ public:
     content image;
     
     vector<hashletter> hashletters;
-    ofxAssimpModelLoader hashModel[13];
+    ofxAssimpModelLoader hashModel[14];
     vector<ofxBulletCustomShape*> hashCollision;
     bool bSingle=false;
     
