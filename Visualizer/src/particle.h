@@ -70,7 +70,13 @@ public:
     class keyframe{
     public:
         
-        ofPoint type=ofPoint(0,0,0);
+        class keyPoint{
+        public:
+            string x;
+            string y;
+            string z;
+        };
+        keyPoint type;
         
         ofPoint pos;
         ofPoint posMin;
@@ -85,9 +91,9 @@ public:
         int durationMin=0;
         int durationMax=0;
         
-        int path=0;
-        vector<int> interpolations;
-        int interpolation;
+        string path="linear";
+        vector<string> interpolations;
+        string interpolation;
         ofPoint gravity;
         
         bool destroy=false;

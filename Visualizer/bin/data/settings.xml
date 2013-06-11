@@ -151,7 +151,7 @@
         <COLLISION>
             <POS>
                 <X>13.000030518</X>
-                <Y>0.000000000</Y>
+                <Y>7.000000000</Y>
                 <Z>-40.000000000</Z>
             </POS>
             <ROTATION>
@@ -251,13 +251,12 @@
         </COLLISION>
         <OBJ>OBJ_letters/S_lower.obj</OBJ>
     </LETTER>
-    
     <LETTER>
         <NAME>bird</NAME>
         <COLLISION>
             <POS>
-                <X>52.000030518</X>
-                <Y>0.000000000</Y>
+                <X>66.100028992</X>
+                <Y>27.200000763</Y>
                 <Z>-39.900001526</Z>
             </POS>
             <ROTATION>
@@ -266,14 +265,13 @@
                 <Z>0.000000000</Z>
             </ROTATION>
             <SCALE>
-                <X>0.260000050</X>
-                <Y>0.260000050</Y>
-                <Z>0.260000050</Z>
+                <X>0.207000062</X>
+                <Y>0.207000062</Y>
+                <Z>0.207000062</Z>
             </SCALE>
         </COLLISION>
         <OBJ>OBJ_letters/bird.obj</OBJ>
     </LETTER>
-    
 </LETTERS>
 <HASHTAG>
     <POS>

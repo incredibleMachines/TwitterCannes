@@ -1,0 +1,31 @@
+{"animations": [
+		{
+	        "tweet": {
+	        	"in":"gravity_in_down.json",
+	        	"out":"gravity_in_down.json"
+	        	},
+	        "user":{
+		        "in":"gravity_in_down.json",
+		        "out":"gravity_in_down.json"
+	        },
+	        "image":{
+		        "in":"gravity_in_down.json",
+		        "out":"gravity_in_down.json"
+	        }
+        },
+        {
+	        "tweet": {
+	        	"in":"gravity_in_down.json",
+	        	"out":"gravity_in_down.json"
+	        	},
+	        "user":{
+		        "in":"gravity_in_down.json",
+		        "out":"gravity_in_down.json"
+	        },
+	        "image":{
+		        "in":"gravity_in_down.json",
+		        "out":"gravity_in_down.json"
+	        }
+        }
+    ]
+}

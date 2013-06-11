@@ -11,6 +11,10 @@
 
 class Alphabet {
 public:
+    
+    Alphabet();
+    ~Alphabet();
+    
     class Letter{
     public:
         Letter();
@@ -21,8 +25,7 @@ public:
     
     vector<Letter*> letters;
     
-    Alphabet();
-    ~Alphabet();
+
     
     void draw(int c, ofPoint scale);
     

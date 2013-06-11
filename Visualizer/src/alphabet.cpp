@@ -32,6 +32,7 @@ void Alphabet::draw(int c, ofPoint scale){
 }
 
 ofPoint Alphabet::getSize(int c){
+    if(c>32){
     vector<ofPoint> vertices=letters[c]->model.getMesh(0).getVertices();
     ofPoint max,min;
     for (int i=0;i<vertices.size();i++)
@@ -55,14 +56,22 @@ ofPoint Alphabet::getSize(int c){
             min.z=vertices[i].z;
         }
     }
+        ofPoint scale=letters[c]->model.getScale();
+        ofPoint size=max-min;
+        return max;
+    }
+    else{
+        return ofPoint(0,0,0);
+    }
+
     
 //    ofPoint max=letters[c]->model.getSceneMax(true);
 //    ofPoint min=letters[c]->model.getSceneMin(true);
-    ofPoint scale=letters[c]->model.getScale();
-    ofPoint size=max-min;
-    return max;
+
 }
 
 ofMesh Alphabet::getMesh(int c){
+    if(c>32){
     return letters[c]->model.getMesh(0);
+    }
 }

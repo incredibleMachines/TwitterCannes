@@ -4,21 +4,14 @@
 #include "assert.h"
 
 #include "ofMain.h"
-#include "particle.h"
 #include "ofxDOF.h"
 #include "ofx3DModelLoader.h"
 #include "ofxAssimpModelLoader.h"
 #include "ofxXmlSettings.h"
-#include "ofxUI.h"
 #include "ofxBullet.h"
-#include "alphabet.h"
-
-#include "ofUTF8.h"
-//#include "ofUTF16.h"
-#include "ofUnicode.h"
-#include "ofTextConverter.h"
 
 #include "shadowMapLight.h"
+#include "tweet.h"
 
 
 class testApp : public ofBaseApp {
@@ -29,15 +22,16 @@ public:
 	void draw();
     
     void setupGL();
-    void loadCamKeyframes();
+    void loadMasterKeyframe();
+    void loadContentKeyframes();
     void loadParticleKeyframes();
-    void loadImage();
+
+
     void loadDir();
     
     void initImgParticles();
     void initTweetParticles();
     
-    void drawHashtag();
     void loadHashtag();
     void drawGUI();
     
@@ -47,74 +41,27 @@ public:
     
     void setupLights();
     void drawObjects();
+        
+       
+    vector<Tweet::Tweet> tweets;
     
-    vector<string> images;
-    ofImage pic;
-	unsigned char * imagePixels;
-    int imgCount;
+    Tweet::Tweet tweet;
+    int tweetCount;
     
-    vector <Particle> particles;
-    vector <Particle::keyframe> particleKeyframes;
+    vector<vector <Particle::keyframe> > particleKeyframes;
     int particleKeyframe;
 	
-	ofEasyCam camera,camera2,guiCamera;
+	ofEasyCam camera;
 	ofxDOF dof;
-    ofLight light;
-    ofLight light2;
-    ofLight light3;
     ofMaterial material;
     
-    class camPoint{
-    public:
-        ofPoint pos;
-        ofPoint lookAt;
-        int pause;
-        int posRate=0;
-        int posPath=0;
-        int lookAtRate=0;
-        int lookAtPath=0;
-        
-        float rate;
-        bool reached;
-        
-    };
-    
-    ofPoint camPos;
-    int camKeyframe;
-    vector<camPoint> camKeyframes;
-    
-    
-    ofxBulletWorldRigid           world;
-    ofxBulletBox                  ground;
-    ofxBulletBox                  groundLow;
-    ofxBulletBox                  background;
-    vector<ofxBulletBox*> shapes;
-    vector<ofxBulletCustomShape*> letters;
+    ofxBulletWorldRigid   world;
+    ofxBulletBox          background;
     
     ofxBulletBox* box;
-    vector<ofTexture> face;
-    
+
     ofImage whiteImg;
     ofTexture white;
-    ofImage blackImg;
-    ofTexture black;
-    
-    bool bDrawPhysics;
-    bool bSwitchPhysics;
-    bool bStart;
-    bool bNewParticleKey=false;
-    
-    bool bCamChange;
-    
-    class hashtag{
-    public:
-        ofPoint pos;
-        ofPoint rotation;
-        ofPoint scale;
-        bool active;
-    };
-    
-        ofFbo drawScreen;
     
     class hashletter{
     public:
@@ -135,24 +82,15 @@ public:
     content image;
     
     vector<hashletter> hashletters;
-    hashtag hash;
-//    ofx3DModelLoader tempMesh[12];
     ofxAssimpModelLoader hashModel[13];
     vector<ofxBulletCustomShape*> hashCollision;
-    vector<ofxBulletBox*> funnelCollision;
+    bool bSingle=false;
     
     btBoxShape*					boxShape;
     
     ofxXmlSettings settings;
-    ofxXmlSettings camXML;
-    ofxXmlSettings particleXML;
-    
     
     float count;
-    
-    ofxUICanvas *hashtagGUI;
-    
-    bool bSingle=false;
     
     ofPoint meshCollisionScale;
     ofPoint meshDrawScale;
@@ -165,7 +103,6 @@ public:
     
     ofPoint meshOffset;
 
-    
     ofPoint boxScale;
     
     void updateCollision(int i);
@@ -175,24 +112,27 @@ public:
     bool bRot;
     bool bScale;
     
-    ofxAssimpModelLoader collisionPlane;
     
+    ofxAssimpModelLoader collisionPlane;
     ofTexture multiply;
+    
     
     Alphabet gotham;
     
-    void loadTweet();
-    
     ofPoint tweetScale;
-    
+    ofPoint tweetPos;
+    ofPoint userScale;
+    ofPoint userPos;
+    ofPoint handleScale;
     int bTweet;
+    
     
     void tweetToKinematic();
     void tweetToPhysics();
     void imgToPhysics();
     void imgToKinematic();
     void updateImg();
-void updateTweet();
+    void updateTweet();
     
     ofShader shader;
     ShadowMapLight shadowLight;
@@ -203,13 +143,8 @@ void updateTweet();
     bool    bDrawDepth;
     bool    bDrawLight;
     
-    ofFbo guiDraw;
-    
-    void drawSelectBoxes();
-    
-    void drawFbo();
-    
     ofTrueTypeFont gui;
+
 
 };
 

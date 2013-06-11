@@ -1,9 +1,5 @@
 #include "testApp.h"
 
-#define tileW 30
-#define tileH 30
-#define tileD 2
-
 #define USE_DOF true
 #define CAM_MOVE false
 #define CAM_MOUSE false
@@ -14,21 +10,35 @@
 //--------------------------------------------------------------
 void testApp::setup(){
     
-    //CALIBRATION VARIABLES -- TODO: ADD TO GUI
+    //DEBUG CONTENT --- to be replaced with live stuff!
+    string debugTweet="Rockin' it out at #CannesLions with Twitter, yeah! ¿¡åüéî!?";
+    string debugID="1";
+    string debugImg="debug/chanel.jpg";
+    string debugUser="IncredibleMachines";
+    string debugHandle="@IncMachines";
+    string debugUserImg="debug/eac28a9e3fcd979d83fe0dddf74f4e15_normal.png";
     
     bDebug=true;
-    bTweet=true;
     bGUI=false;
     
-    tweetScale=ofPoint(.1,.1,.1);
-    meshCollisionScale=ofPoint(5,5 ,5);
-    meshDrawScale=ofPoint(10,10,20);
-    image.pos=ofPoint(-10,-10,-55);
-    boxScale=ofPoint(.05,.05,.05);
+    camState=1;
     
-    gotham=*new Alphabet();
+    camera.setDistance(40.0f);
+    camera.setGlobalPosition( 30.0f, 15.0f, 00.0f );
+    camera.lookAt( ofVec3f( 0.0f, 0.0f, 0.0f ) );
     
-    camState=0;
+    if(camState==1){
+        camera.setDistance(40.0f);
+        camera.rotateAround(90, ofVec3f(0,1,0), ofVec3f(0,0,0));
+        camera.lookAt(ofVec3f(0.0f,0.0f,0.0f));
+    }
+    
+    world.setup();
+    world.enableCollisionEvents();
+    world.setCamera(&camera);
+    
+    gotham= *new Alphabet();
+
     
     ofSetVerticalSync(true);
 	ofSetFrameRate(30);
@@ -46,15 +56,11 @@ void testApp::setup(){
     
     if(!CAM_MOUSE){
         camera.disableMouseInput();
-        camera2.disableMouseInput();
     }
      
     
-    camera.setDistance(40.0f);
-    camera.setGlobalPosition( 30.0f, 15.0f, 00.0f );
+
     
-    camera.lookAt( ofVec3f( 0.0f, 0.0f, 0.0f ) );
-        
     shader.load( "shaders/mainScene.vert", "shaders/mainScene.frag" );
     
     setupLights();
@@ -67,37 +73,14 @@ void testApp::setup(){
     //camKeyframe cycles through camPoints vector which includes x,y,z coords and rate of movement between them
     //particle keyframes animate sequence of particle behaviors for individual image or tweet
     particleKeyframe=0;
-    loadParticleKeyframes();
     
-    //populates vector of images off of specified directory
-    imgCount=0;
-    if(bTweet==false){
-        loadDir();
-        loadImage();
-    }
-    else{
-        loadTweet();
-    }
+//    Tweet newTweet=*new Tweet();
 
+//    tweets.push_back(newTweet.loadTweet(debugTweet, debugID, debugImg, debugUser, debugHandle, debugUserImg,&gotham ,&tweetPos, &tweetScale, &world, &boxScale, &image.pos, &userPos, &userScale, &handleScale,&white));
+    
+    tweet.loadTweet(debugTweet, debugID, debugImg, debugUser, debugHandle, debugUserImg, &gotham ,&world);
     
     
-}
-
-//--------------------------------------------------------------
-void testApp::setupLights() {
-    
-    // shadow map resolution (must be power of 2), field of view, near, far
-    // the larger the shadow map resolution, the better the detail, but slower
-    shadowLight.setup( 2048, 45.0f, 0.1f, 100.0f );
-    shadowLight.setBlurLevel(4.0f); // amount to blur to soften the shadows
-    
-    shadowLight.setAmbientColor( ofFloatColor( 0.0f, 0.0f, 0.0f, 1.0f ) );
-    shadowLight.setDiffuseColor( ofFloatColor( 0.9f, 0.9f, 0.9f, 1.0f ) );
-    shadowLight.setSpecularColor( ofFloatColor( 0.1f, 0.1f, 0.8f, 1.0f ) );
-    
-    shadowLight.setPosition( 200.0f, 0.0f, 45.0f );
-    
-    ofSetGlobalAmbientColor( ofFloatColor( 0.05f, 0.05f, 0.05f ) );
 }
 
 //--------------------------------------------------------------
@@ -143,79 +126,9 @@ void testApp::update(){
     
     ofSetWindowTitle( ofToString( ofGetFrameRate() ) );
     
-    world.update();    //updates bullet objects
-    
-    
-    //check whether individual particles have completed the duration of their transition
-    int moving=0;
-    for(int i=0;i<particles.size();i++){
-        if(!particles[i].targetReached){
-            moving++;
-        }
-    }
-    
-    //if all have reached, trigger next keyframe position
-    if (moving==0){
-        bNewParticleKey=true;
-        particleKeyframe++;
-        if(particleKeyframe>particleKeyframes.size()-1){
-            particleKeyframe=0;
-        }
-    }
-    
-    //set new particle destinations
-    if(bNewParticleKey==true){
-        
-        //Destroy particles action - triggers image switch and removes bullet objects/position vectors
-        
-        if(particleKeyframes[particleKeyframe].path==PARTICLE_PATH_DESTROY){
-            particleKeyframe++;
-            if(particleKeyframe>particleKeyframes.size()-1){
-                particleKeyframe=0;
-            }
-            if(bTweet==false){
-                loadImage();
-            }
-        }
-        
-        else if(particleKeyframes[particleKeyframe].path!=PARTICLE_PATH_PHYSICS){
-            if(bTweet==true){
-                tweetToKinematic();
-            }
-            else{
-                imgToKinematic();
-            }
-        }
-        
-        //if switching into physics state
-        
-        else{
-            if(bTweet==true){
-                tweetToPhysics();
-            }
-            else{
-                imgToPhysics();
-            }
-        }
-        bNewParticleKey=false;
-    }
-    
-    //if not new keyframe
-    
-    else{
-        
-        //if not in physics state
-        
-        if(bTweet==true){
-            updateTweet();
-        }
-        
-        else{
-            updateImg();
-        }
-    }
-    
-
+//updates bullet objects
+    world.update();
+    tweet.update(&world);
     
 }
 
@@ -269,36 +182,7 @@ void testApp::draw(){
     
     material.begin();
     
-    if(bTweet==true){
-        for (int i=0;i<letters.size();i++){
-            face[i].bind();
-            //        letters[i]->draw();
-            glPushAttrib(GL_ALL_ATTRIB_BITS);
-            glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS);
-            glEnable(GL_NORMALIZE);
-            glDisable(GL_CULL_FACE);
-            btScalar	m[16];
-            ofGetOpenGLMatrixFromRigidBody( letters[i]->getRigidBody(), m );
-            glPushMatrix();
-            glMultMatrixf( m );
-            glTranslatef(-particles[i].size.x/2, -particles[i].size.y/2, -particles[i].size.z/2);
-            gotham.draw(particles[i].letter,tweetScale);
-            glPopMatrix();
-            glPopClientAttrib();
-            glPopAttrib();
-            face[i].unbind();
-        }
-    }
-    
-    
-    else{
-        for (int i=0;i<shapes.size();i++){
-            face[i].bind();
-            shapes[i]->draw();
-            face[i].unbind();
-        }
-    }
-    
+    tweet.draw();
     
     shadowLight.disable();
         material.end();
@@ -326,74 +210,10 @@ void testApp::draw(){
     if(bGUI==true){
         drawGUI();
     }
-                gui.drawString("hi!!", 100,100);
     
     
 }
 
-void testApp::loadParticleKeyframes(){
-    
-    //Populate particle behavior Keyframes off of XML document
-    
-    particleXML.loadFile("keyframes/particleKeyframes/particles.xml");
-    
-    particleXML.pushTag("PARTICLES");
-    int numParticles = particleXML.getNumTags("PARTICLE");
-    for(int i = 0; i < numParticles; i++){
-        particleXML.pushTag("PARTICLE", i);
-        Particle::keyframe temp;
-        temp.path=particleXML.getValue("PATH",0);
-        
-        particleXML.pushTag("TYPE");
-        temp.type.x=particleXML.getValue("X",0);
-        temp.type.y=particleXML.getValue("Y",0);
-        temp.type.z=particleXML.getValue("Z",0);
-        particleXML.popTag();
-        
-        particleXML.pushTag("POS");
-        temp.pos.x = particleXML.getValue("X", 0);
-        temp.pos.y = particleXML.getValue("Y", 0);
-        temp.pos.z = particleXML.getValue("Z", 0);
-        
-        particleXML.pushTag("MIN");
-        temp.posMin.x = particleXML.getValue("X", 0);
-        temp.posMin.y = particleXML.getValue("Y", 0);
-        temp.posMin.z = particleXML.getValue("Z", 0);
-        particleXML.popTag();
-        
-        particleXML.pushTag("MAX");
-        temp.posMax.x = particleXML.getValue("X", 0);
-        temp.posMax.y = particleXML.getValue("Y", 0);
-        temp.posMax.z = particleXML.getValue("Z", 0);
-        particleXML.popTag();
-        particleXML.popTag();
-        
-        particleXML.pushTag("DURATION");
-        temp.duration= particleXML.getValue("ACTUAL", 0);
-        temp.durationMax= particleXML.getValue("MAX", 0);
-        temp.durationMin= particleXML.getValue("MIN", 0);
-        particleXML.popTag();
-        
-        particleXML.pushTag("INTERPOLATIONS");
-        int interpCount=particleXML.getNumTags("INTERPOLATION");
-        for(int j = 0; j < interpCount; j++){
-            temp.interpolations.push_back(particleXML.getValue("INTERPOLATION",0,j));
-        }
-        particleXML.popTag();
-        
-        particleXML.pushTag("GRAVITY");
-        temp.gravity.x = particleXML.getValue("X", 0);
-        temp.gravity.y = particleXML.getValue("Y", 0);
-        temp.gravity.z = particleXML.getValue("Z", 0);
-        particleXML.popTag();
-        
-        particleXML.popTag();
-        particleKeyframes.push_back(temp);
-    }
-    
-    particleXML.popTag();
-    
-}
 
 
 //--------------------------------------------------------------
@@ -401,161 +221,50 @@ void testApp::setupGL(){
     
     material.setShininess(.1);
     
-    //initialize Bullet Physics world
-    world.setup();
-    world.enableCollisionEvents();
-    world.setCamera(&camera);
-    
     //Create static collision objects
     background.create(world.world,ofVec3f(0,0,-90.),0.,175,100,10.);
     background.add();
     background.setProperties(.1,1);
     
     whiteImg.loadImage("textures/whiteBig.png");
-    white=whiteImg.getTextureReference();
-     
     
+    white=whiteImg.getTextureReference();
 }
 
-
-//SETUP PARTICLES OFF IMAGE
-
-void testApp::loadImage(){
+//--------------------------------------------------------------
+void testApp::setupLights() {
     
-    //go to next image in vector and create new particles
-    if(imgCount>images.size()-1){
-        imgCount=0;
-    }
-    if(particleKeyframe>particleKeyframes.size()-1){
-        particleKeyframe=0;
-    }
-    pic.loadImage(images[imgCount]);
-    pic.setImageType(OF_IMAGE_COLOR);
-    pic.resize(pic.width/2, pic.height/2);
-    pic.mirror(false, false);
-    initImgParticles();
-    imgCount++;
+    // shadow map resolution (must be power of 2), field of view, near, far
+    // the larger the shadow map resolution, the better the detail, but slower
+    shadowLight.setup( 2048, 45.0f, 0.1f, 100.0f );
+    shadowLight.setBlurLevel(4.0f); // amount to blur to soften the shadows
+    
+    shadowLight.setAmbientColor( ofFloatColor( 0.0f, 0.0f, 0.0f, 1.0f ) );
+    shadowLight.setDiffuseColor( ofFloatColor( 0.9f, 0.9f, 0.9f, 1.0f ) );
+    shadowLight.setSpecularColor( ofFloatColor( 0.1f, 0.1f, 0.8f, 1.0f ) );
+    
+    shadowLight.setPosition( 200.0f, 0.0f, 45.0f );
+    
+    ofSetGlobalAmbientColor( ofFloatColor( 0.05f, 0.05f, 0.05f ) );
 }
 
 void testApp::loadDir(){
     
-    //use ofDirectory to load image files into vector of strings then close dir
-    
-    string path = "images";
-    ofDirectory dir(path);
-    dir.allowExt("jpg");
-    dir.allowExt("png");
-    dir.listDir();
-    for(int i = 0; i < dir.numFiles(); i++){
-        string newImage=dir.getPath(i);
-        images.push_back(newImage);
-    }
-    dir.close();
+//    //use ofDirectory to load image files into vector of strings then close dir
+//    
+//    string path = "images";
+//    ofDirectory dir(path);
+//    dir.allowExt("jpg");
+//    dir.allowExt("png");
+//    dir.listDir();
+//    for(int i = 0; i < dir.numFiles(); i++){
+//        string newImage=dir.getPath(i);
+//        images.push_back(newImage);
+//    }
+//    dir.close();
 }
 
-void testApp::initImgParticles(){
-    
-    for(int i=0;i<shapes.size();i++){
-        shapes[i]->remove();
-    }
-    shapes.clear();
-    particles.clear();
-    face.clear();
-    
-    boxShape = ofBtGetBoxCollisionShape(boxScale.x*tileW, boxScale.y*tileH, boxScale.z*tileD);
-    
-    for (int x = 0; x < pic.width / tileW; x++){
-        for (int y = 0; y < pic.height / tileH; y++){
-            
-            //setup position values for displaying whole image
-            Particle::keyframe temp;
-            temp.pos.x=x*tileW*boxScale.x+image.pos.x;
-            temp.pos.y=y*tileH*boxScale.y+image.pos.y;
-            temp.pos.z=image.pos.z;
-            
-            //create Bullet shapes for image visualization
-            shapes.push_back( new ofxBulletBox() );
-            
-            ((ofxBulletBox*)shapes[shapes.size()-1])->init(boxShape);
-            ((ofxBulletBox*)shapes[shapes.size()-1])->create(world.world,particleKeyframes[particleKeyframe].pos,0.);
-            shapes[shapes.size()-1]->setProperties(.1,1);
-            shapes[shapes.size()-1]->add();
-            shapes[shapes.size()-1]->enableKinematic();
-            
-            //crop and allocate image boxes to tiles
-            ofTexture newFace;
-            ofImage tileImage;
-            tileImage.allocate(tileW, tileH, OF_IMAGE_COLOR);
-            tileImage.cropFrom(pic, x*tileW, y*tileH, tileW, tileH);
-            tileImage.mirror(false,true);
-            ofEnableNormalizedTexCoords();
-            newFace.allocate(tileW,tileH, GL_RGB,true);
-            newFace=tileImage.getTextureReference();
-            face.push_back(newFace);
-            
-            //create particles for controlling static shape position/rotation
-            Particle particle;
-            particle.setup(temp,x+x*y);
-            particles.push_back(particle);
-        }
-    }
-    
-    for(int i=0;i<particles.size();i++){
-        particles[i].goToPosition(particleKeyframes[particleKeyframe]);
-        particles[i].start.pos=particles[i].target.pos;
-    }
-}
 
-void testApp::loadTweet(){
-    assert(ofTextConverter::toUTF8(0x30A1) == "\u30A1");
-    string tweetRaw="ÉÅîñ";
-    
-    ofUniString tweet= ofTextConverter::toUTF32(tweetRaw);
-    
-    ofPoint pos=ofPoint(-45,0,-60);
-    for (int i=0;i<tweet.length();i++){
-        cout<<tweet[i]<<endl;
-        
-        if (tweet[i]==32){
-            pos.x+=10;
-            if(pos.x>40){
-                pos.y+=5;
-                pos.x=-45;
-            }
-        }
-        
-        else{
-            //setup position values for displaying whole image
-            Particle::keyframe temp;
-            temp.pos.x=pos.x;
-            temp.pos.y=pos.y;
-            temp.pos.z=pos.z;
-            ofVec3f boxDim;
-            boxDim=gotham.getSize(tweet[i])*tweetScale;
-            //create Bullet letters for image visualization
-            letters.push_back( new ofxBulletCustomShape() );
-            
-            ofQuaternion startRot=ofQuaternion(0,0,1,PI);
-            letters[letters.size()-1]->addMesh(gotham.getMesh(tweet[i]),tweetScale,true);
-            letters[letters.size()-1]->create(world.world,particleKeyframes[particleKeyframe].pos,startRot,10.);
-            letters[letters.size()-1]->add();
-            letters[letters.size()-1]->setProperties(.1,.1);
-            letters[letters.size()-1]->enableKinematic();
-            
-            
-            
-            ofTexture newFace=whiteImg.getTextureReference();
-            face.push_back(newFace);
-            
-            //create particles for controlling static shape position/rotation
-            Particle particle;
-            particle.setup(temp,i,tweet[i],boxDim);
-            particles.push_back(particle);
-            pos.x+=boxDim.x+2;
-        }
-    }
-    
-}
 
 //GUI INIT CODE - LOADS MASTER SETTINGS DOCS AND POPULATES GUI OF THEIR CONTENT
 
@@ -564,9 +273,6 @@ void testApp::loadHashtag()
     //gui variables
     
     bSingle=true;
-    float dim = 16;
-    float xInit = OFX_UI_GLOBAL_WIDGET_SPACING;
-    float length = 255-xInit;
     
     settings.loadFile("settings.xml");
     
@@ -574,9 +280,7 @@ void testApp::loadHashtag()
     
     settings.pushTag("HASHTAG");
     settings.pushTag("POS");
-    hash.pos.x = settings.getValue("X", 0);
-    hash.pos.y = settings.getValue("Y", 0);
-    hash.pos.z = settings.getValue("Z", 0);
+
     settings.popTag();
     settings.popTag();
     
@@ -723,27 +427,11 @@ void testApp::keyPressed(int key){
                 settings.popTag();
             }
             settings.popTag();
-            settings.pushTag("HASHTAG");
-            settings.pushTag("POS");
-            settings.setValue("X", hash.pos.x);
-            settings.setValue("Y", hash.pos.y);
-            settings.setValue("Z", hash.pos.z);
-            settings.popTag();
-            settings.popTag();
             settings.saveFile("settings.xml");
             return;
             
         case OF_KEY_DOWN:
-            if(hash.active&&bRot==false){
-                if(!bSingle){
-                    hash.pos.y-=10;
-                }
-                else{
-                    hash.pos.y--;
-                }
-                
-            }
-            
+
             for(int i=0;i<hashletters.size();i++){
                     
                     
@@ -781,15 +469,7 @@ void testApp::keyPressed(int key){
             return;
             
         case OF_KEY_UP:
-            if(hash.active){
-                if(!bSingle){
-                    hash.pos.y+=10;
-                }
-                else{
-                    hash.pos.y++;
-                }
-                
-            }
+
             for(int i=0;i<hashletters.size();i++){
                 
                     if(hashletters[i].active&&bScale==true){
@@ -826,15 +506,7 @@ void testApp::keyPressed(int key){
             return;
             
         case OF_KEY_RIGHT:
-            if(hash.active){
-                if(!bSingle){
-                    hash.pos.x+=10;
-                }
-                else{
-                    hash.pos.x++;
-                }
-                
-            }
+
             for(int i=0;i<hashletters.size();i++){                    
                     
                     if(hashletters[i].active&&bScale==true){
@@ -870,15 +542,7 @@ void testApp::keyPressed(int key){
             return;
             
         case OF_KEY_LEFT:
-            if(hash.active){
-                if(!bSingle){
-                    hash.pos.x-=10;
-                }
-                else{
-                    hash.pos.x--;
-                }
-                
-            }
+
             for(int i=0;i<hashletters.size();i++){
                     
                     
@@ -917,15 +581,7 @@ void testApp::keyPressed(int key){
             
         case '-':
         case '_':
-            if(hash.active){
-                if(!bSingle){
-                    hash.pos.z-=10;
-                }
-                else{
-                    hash.pos.z--;
-                }
-                
-            }
+
             for(int i=0;i<hashletters.size();i++){
 
                     if(hashletters[i].active&&bScale==true){
@@ -962,15 +618,7 @@ void testApp::keyPressed(int key){
             
         case '+':
         case '=':
-            if(hash.active){
-                if(!bSingle){
-                    hash.pos.z+=10;
-                }
-                else{
-                    hash.pos.z++;
-                }
-                
-            }
+
             for(int i=0;i<hashletters.size();i++){
                     if(hashletters[i].active&&bScale==true){
                             if(!bSingle){
@@ -1074,171 +722,6 @@ void testApp::keyReleased(int key){
     }
 }
 
-void testApp::tweetToKinematic(){
-    for (int i=0;i<letters.size();i++){
-        particles[i].update();
-        
-        //set vector position/rotation to bullet object position/rotation and start rotation transition
-        btTransform trans;
-        ofPoint temp=letters[i]->getPosition();
-        if(particleKeyframe!=0){
-            if(particleKeyframes[particleKeyframe-1].path==PARTICLE_PATH_PHYSICS){
-                particles[i].current.pos=temp;
-            }
-        }
-        trans.setOrigin( btVector3( btScalar(temp.x), btScalar(temp.y), btScalar(temp.z)) );
-        ofQuaternion rotQuat = letters[i]->getRotationQuat();
-        float newRot = rotQuat.w();
-        trans.setRotation( btQuaternion(btVector3(rotQuat.x(), rotQuat.y(), rotQuat.z()), newRot) );
-        if(particleKeyframe!=0){
-            if(particleKeyframes[particleKeyframe-1].path==PARTICLE_PATH_PHYSICS){
-                particles[i].bRotate=true;
-                particles[i].current.quat=rotQuat;
-            }
-        }
-        letters[i]->getRigidBody()->getMotionState()->setWorldTransform( trans );
-        letters[i]->getRigidBody()->setActivationState(DISABLE_DEACTIVATION);
-        particles[i].goToPosition(particleKeyframes[particleKeyframe]);
-        letters[i]->enableKinematic();
-    }
-}
-
-void testApp::imgToKinematic(){
-    for (int i=0;i<shapes.size();i++){
-        particles[i].update();
-        btTransform trans;
-        ofPoint temp;
-        if(particleKeyframe!=0){
-            if(particleKeyframes[particleKeyframe-1].path==PARTICLE_PATH_PHYSICS){
-                particles[i].current.pos=temp;
-            }
-        }
-        trans.setOrigin( btVector3( btScalar(temp.x), btScalar(temp.y), btScalar(temp.z)) );
-        ofQuaternion rotQuat = shapes[i]->getRotationQuat();
-        float newRot = rotQuat.w();
-        trans.setRotation( btQuaternion(btVector3(rotQuat.x(), rotQuat.y(), rotQuat.z()), newRot) );
-        if(particleKeyframe!=0){
-            if(particleKeyframes[particleKeyframe-1].path==PARTICLE_PATH_PHYSICS){
-                particles[i].bRotate=true;
-                particles[i].current.quat=rotQuat;
-            }
-        }
-        shapes[i]->getRigidBody()->getMotionState()->setWorldTransform( trans );
-        shapes[i]->getRigidBody()->setActivationState(DISABLE_DEACTIVATION);
-        particles[i].goToPosition(particleKeyframes[particleKeyframe]);
-        shapes[i]->enableKinematic();
-    }
-}
-
-void testApp::tweetToPhysics(){
-    world.setGravity(ofVec3f(particleKeyframes[particleKeyframe].gravity.x,particleKeyframes[particleKeyframe].gravity.y,particleKeyframes[particleKeyframe].gravity.z));
-    for (int i=0;i<letters.size();i++){
-        btTransform trans;
-        ofPoint temp=letters[i]->getPosition();
-        trans.setOrigin( btVector3( btScalar(temp.x), btScalar(temp.y), btScalar(temp.z)) );
-        ofQuaternion rotQuat = letters[i]->getRotationQuat();
-        float newRot = rotQuat.w();
-        trans.setRotation( btQuaternion(btVector3(rotQuat.x(), rotQuat.y(), rotQuat.z()), newRot) );
-        letters[i]->remove();
-        letters[i]->addMesh(gotham.getMesh(particles[i].letter),tweetScale,false);
-        letters[i]->create(world.world,trans, 1.);
-        letters[i]->add();
-        letters[i]->setProperties(.1,1);
-        particles[i].goToPosition(particleKeyframes[particleKeyframe]);
-    }
-}
-
-void testApp::imgToPhysics(){
-    world.setGravity(ofVec3f(particleKeyframes[particleKeyframe].gravity.x,particleKeyframes[particleKeyframe].gravity.y,particleKeyframes[particleKeyframe].gravity.z));
-    for (int i=0;i<shapes.size();i++){
-        btTransform trans;
-        ofPoint temp=shapes[i]->getPosition();
-        trans.setOrigin( btVector3( btScalar(temp.x), btScalar(temp.y), btScalar(temp.z)) );
-        ofQuaternion rotQuat = shapes[i]->getRotationQuat();
-        float newRot = rotQuat.w();
-        trans.setRotation( btQuaternion(btVector3(rotQuat.x(), rotQuat.y(), rotQuat.z()), newRot) );
-        shapes[i]->remove();
-        shapes[i]->init(boxShape);
-        
-        shapes[i]->create(world.world,trans, 10);
-        shapes[i]->setProperties(.1,1);
-        shapes[i]->add();
-        particles[i].goToPosition(particleKeyframes[particleKeyframe]);
-    }
-    
-}
-
-void testApp::updateTweet(){
-    if(particleKeyframes[particleKeyframe].path!=PARTICLE_PATH_PHYSICS){
-        for (int i=0;i<letters.size();i++){
-            particles[i].update();
-            btTransform trans;
-            ofPoint temp=particles[i].current.pos;
-            trans.setOrigin( btVector3( btScalar(temp.x), btScalar(temp.y), btScalar(temp.z)) );
-            ofQuaternion rotQuat = letters[i]->getRotationQuat();
-            float newRot = rotQuat.w();
-            if(particles[i].bRotate==true){
-                float newRot = rotQuat.w();
-                newRot -= .05f;
-                if (newRot<0){
-                    newRot=0;
-                    particles[i].bRotate=false;
-                }
-                trans.setRotation( btQuaternion(btVector3(rotQuat.x(), rotQuat.y(), rotQuat.z()), newRot) );
-            }
-            else{
-                trans.setRotation( btQuaternion(btVector3(rotQuat.x(), rotQuat.y(), rotQuat.z()), 0) );
-            }
-            letters[i]->getRigidBody()->getMotionState()->setWorldTransform( trans );
-            letters[i]->activate();
-        }
-    }
-    
-    //if in physics state - do nothing other than keep track of duration
-    
-    else{
-        for (int i=0;i<letters.size();i++){
-            particles[i].update();
-        }
-    }
-}
-
-void testApp::updateImg(){
-    if(particleKeyframes[particleKeyframe].path!=PARTICLE_PATH_PHYSICS){
-        for (int i=0;i<shapes.size();i++){
-            particles[i].update();
-            btTransform trans;
-            ofPoint temp=particles[i].current.pos;
-            trans.setOrigin( btVector3( btScalar(temp.x), btScalar(temp.y), btScalar(temp.z)) );
-            ofQuaternion rotQuat = shapes[i]->getRotationQuat();
-            float newRot = rotQuat.w();
-            if(particles[i].bRotate==true){
-                float newRot = rotQuat.w();
-                newRot -= .05f;
-                if (newRot<0){
-                    newRot=0;
-                    particles[i].bRotate=false;
-                }
-                trans.setRotation( btQuaternion(btVector3(rotQuat.x(), rotQuat.y(), rotQuat.z()), newRot) );
-            }
-            else{
-                trans.setRotation( btQuaternion(btVector3(rotQuat.x(), rotQuat.y(), rotQuat.z()), 0) );
-            }
-            shapes[i]->getRigidBody()->getMotionState()->setWorldTransform( trans );
-            shapes[i]->activate();
-        }
-    }
-    
-    //if in physics state - do nothing other than keep track of duration
-    
-    else{
-        for (int i=0;i<shapes.size();i++){
-            particles[i].update();
-        }
-    }
-
-}
-
 void testApp::updateCollision(int i){
     btTransform trans;
     ofPoint temp=hashletters[i].pos;
@@ -1266,7 +749,6 @@ void testApp::drawGUI(){
             ofSetColor(0,255,0);
         }
         ofRect(hashletters[i].checkbox);
-        gui.drawString(hashletters[i].key,hashletters[i].checkbox.position.x+10,hashletters[i].checkbox.position.y-200);
         ofSetColor(225,255,255);
     }
     ofFill();
