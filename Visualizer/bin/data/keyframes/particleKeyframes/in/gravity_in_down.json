@@ -160,7 +160,7 @@
                },
                "gravity":{
                    "x":"0",
-                   "y":"50",
+                   "y":"0",
                    "z":"0"
                },
                "duration":{
@@ -168,16 +168,16 @@
                    "max":"",
                    "actual":"5000"
                },
-               "interpolations":[{
-                                 "interpolation":"linear"}
+               "interpolations":[
+                                 {"interpolation":"linear"}
                                  ]
                },
                
                {
                "path": "gravity",
                "type":{
-               "x":"pixel",
-               "y":"pixel",
+               "x":"previous",
+               "y":"previous",
                "z":"previous"
                },
                "pos":{

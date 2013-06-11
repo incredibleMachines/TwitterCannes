@@ -40,7 +40,6 @@ void Particle::update(){
     ofPoint c = target.pos - start.pos;
     float d = target.duration;
     
-    cout<<"trigger"<<endl;
     if (target.path == "line") {
         
         if (target.interpolation == "linear")
@@ -132,7 +131,6 @@ void Particle::calcPosition(keyframe goTo){
     
     if(goTo.type.x=="pixel"){
         calc.pos.x=pixel.pos.x;
-        cout<<"trigger"<<endl;
     }
     else if(goTo.type.x=="previous"){
         calc.pos.x=current.pos.x;
@@ -232,6 +230,8 @@ void Particle::calcPosition(keyframe goTo){
     else{
         calc.interpolation=goTo.interpolations[0];
     }
+    
+    calc.path=goTo.path;
 }
 
 void Particle::goToPixels(){

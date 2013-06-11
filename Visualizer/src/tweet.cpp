@@ -50,7 +50,7 @@ void Tweet::loadTweet(string _text, string _ID, string _img, string _username, s
         if (tweetText[i]==32){
             pos.x+=10;
             if(pos.x>40){
-                pos.y+=5;
+                pos.y-=5;
                 pos.x=-45;
             }
         }
@@ -62,7 +62,7 @@ void Tweet::loadTweet(string _text, string _ID, string _img, string _username, s
             temp.pos.y=pos.y;
             temp.pos.z=pos.z;
             ofVec3f boxDim;
-            boxDim=gotham.getSize(tweetText[i])*tweetScale;
+            boxDim=gotham.getSize(tweetText[i])*.1*tweetScale;
             //create Bullet letters for image visualization
             letters.push_back( new ofxBulletCustomShape() );
             ofQuaternion startRot=ofQuaternion(0,0,1,PI);
@@ -76,7 +76,7 @@ void Tweet::loadTweet(string _text, string _ID, string _img, string _username, s
             Particle particle;
             particle.setup(temp,i,tweetText[i],boxDim);
             particles.push_back(particle);
-            pos.x+=boxDim.x+2;
+            pos.x+=boxDim.x+1;
             particle.goToPosition(tweetKeyframes[keyframe]);
         }
     }
@@ -131,6 +131,7 @@ void Tweet::update(){
         else{
             tweetToPhysics();
         }
+        
         bNewKey=false;
     }
     
@@ -413,10 +414,10 @@ void Tweet::loadParticleKeyframes(string filePath, int which){
 void Tweet::tweetToKinematic(){
     for (int i=0;i<letters.size();i++){
         particles[i].update();
-        
         //set vector position/rotation to bullet object position/rotation and start rotation transition
         btTransform trans;
         ofPoint temp=letters[i]->getPosition();
+        
         if(keyframe!=0){
             if(tweetKeyframes[keyframe-1].path=="gravity"){
                 particles[i].current.pos=temp;
@@ -556,6 +557,9 @@ void Tweet::updateTweet(){
             particles[i].update();
             btTransform trans;
             ofPoint temp=particles[i].current.pos;
+//            if(i==0){
+//                cout<<particles[i].current.pos;
+//            }
             trans.setOrigin( btVector3( btScalar(temp.x), btScalar(temp.y), btScalar(temp.z)) );
             ofQuaternion rotQuat = letters[i]->getRotationQuat();
             float newRot = rotQuat.w();
