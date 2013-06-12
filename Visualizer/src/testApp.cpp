@@ -120,7 +120,6 @@ void testApp::drawObjects(){
         glPopAttrib();
     }
     
-//    mesh.draw();
 }
 
 
@@ -144,15 +143,27 @@ void testApp::draw(){
     ofEnableLighting();
     ofDisableArbTex();
     ofPushMatrix();
+        
+    float shadowX = ofMap(mouseX, 0, ofGetWidth(), 0, 200);
+    float shadowY = ofMap(mouseY, 0, ofGetHeight(), -100, 100);
     
     shadowLightLeft.lookAt( ofVec3f(0.0,0.0,0.0) );
-    shadowLightLeft.orbit( 90, -70, 90, ofVec3f(0.0,0.0,0.0) );
+//    shadowLightLeft.orbit( 90, -70, 90, ofVec3f(0.0,0.0,0.0) );
+    shadowLightLeft.orbit( 90, -80, 90, ofVec3f(0.0,0.0,0.0) );
+    
+//    cout << shadowY << " " << shadowX << endl;
+
     // lat, long, rad, center
 
     // render linear depth buffer from light view
     shadowLightLeft.beginShadowMap();
+    ofPushMatrix();
+    ofScale(0.3, 0.3, 0.3);
+
     drawObjects(); // render to shader map
     tweet.draw();
+    
+    ofPopMatrix();
 
     shadowLightLeft.endShadowMap();
     
@@ -169,7 +180,7 @@ void testApp::draw(){
     camera.begin();
     
     shadowLightLeft.enable();
-        
+    
     // draw background for projecting shadows onto
     ofPushMatrix();
     ofScale(6,6,6);
@@ -178,17 +189,23 @@ void testApp::draw(){
     ofRect(-15, -15, 30, 30);
     ofPopMatrix();
     
+    ofPushMatrix();
+    ofScale(0.3, 0.3, 0.3);
+    
     material.begin();
     
     drawObjects(); // render to screen
    
     material.end();
-    
+        
     //bind image textures and draw bullet shapes
     
     material.begin();   
     tweet.draw();
     material.end();
+    
+    ofPopMatrix();
+
     
     shadowLightLeft.disable();
     
@@ -238,12 +255,12 @@ void testApp::setupLights() {
     
     // shadow map resolution (must be power of 2), field of view, near, far
     // the larger the shadow map resolution, the better the detail, but slower
-    shadowLightLeft.setup( 2048, 45.0f, 0.1f, 100.0f );
-    shadowLightLeft.setBlurLevel(4.0f); // amount to blur to soften the shadows
+    shadowLightLeft.setup( 2048, 60.0f, 0.1f, 100.0f );
+    shadowLightLeft.setBlurLevel(10.0f); // amount to blur to soften the shadows
     
-    shadowLightLeft.setAmbientColor( ofFloatColor( 0.0f, 0.0f, 0.0f, 1.0f ) );
+    shadowLightLeft.setAmbientColor( ofFloatColor( 0.1f, 0.1f, 0.1f, 1.0f ) );
     shadowLightLeft.setDiffuseColor( ofFloatColor( 0.9f, 0.9f, 0.9f, 1.0f ) );
-    shadowLightLeft.setSpecularColor( ofFloatColor( 0.1f, 0.1f, 0.8f, 1.0f ) );
+    shadowLightLeft.setSpecularColor( ofFloatColor( 0.1f, 0.1f, 0.1f, 1.0f ) );
     
     shadowLightLeft.setPosition( 200.0f, 0.0f, 45.0f );
     
