@@ -14,7 +14,7 @@
 
 void Tweet::loadTweet(string _text, string _ID, string _img, string _username, string _handle, string _profileimage, ofxBulletWorldRigid* _world, Alphabet* _gotham){
     
-    tweetPos=ofPoint(-45,20,-55);
+    tweetPos=ofPoint(-45,20,5);
     boxScale=ofPoint(.2,.2,.2);
     imagePos=ofPoint(-10,-10,-70);
     tweetScale=ofPoint(.1,.1,.1);

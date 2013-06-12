@@ -48,15 +48,9 @@ void testApp::setup(){
     camState=0;
     
     camera.setDistance(40.0f);
-    camera.setGlobalPosition( 30.0f, 15.0f, 00.0f );
+    camera.setGlobalPosition( 30.0f, 15.0f, 0.0f );
     camera.lookAt( ofVec3f( 0.0f, 0.0f, 0.0f ) );
-    
-    if(camState==1){
-        camera.setDistance(40.0f);
-        camera.rotateAround(90, ofVec3f(0,1,0), ofVec3f(0,0,0));
-        camera.lookAt(ofVec3f(0.0f,0.0f,0.0f));
-    }
-    
+
     world.setup();
     world.enableCollisionEvents();
     world.setCamera(&camera);
@@ -87,6 +81,7 @@ void testApp::setup(){
     loadHashtag();
     
     tweet.loadTweet(text, id, media_url, user_name, user_screen_name, user_image, &world, &gotham);
+    
 }
 
 //--------------------------------------------------------------
@@ -150,35 +145,37 @@ void testApp::draw(){
     ofDisableArbTex();
     ofPushMatrix();
     
-    shadowLight.lookAt( ofVec3f(0.0,0.0,0.0) );
-    shadowLight.orbit( 90, -70, 90, ofVec3f(0.0,0.0,0.0) );
-    shadowLight.enable();
-    
+    shadowLightLeft.lookAt( ofVec3f(0.0,0.0,0.0) );
+    shadowLightLeft.orbit( 90, -70, 90, ofVec3f(0.0,0.0,0.0) );
+    // lat, long, rad, center
+
     // render linear depth buffer from light view
-    shadowLight.beginShadowMap();
+    shadowLightLeft.beginShadowMap();
     drawObjects(); // render to shader map
-    shadowLight.endShadowMap();
+    tweet.draw();
+
+    shadowLightLeft.endShadowMap();
     
     // render final scene
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     
     shader.begin();
     
-    shadowLight.bindShadowMapTexture(0); // bind shadow map texture to unit 0
+    shadowLightLeft.bindShadowMapTexture(0); // bind shadow map texture to unit 0
     shader.setUniform1i("u_ShadowMap", 0); // set uniform to unit 0
-    shader.setUniform1f("u_LinearDepthConstant", shadowLight.getLinearDepthScalar()); // set near/far linear scalar
-    shader.setUniformMatrix4f("u_ShadowTransMatrix", shadowLight.getShadowMatrix(camera)); // specify shadow matrix
+    shader.setUniform1f("u_LinearDepthConstant", shadowLightLeft.getLinearDepthScalar()); // set near/far linear scalar
+    shader.setUniformMatrix4f("u_ShadowTransMatrix", shadowLightLeft.getShadowMatrix(camera)); // specify shadow matrix
     
     camera.begin();
     
-    shadowLight.enable();
-    
+    shadowLightLeft.enable();
+        
     // draw background for projecting shadows onto
     ofPushMatrix();
     ofScale(6,6,6);
     ofRotate(90, 0, 1, 0);
     ofRotate(330,1,0,0);
-    ofRect(-8, -8, 16, 16);
+    ofRect(-15, -15, 30, 30);
     ofPopMatrix();
     
     material.begin();
@@ -193,7 +190,7 @@ void testApp::draw(){
     tweet.draw();
     material.end();
     
-    shadowLight.disable();
+    shadowLightLeft.disable();
     
     //enable to see physics collision wireframes
     if(bDebug==true){
@@ -204,7 +201,8 @@ void testApp::draw(){
     
     camera.end();
     
-    shadowLight.unbindShadowMapTexture();
+    shadowLightLeft.unbindShadowMapTexture();
+
     shader.end();
     
     
@@ -240,15 +238,24 @@ void testApp::setupLights() {
     
     // shadow map resolution (must be power of 2), field of view, near, far
     // the larger the shadow map resolution, the better the detail, but slower
-    shadowLight.setup( 2048, 45.0f, 0.1f, 100.0f );
-    shadowLight.setBlurLevel(4.0f); // amount to blur to soften the shadows
+    shadowLightLeft.setup( 2048, 45.0f, 0.1f, 100.0f );
+    shadowLightLeft.setBlurLevel(4.0f); // amount to blur to soften the shadows
     
-    shadowLight.setAmbientColor( ofFloatColor( 0.0f, 0.0f, 0.0f, 1.0f ) );
-    shadowLight.setDiffuseColor( ofFloatColor( 0.9f, 0.9f, 0.9f, 1.0f ) );
-    shadowLight.setSpecularColor( ofFloatColor( 0.1f, 0.1f, 0.8f, 1.0f ) );
+    shadowLightLeft.setAmbientColor( ofFloatColor( 0.0f, 0.0f, 0.0f, 1.0f ) );
+    shadowLightLeft.setDiffuseColor( ofFloatColor( 0.9f, 0.9f, 0.9f, 1.0f ) );
+    shadowLightLeft.setSpecularColor( ofFloatColor( 0.1f, 0.1f, 0.8f, 1.0f ) );
     
-    shadowLight.setPosition( 200.0f, 0.0f, 45.0f );
+    shadowLightLeft.setPosition( 200.0f, 0.0f, 45.0f );
     
+//    shadowLightRight.setup( 2048, 45.0f, 0.1f, 100.0f );
+//    shadowLightRight.setBlurLevel(4.0f); // amount to blur to soften the shadows
+//    
+//    shadowLightRight.setAmbientColor( ofFloatColor( 0.0f, 0.0f, 0.0f, 1.0f ) );
+//    shadowLightRight.setDiffuseColor( ofFloatColor( 0.9f, 0.9f, 0.9f, 1.0f ) );
+//    shadowLightRight.setSpecularColor( ofFloatColor( 0.1f, 0.1f, 0.8f, 1.0f ) );
+//    
+//    shadowLightRight.setPosition( 200.0f, 0.0f, 45.0f );
+//    
     ofSetGlobalAmbientColor( ofFloatColor( 0.05f, 0.05f, 0.05f ) );
 }
 

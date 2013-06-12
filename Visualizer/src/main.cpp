@@ -8,7 +8,8 @@ int main(){
 	// set width, height, mode (OF_WINDOW or OF_FULLSCREEN)
     
     // uncomment this line for antialiasing
-    window.setGlutDisplayString("rgba double samples>=4");
+//    window.setGlutDisplayString("rgba double samples>=4");
+    window.setGlutDisplayString("rgb alpha double samples depth");
     
     ofSetupOpenGL(&window, 1280, 610, OF_WINDOW);
 

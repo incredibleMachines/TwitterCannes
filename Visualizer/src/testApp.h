@@ -88,8 +88,7 @@ public:
     bool bScale;
         
     ofShader shader;
-    ShadowMapLight shadowLight;
-//    ofxAssimpModelLoader model;
+    ShadowMapLight shadowLightLeft, shadowLightRight;
     ofMesh mesh;
     
     float   lightAngle;
