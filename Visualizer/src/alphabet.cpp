@@ -25,14 +25,16 @@ void Alphabet::setup(){
 }
 
 void Alphabet::draw(int c, ofPoint scale){
+    if(c>32&&c<256){
     ofPushMatrix();
     ofScale(scale.x,scale.y,scale.z);
     letters[c]->mesh.draw();
     ofPopMatrix();
+    }
 }
 
 ofPoint Alphabet::getSize(int c){
-    if(c>32){
+    if(c>32&&c<256){
         return letters[c]->size;
     }
 
@@ -43,7 +45,7 @@ ofPoint Alphabet::getSize(int c){
 }
 
 ofMesh Alphabet::getMesh(int c){
-    if(c>32){
+    if(c>32&&c<256){
     return letters[c]->mesh;
     }
 }

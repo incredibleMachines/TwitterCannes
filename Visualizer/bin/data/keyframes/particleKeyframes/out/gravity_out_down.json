@@ -1,0 +1,124 @@
+{
+    "particles": [
+        {
+            "path": "line",
+            "type": {
+                "x": "previous",
+                "y": "previous",
+                "z": "previous"
+            },
+            "pos": {
+                "set": {
+                    "x": "",
+                    "y": "",
+                    "z": ""
+                },
+                "min": {
+                    "x": "-8",
+                    "y": "-50",
+                    "z": "-40"
+                },
+                "max": {
+                    "x": "28",
+                    "y": "-100",
+                    "z": "-42"
+                }
+            },
+            "gravity": {
+                "x": "",
+                "y": "",
+                "z": ""
+            },
+            "duration": {
+                "min": "",
+                "max": "",
+                "actual": "0"
+            },
+            "interpolations": [
+                {
+                    "interpolation": "linear"
+                }
+            ]
+        },
+        {
+            "path": "gravity",
+            "type": {
+                "x": "absolute",
+                "y": "absolute",
+                "z": "absolute"
+            },
+            "pos": {
+                "set": {
+                    "x": "",
+                    "y": "",
+                    "z": ""
+                },
+                "min": {
+                    "x": "-8",
+                    "y": "-50",
+                    "z": "-40"
+                },
+                "max": {
+                    "x": "28",
+                    "y": "-100",
+                    "z": "-42"
+                }
+            },
+            "gravity": {
+                "x": "",
+                "y": "-150",
+                "z": "0"
+            },
+            "duration": {
+                "min": "",
+                "max": "",
+                "actual": "3000"
+            },
+            "interpolations": [
+                {
+                    "interpolation": "linear"
+                }
+            ]
+        },
+        {
+            "path": "gravity",
+            "type": {
+                "x": "absolute",
+                "y": "absolute",
+                "z": "absolute"
+            },
+            "pos": {
+                "set": {
+                    "x": "",
+                    "y": "",
+                    "z": ""
+                },
+                "min": {
+                    "x": "-8",
+                    "y": "-50",
+                    "z": "-40"
+                },
+                "max": {
+                    "x": "28",
+                    "y": "-100",
+                    "z": "-42"
+                }
+            },
+            "gravity": {
+                "x": "",
+                "y": "-150",
+                "z": "50"
+            },
+            "duration": {
+                "min": "",
+                "max": "",
+                "actual": "4000"
+            },
+            "interpolations": [
+                {
+                    "interpolation": "linear"
+                }
+            ]
+        }
+    ]
+}

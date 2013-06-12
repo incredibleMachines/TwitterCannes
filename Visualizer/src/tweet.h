@@ -108,6 +108,7 @@ public:
     ofPoint handleScale;
     void loadParticleKeyframes(Animation anim, int which);
     ofTexture white;
+    ofImage pic;
     
     void destroy();
     

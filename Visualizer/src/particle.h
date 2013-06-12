@@ -67,7 +67,8 @@ class Particle{
 public:
     class Keyframe{
     public:
-        
+        Keyframe();
+        ~Keyframe();
         class keyPoint{
         public:
             string x;
@@ -90,7 +91,6 @@ public:
         int durationMax=0;
         
         string path="linear";
-        vector<string> interpolations;
         string interpolation;
         ofPoint gravity;
         

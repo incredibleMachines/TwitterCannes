@@ -4,7 +4,7 @@
                        "tweet": {
                        "in": {
                            "speed": "1",
-                           "delay": "2000",
+                           "delay": "0",
                            "animation": "gravity_in_down.json"
                        },
                        "out": {
@@ -16,12 +16,50 @@
                        "user": {
                        "in": {
                            "speed": "1",
-                           "delay": "5000",
+                           "delay": "0",
                            "animation": "gravity_in_down.json"
                        },
                        "out": {
                            "speed": "1",
                            "delay": "0",
+                           "animation": "gravity_in_down.json"
+                       }
+                   },
+                       "image": {
+                           "in": {
+                           "speed": "1",
+                           "delay": "0",
+                           "animation": "gravity_in_down.json"
+                           },
+                           "out": {
+                           "speed": "1",
+                           "delay": "0",
+                           "animation": "gravity_in_down.json"
+                           }
+                       }
+                   },
+                   {
+                       "tweet": {
+                       "in": {
+                           "speed": "1",
+                           "delay": "0",
+                           "animation": "gravity_in_down.json"
+                       },
+                       "out": {
+                           "speed": "1",
+                           "delay": "0",
+                           "animation": "gravity_in_down.json"
+                       }
+                   },
+                       "user": {
+                       "in": {
+                           "speed": "1",
+                           "delay": "4000",
+                           "animation": "gravity_in_down.json"
+                       },
+                       "out": {
+                           "speed": "1",
+                           "delay": "2000",
                            "animation": "gravity_in_down.json"
                        }
                    },
@@ -37,45 +75,6 @@
                            "animation": "gravity_in_down.json"
                            }
                        }
-                   },
-                   {
-                   "speed": "1",
-                   "tweet": {
-                   "in": {
-                   "speed": "1",
-                   "delay": "1000",
-                   "animation": "gravity_in_down.json"
-                   },
-                   "out": {
-                   "speed": "1",
-                   "delay": "1000",
-                   "animation": "gravity_in_down.json"
-                   }
-                   },
-                   "user": {
-                   "in": {
-                   "speed": "1",
-                   "delay": "1000",
-                   "animation": "gravity_in_down.json"
-                   },
-                   "out": {
-                   "speed": "1",
-                   "delay": "1000",
-                   "animation": "gravity_in_down.json"
-                   }
-                   },
-                   "image": {
-                   "in": {
-                   "speed": "1",
-                   "delay": "1000",
-                   "animation": "gravity_in_down.json"
-                   },
-                   "out": {
-                   "speed": "1",
-                   "delay": "1000",
-                   "animation": "gravity_in_down.json"
-                   }
-                   }
                    }
                    ]
 }

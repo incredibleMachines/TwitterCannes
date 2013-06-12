@@ -18,24 +18,35 @@
 
 void Tweet::loadTweet(db item, ofxBulletWorldRigid* _world, Alphabet* _gotham){
     
-    tweetPos=ofPoint(-7665,50,2);
+    tweetPos=ofPoint(-70,50,5);
     boxScale=ofPoint(.2,.2,.2);
     imagePos=ofPoint(-10,-10,-70);
     tweetScale=ofPoint(.1,.1,.1);
-    userPos=ofPoint(-80,-20,-25);
+    userPos=ofPoint(-80,-40,25);
     userScale=ofPoint(.1,.1,.1);
     handleScale=ofPoint(.1,.09,.1);
-
+    
     gotham=_gotham;
     
     tweetKeyframe=0;
     imageKeyframe=0;
     userKeyframe=0;
     bNewKey=true;
+    user.bNewKey=true;
     world=_world;
+    bImage=false;
     
     boxShape = ofBtGetBoxCollisionShape(boxScale.x*tileW, boxScale.y*tileH, boxScale.z*tileD);
     ofxJSONElement json;
+    
+    if(item.media_url!=""){
+        bool success=pic.loadImage(item.media_url);
+        if(success){
+            bImage=true;
+            cout<<item.media_url<<endl;
+        }
+    }
+    
     bool success=json.open("keyframes/contentBlockKeyframes/test.json");
     int i=0;
     
@@ -53,7 +64,6 @@ void Tweet::loadTweet(db item, ofxBulletWorldRigid* _world, Alphabet* _gotham){
     if(delay!="") tweetIn.delay=ofToInt(delay);
     else tweetIn.delay=0;
     
-    
     tweetOut.path="keyframes/particleKeyframes/out/"+json["animations"][i]["tweet"]["out"]["animation"].asString();
     
     speed=json["animations"][i]["tweet"]["out"]["speed"].asString();
@@ -64,24 +74,26 @@ void Tweet::loadTweet(db item, ofxBulletWorldRigid* _world, Alphabet* _gotham){
     if(delay!="") tweetOut.delay=ofToInt(delay);
     else tweetOut.delay=0;
     
-    imgIn.path="keyframes/particleKeyframes/in/"+json["animations"][i]["image"]["in"]["animation"].asString();
-    speed=json["animations"][i]["image"]["in"]["speed"].asString();
-    if(speed!="") imgIn.speed=ofToInt(speed);
-    else imgIn.speed=1;
-    
-    delay=json["animations"][i]["image"]["in"]["delay"].asString();
-    if(delay!="") imgIn.delay=ofToInt(delay);
-    else imgIn.delay=0;
-    
-    
-    imgOut.path="keyframes/particleKeyframes/out/"+json["animations"][i]["image"]["out"]["animation"].asString();
-    speed=json["animations"][i]["image"]["out"]["speed"].asString();
-    if(speed!="") imgOut.speed=ofToInt(speed);
-    else imgOut.speed=1;
-    
-    delay=json["animations"][i]["image"]["out"]["delay"].asString();
-    if(delay!="") imgOut.delay=ofToInt(delay);
-    else imgOut.delay=0;
+    if(bImage==true){
+        imgIn.path="keyframes/particleKeyframes/in/"+json["animations"][i]["image"]["in"]["animation"].asString();
+        speed=json["animations"][i]["image"]["in"]["speed"].asString();
+        if(speed!="") imgIn.speed=ofToInt(speed);
+        else imgIn.speed=1;
+        
+        delay=json["animations"][i]["image"]["in"]["delay"].asString();
+        if(delay!="") imgIn.delay=ofToInt(delay);
+        else imgIn.delay=0;
+        
+        
+        imgOut.path="keyframes/particleKeyframes/out/"+json["animations"][i]["image"]["out"]["animation"].asString();
+        speed=json["animations"][i]["image"]["out"]["speed"].asString();
+        if(speed!="") imgOut.speed=ofToInt(speed);
+        else imgOut.speed=1;
+        
+        delay=json["animations"][i]["image"]["out"]["delay"].asString();
+        if(delay!="") imgOut.delay=ofToInt(delay);
+        else imgOut.delay=0;
+    }
     
     
     userIn.path="keyframes/particleKeyframes/in/"+json["animations"][i]["user"]["in"]["animation"].asString();
@@ -107,8 +119,11 @@ void Tweet::loadTweet(db item, ofxBulletWorldRigid* _world, Alphabet* _gotham){
     
     loadParticleKeyframes(tweetIn, KEYFRAME_TWEET);
     loadParticleKeyframes(tweetOut,KEYFRAME_TWEET);
-    loadParticleKeyframes(imgIn, KEYFRAME_IMAGE);
-    loadParticleKeyframes(imgOut,KEYFRAME_IMAGE);
+    
+    if(bImage==true){
+        loadParticleKeyframes(imgIn, KEYFRAME_IMAGE);
+        loadParticleKeyframes(imgOut,KEYFRAME_IMAGE);
+    }
     loadParticleKeyframes(userIn, KEYFRAME_USER);
     loadParticleKeyframes(userOut,KEYFRAME_USER);
     
@@ -123,7 +138,8 @@ void Tweet::loadTweet(db item, ofxBulletWorldRigid* _world, Alphabet* _gotham){
                 pos.y-=5;
                 pos.x=-45;
             }
-        }else{
+        }
+        else if(tweetText[i]>32&&tweetText[i]<256){
             //setup position values for displaying whole image
             Particle::Keyframe temp;
             temp.pos.x=pos.x;
@@ -132,28 +148,31 @@ void Tweet::loadTweet(db item, ofxBulletWorldRigid* _world, Alphabet* _gotham){
             ofVec3f boxDim;
             boxDim=gotham->getSize(tweetText[i])*tweetScale;
             //create Bullet letters for image visualization
+            //create particles for controlling static shape position/rotation
+            
+            Particle particle;
+            particle.setup(temp,i,tweetText[i],boxDim);
+            particle.start.pos=particle.target.pos;
+            particle.goToPosition(tweetKeyframes[tweetKeyframe]);
+            particles.push_back(particle);
+          
+            
             letters.push_back( new ofxBulletCustomShape() );
             ofQuaternion startRot=ofQuaternion(0,0,1,PI);
             letters[letters.size()-1]->addMesh(gotham->getMesh(tweetText[i]),tweetScale,true);
-            letters[letters.size()-1]->create(world->world,tweetKeyframes[tweetKeyframe].pos,startRot,0.);
+            letters[letters.size()-1]->create(world->world,particle.target.pos,startRot,0.);
             letters[letters.size()-1]->add();
             letters[letters.size()-1]->setProperties(.1,.1);
             letters[letters.size()-1]->enableKinematic();
             
-            //create particles for controlling static shape position/rotation
-            Particle particle;
-            particle.setup(temp,i,tweetText[i],gotham->getSize(tweetText[i]));
-            particles.push_back(particle);
+            
             pos.x+=boxDim.x+2;
-            particle.goToPosition(tweetKeyframes[tweetKeyframe]);
         }
     }
     
-    if(item.media_url!=""){
-        cout<<"load"<<endl;
-            loadImage(item.media_url);
-        bImage=true;
-        }
+    if(bImage==true){
+        loadImage(item.media_url);
+    }
     loadUser(item.user_name, item.user_screen_name, item.user_image);
     
 }
@@ -173,12 +192,14 @@ void Tweet::update(){
     }
     
     if(bImage==true){
-        switchKey(imageKeyframes[imageKeyframe],KEYFRAME_IMAGE);
-        image.bNewKey=false;
-    }
-    
-    else{
-        updateImg();
+        if(image.bNewKey==true){
+            switchKey(imageKeyframes[imageKeyframe],KEYFRAME_IMAGE);
+            image.bNewKey=false;
+        }
+        
+        else{
+            updateImg();
+        }
     }
     
     if (user.bNewKey==true){
@@ -193,29 +214,31 @@ void Tweet::update(){
 
 
 void Tweet::draw(){
-        for (int i=0;i<letters.size();i++){
-            white.bind();
-            //        letters[i]->draw();
-            glPushAttrib(GL_ALL_ATTRIB_BITS);
-            glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS);
-            glEnable(GL_NORMALIZE);
-            glDisable(GL_CULL_FACE);
-            btScalar	m[16];
-            ofGetOpenGLMatrixFromRigidBody( letters[i]->getRigidBody(), m );
-            glPushMatrix();
-            glMultMatrixf( m );
-            glTranslatef((-particles[i].size.x)/2*tweetScale.x, (-particles[i].size.y)/2*tweetScale.y, (-particles[i].size.z)/2*tweetScale.z);
-            gotham->draw(particles[i].letter,tweetScale);
-            glPopMatrix();
-            glPopAttrib();
-            white.unbind();
+    for (int i=0;i<letters.size();i++){
+        white.bind();
+        //        letters[i]->draw();
+        glPushAttrib(GL_ALL_ATTRIB_BITS);
+        glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS);
+        glEnable(GL_NORMALIZE);
+        glDisable(GL_CULL_FACE);
+        btScalar	m[16];
+        ofGetOpenGLMatrixFromRigidBody( letters[i]->getRigidBody(), m );
+        glPushMatrix();
+        glMultMatrixf( m );
+        glTranslatef((-particles[i].size.x)/2*tweetScale.x, (-particles[i].size.y)/2*tweetScale.y, (-particles[i].size.z)/2*tweetScale.z);
+//        gotham->draw(particles[i].letter,tweetScale);
+        glPopMatrix();
+        glPopAttrib();
+        white.unbind();
     }
     
-    for (int i=0;i<image.shapes.size();i++){
+    if(bImage==true){
+        for (int i=0;i<image.shapes.size();i++){
             image.face[i].bind();
             image.shapes[i]->draw();
             image.face[i].unbind();
         }
+    }
     
     for (int i=0;i<user.letters.size();i++){
         white.bind();
@@ -229,12 +252,12 @@ void Tweet::draw(){
         glPushMatrix();
         glMultMatrixf( m );
         glTranslatef(-user.particles[i].size.x/2, -user.particles[i].size.y/2, -user.particles[i].size.z/2);
-//        if(user.particles[i].handle==true){
-//            gotham->draw(user.particles[i].letter,handleScale);
-//        }
-//        else{
-            gotham->draw(user.particles[i].letter,userScale);
-//        }
+        //        if(user.particles[i].handle==true){
+        //            gotham->draw(user.particles[i].letter,handleScale);
+        //        }
+        //        else{
+        gotham->draw(user.particles[i].letter,userScale);
+        //        }
         glPopMatrix();
         glPopClientAttrib();
         glPopAttrib();
@@ -307,166 +330,209 @@ void Tweet::loadUser(string _username, string _handle, string _profileimage){
     
     for (int i=0;i<nameText.length();i++){
         if(nameText[i]>32){
-        //setup position values for displaying whole image
-        Particle::Keyframe temp;
-        temp.pos.x=pos.x;
-        temp.pos.y=pos.y;
-        temp.pos.z=pos.z;
-        ofVec3f boxDim;
-        boxDim=gotham->getSize(nameText[i])*userScale;
-        //create Bullet letters for image visualization
-        user.letters.push_back( new ofxBulletCustomShape() );
-        ofQuaternion startRot=ofQuaternion(0,0,1,PI);
-        user.letters[user.letters.size()-1]->addMesh(gotham->getMesh(nameText[i]),userScale,true);
-        user.letters[user.letters.size()-1]->create(world->world,userKeyframes[userKeyframe].pos,startRot,10.);
-        user.letters[user.letters.size()-1]->add();
-        user.letters[user.letters.size()-1]->setProperties(.1,.1);
-        user.letters[user.letters.size()-1]->enableKinematic();
-        
-        //create particles for controlling static shape position/rotation
-        Particle particle;
-        particle.setup(temp,i,nameText[i],boxDim);
-        user.particles.push_back(particle);
-        pos.x+=boxDim.x+2;
+            //setup position values for displaying whole image
+            Particle::Keyframe temp;
+            temp.pos.x=pos.x;
+            temp.pos.y=pos.y;
+            temp.pos.z=pos.z;
+            ofVec3f boxDim;
+            boxDim=gotham->getSize(nameText[i])*userScale;
+            
+            
+            Particle particle;
+            particle.setup(temp,i,nameText[i],boxDim);
+            particle.goToPosition(userKeyframes[userKeyframe]);
+            particle.start.pos=particle.target.pos;
+            user.particles.push_back(particle);
+            
+            //create particles for controlling static shape position/rotation
+
+//            
+//            Particle particle;
+//            particle.setup(temp,i,tweetText[i],gotham->getSize(tweetText[i]));
+//            particle.start.pos=particle.target.pos;
+//            particle.goToPosition(tweetKeyframes[tweetKeyframe]);
+//            particles.push_back(particle);
+            
+            //create Bullet letters for image visualization
+            user.letters.push_back( new ofxBulletCustomShape() );
+            ofQuaternion startRot=ofQuaternion(0,0,1,PI);
+            user.letters[user.letters.size()-1]->addMesh(gotham->getMesh(nameText[i]),userScale,true);
+            user.letters[user.letters.size()-1]->create(world->world,particle.target.pos,startRot,10.);
+            user.letters[user.letters.size()-1]->add();
+            user.letters[user.letters.size()-1]->setProperties(.1,.1);
+            user.letters[user.letters.size()-1]->enableKinematic();
+            pos.x+=boxDim.x+2;
         }
     }
     
-    for (int i=0;i<handleText.length();i++){
-
-        if(handleText[i]>32){
-        //setup position values for displaying whole image
-        Particle::Keyframe temp;
-        temp.pos.x=pos.x;
-        temp.pos.y=pos.y;
-        temp.pos.z=pos.z;
-        ofVec3f boxDim;
-        boxDim=gotham->getSize(handleText[i])*handleScale;
-        //create Bullet letters for image visualization
-        user.letters.push_back( new ofxBulletCustomShape() );
-        ofQuaternion startRot=ofQuaternion(0,0,1,PI);
-        user.letters[user.letters.size()-1]->addMesh(gotham->getMesh(handleText[i]),handleScale,true);
-        user.letters[user.letters.size()-1]->create(world->world,userKeyframes[userKeyframe].pos,startRot,10.);
-        user.letters[user.letters.size()-1]->add();
-        user.letters[user.letters.size()-1]->setProperties(.1,.1);
-        user.letters[user.letters.size()-1]->enableKinematic();
-        
-        //create particles for controlling static shape position/rotation
-        Particle particle;
-        particle.setup(temp,i,handleText[i],boxDim);
-        particle.handle=true;
-        user.particles.push_back(particle);
-        pos.x+=boxDim.x+2;
-        }
-    }
+    //    for (int i=0;i<handleText.length();i++){
+    //
+    //        if(handleText[i]>32){
+    //        //setup position values for displaying whole image
+    //        Particle::Keyframe temp;
+    //        temp.pos.x=pos.x;
+    //        temp.pos.y=pos.y;
+    //        temp.pos.z=pos.z;
+    //        ofVec3f boxDim;
+    //        boxDim=gotham->getSize(handleText[i])*handleScale;
+    //        //create Bullet letters for image visualization
+    //        user.letters.push_back( new ofxBulletCustomShape() );
+    //        ofQuaternion startRot=ofQuaternion(0,0,1,PI);
+    //        user.letters[user.letters.size()-1]->addMesh(gotham->getMesh(handleText[i]),handleScale,true);
+    //        user.letters[user.letters.size()-1]->create(world->world,userKeyframes[userKeyframe].pos,startRot,10.);
+    //        user.letters[user.letters.size()-1]->add();
+    //        user.letters[user.letters.size()-1]->setProperties(.1,.1);
+    //        user.letters[user.letters.size()-1]->enableKinematic();
+    //
+    //        //create particles for controlling static shape position/rotation
+    //        Particle particle;
+    //        particle.setup(temp,i,handleText[i],boxDim);
+    //        particle.handle=true;
+    //        user.particles.push_back(particle);
+    //        pos.x+=boxDim.x+2;
+    //        }
+    //    }
     
     for(int i=0;i<user.particles.size();i++){
-        user.particles[i].goToPosition(userKeyframes[userKeyframe]);
         user.particles[i].start.pos=user.particles[i].target.pos;
+        user.particles[i].calcPosition(userKeyframes[userKeyframe]);
     }
 }
 
 void Tweet::loadParticleKeyframes(Animation anim, int which){
     ofxJSONElement json;
-   bool success=json.open(anim.path);
-        for(int i = 0; i < json["particles"].size(); i++){
-            Particle::Keyframe temp;
-            temp.path=json["particles"][i]["path"].asString();
-            temp.type.x=json["particles"][i]["type"]["x"].asString();
-            temp.type.y=json["particles"][i]["type"]["y"].asString();
-            temp.type.z=json["particles"][i]["type"]["z"].asString();
-            string stringNum;
-            stringNum=json["particles"][i]["pos"]["set"]["x"].asString();
-            if(stringNum!=""){
-                temp.pos.x=ofToInt(stringNum);
-            }
-            stringNum=json["particles"][i]["pos"]["set"]["y"].asString();
-            if(stringNum!=""){
-                temp.pos.y=ofToInt(stringNum);
-            }
-            stringNum=json["particles"][i]["pos"]["set"]["z"].asString();
-            if(stringNum!=""){
-                temp.pos.z=ofToInt(stringNum);
-            }
-            stringNum = json["particles"][i]["pos"]["min"]["x"].asString();
-            if(stringNum!=""){
-                temp.posMin.x=ofToInt(stringNum);
-            }
-            stringNum = json["particles"][i]["pos"]["min"]["y"].asString();
-            if(stringNum!=""){
-                temp.posMin.y=ofToInt(stringNum);
-            }
-            stringNum = json["particles"][i]["pos"]["min"]["z"].asString();
-            if(stringNum!=""){
-                temp.posMin.z=ofToInt(stringNum);
-            }
-            stringNum = json["particles"][i]["pos"]["max"]["x"].asString();
-            if(stringNum!=""){
-                temp.posMax.x=ofToInt(stringNum);
-            }
-            stringNum = json["particles"][i]["pos"]["max"]["y"].asString();
-            if(stringNum!=""){
-                temp.posMax.y=ofToInt(stringNum);
-            }
-            stringNum = json["particles"][i]["pos"]["max"]["z"].asString();
-            if(stringNum!=""){
-                temp.posMax.z=ofToInt(stringNum);
-            }
-            stringNum= json["particles"][i]["duration"]["actual"].asString();
-            if(stringNum!=""){
-                temp.duration=anim.speed*ofToInt(stringNum);
-                if(i==0){
-                    temp.duration+=anim.delay;
-                }
-            }
-            stringNum= json["particles"][i]["duration"]["max"].asString();
-            if(stringNum!=""){
-                temp.durationMax=anim.speed*ofToInt(stringNum);
-                if(i==0){
-                    temp.durationMax+=anim.delay;
-                }
-            }
-            stringNum= json["particles"][i]["duration"]["min"].asString();
-            
-            if(stringNum!=""){
-                temp.durationMin=anim.speed*ofToInt(stringNum);
-                if(i==0){
-                    temp.durationMin+=anim.delay;
-                }
-            }
-            
-            
-            for(int j=0;j<json["particles"][i]["interpolations"].size();j++){
-                     temp.interpolations.push_back(json["particles"][i]["interpolations"][j]["interpolation"].asString());
-            }
-            
-            stringNum = json["particles"][i]["gravity"]["x"].asString();
-            if(stringNum!=""){
-                temp.gravity.x=ofToInt(stringNum);
-            }
-            stringNum = json["particles"][i]["gravity"]["y"].asString();
-            if(stringNum!=""){
-                temp.gravity.y=ofToInt(stringNum);
-            }
-            stringNum= json["particles"][i]["gravity"]["z"].asString();
-            if(stringNum!=""){
-                temp.gravity.z=ofToInt(stringNum);
-            }
-            
-            if(which==0){
-                tweetKeyframes.push_back(temp);
-            }
-            else if(which==1){
-                imageKeyframes.push_back(temp);
-            }
-            else if(which==2){
-                userKeyframes.push_back(temp);
+    bool success=json.open(anim.path);
+    for(int i = 0; i < json["particles"].size(); i++){
+        Particle::Keyframe temp;
+        
+        temp.path=json["particles"][i]["path"].asString();
+        temp.type.x=json["particles"][i]["type"]["x"].asString();
+        temp.type.y=json["particles"][i]["type"]["y"].asString();
+        temp.type.z=json["particles"][i]["type"]["z"].asString();
+        string stringNum;
+        
+        
+        stringNum=json["particles"][i]["pos"]["set"]["x"].asString();
+        if(stringNum!=""){
+            temp.pos.x=ofToInt(stringNum);
+        }
+        else temp.pos.x=NULL;
+        stringNum=json["particles"][i]["pos"]["set"]["y"].asString();
+        if(stringNum!=""){
+            temp.pos.y=ofToInt(stringNum);
+        }
+        else temp.pos.y=NULL;
+        stringNum=json["particles"][i]["pos"]["set"]["z"].asString();
+        if(stringNum!=""){
+            temp.pos.z=ofToInt(stringNum);
+        }
+        else temp.pos.z=NULL;
+        
+        
+        stringNum = json["particles"][i]["pos"]["min"]["x"].asString();
+        if(stringNum!=""){
+            temp.posMin.x=ofToInt(stringNum);
+        }
+        else temp.posMin.x=NULL;
+        stringNum = json["particles"][i]["pos"]["min"]["y"].asString();
+        if(stringNum!=""){
+            temp.posMin.y=ofToInt(stringNum);
+        }
+        else temp.posMin.y=NULL;
+        stringNum = json["particles"][i]["pos"]["min"]["z"].asString();
+        if(stringNum!=""){
+            temp.posMin.z=ofToInt(stringNum);
+        }
+        else temp.posMin.z=NULL;
+        
+        
+        
+        stringNum = json["particles"][i]["pos"]["max"]["x"].asString();
+        if(stringNum!=""){
+            temp.posMax.x=ofToInt(stringNum);
+        }
+        else temp.posMax.x=NULL;
+        stringNum = json["particles"][i]["pos"]["max"]["y"].asString();
+        if(stringNum!=""){
+            temp.posMax.y=ofToInt(stringNum);
+        }
+        else temp.posMax.y=NULL;
+        stringNum = json["particles"][i]["pos"]["max"]["z"].asString();
+        if(stringNum!=""){
+            temp.posMax.z=ofToInt(stringNum);
+        }
+        else temp.posMax.z=NULL;
+        
+        
+        
+        stringNum= json["particles"][i]["duration"]["actual"].asString();
+        if(stringNum!=""){
+            temp.duration=anim.speed*ofToInt(stringNum);
+            if(i==0){
+                temp.duration+=anim.delay;
             }
         }
-    
+        else temp.duration=NULL;
+        stringNum= json["particles"][i]["duration"]["max"].asString();
+        if(stringNum!=""){
+            temp.durationMax=anim.speed*ofToInt(stringNum);
+            if(i==0){
+                temp.durationMax+=anim.delay;
+            }
+        }
+        else temp.durationMax=NULL;
+        
+        
+        stringNum= json["particles"][i]["duration"]["min"].asString();
+        
+        if(stringNum!=""){
+            temp.durationMin=anim.speed*ofToInt(stringNum);
+            if(i==0){
+                temp.durationMin+=anim.delay;
+            }
+        }
+        else temp.durationMin=NULL;
+        
+        temp.interpolation=json["particles"][i]["interpolation"].asString();
+        
+        stringNum = json["particles"][i]["gravity"]["x"].asString();
+        if(stringNum!=""){
+            temp.gravity.x=ofToInt(stringNum);
+        }
+        else temp.gravity.x=NULL;
+        
+        stringNum = json["particles"][i]["gravity"]["y"].asString();
+        if(stringNum!=""){
+            temp.gravity.y=ofToInt(stringNum);
+        }
+        else temp.gravity.y=NULL;
+        
+        stringNum= json["particles"][i]["gravity"]["z"].asString();
+        if(stringNum!=""){
+            temp.gravity.z=ofToInt(stringNum);
+        }
+        else temp.gravity.z=NULL;
+        
+        temp.interpolation="linear";
+        
+        if(which==0){
+            tweetKeyframes.push_back(temp);
+        }
+        
+        else if(which==1){
+            imageKeyframes.push_back(temp);
+        }
+        
+        else if(which==2){
+            userKeyframes.push_back(temp);
+        }
     }
+    
+}
 
-    
-    
+
+
 
 
 void Tweet::tweetToKinematic(){
@@ -556,19 +622,23 @@ void Tweet::userToKinematic(){
 
 void Tweet::tweetToPhysics(){
     world->setGravity(ofVec3f(tweetKeyframes[tweetKeyframe].gravity.x,tweetKeyframes[tweetKeyframe].gravity.y,tweetKeyframes[tweetKeyframe].gravity.z));
-    for (int i=0;i<letters.size();i++){
-        btTransform trans;
-        ofPoint temp=letters[i]->getPosition();
-        trans.setOrigin( btVector3( btScalar(temp.x), btScalar(temp.y), btScalar(temp.z)) );
-        ofQuaternion rotQuat = letters[i]->getRotationQuat();
-        float newRot = rotQuat.w();
-        trans.setRotation( btQuaternion(btVector3(rotQuat.x(), rotQuat.y(), rotQuat.z()), newRot) );
-        letters[i]->remove();
-        letters[i]->addMesh(gotham->getMesh(particles[i].letter),tweetScale,false);
-        letters[i]->create(world->world,trans, 1.);
-        letters[i]->add();
-        letters[i]->setProperties(.1,1);
-        particles[i].goToPosition(tweetKeyframes[tweetKeyframe]);
+    if(tweetKeyframe!=0){
+        if(tweetKeyframes[tweetKeyframe-1].path!="gravity"){
+            for (int i=0;i<letters.size();i++){
+                btTransform trans;
+                ofPoint temp=letters[i]->getPosition();
+                trans.setOrigin( btVector3( btScalar(temp.x), btScalar(temp.y), btScalar(temp.z)) );
+                ofQuaternion rotQuat = letters[i]->getRotationQuat();
+                float newRot = rotQuat.w();
+                trans.setRotation( btQuaternion(btVector3(rotQuat.x(), rotQuat.y(), rotQuat.z()), newRot) );
+                letters[i]->remove();
+                letters[i]->addMesh(gotham->letters[particles[i].letter]->mesh,tweetScale,false);
+                letters[i]->create(world->world,trans, 1.);
+                letters[i]->add();
+                letters[i]->setProperties(.1,1);
+                particles[i].goToPosition(tweetKeyframes[tweetKeyframe]);
+            }
+        }
     }
 }
 
@@ -671,8 +741,8 @@ void Tweet::updateImg(){
         int moving=0;
         for (int i=0;i<image.shapes.size();i++){
             image.particles[i].update();
-                if(!image.particles[i].targetReached){
-                    moving++;
+            if(!image.particles[i].targetReached){
+                moving++;
             }
             btTransform trans;
             ofPoint temp=image.particles[i].current.pos;
@@ -702,7 +772,7 @@ void Tweet::updateImg(){
                 bFinished=true;
             }
         }
-
+        
     }
     
     //if in physics state - do nothing other than keep track of duration
@@ -722,7 +792,7 @@ void Tweet::updateImg(){
                 bFinished=true;
             }
         }
-
+        
     }
     
 }
@@ -730,6 +800,7 @@ void Tweet::updateImg(){
 
 void Tweet::updateUser(){
     if(userKeyframes[userKeyframe].path!="gravity"){
+        int moving=0;
         for (int i=0;i<user.letters.size();i++){
             user.particles[i].update();
             btTransform trans;
@@ -751,14 +822,40 @@ void Tweet::updateUser(){
             }
             user.letters[i]->getRigidBody()->getMotionState()->setWorldTransform( trans );
             user.letters[i]->activate();
+            
+            if(!user.particles[i].targetReached){
+                moving++;
+            }
+        }
+        
+        
+        if (moving==0){
+            user.bNewKey=true;
+            userKeyframe++;
+            if(userKeyframe>userKeyframes.size()-1){
+                bFinished=true;
+            }
         }
     }
     
     //if in physics state - do nothing other than keep track of duration
     
     else{
+        int moving=0;
+
         for (int i=0;i<user.letters.size();i++){
             user.particles[i].update();
+            if(!user.particles[i].targetReached){
+                moving++;
+            }
+        }
+        
+        if (moving==0){
+            user.bNewKey=true;
+            userKeyframe++;
+            if(userKeyframe>userKeyframes.size()-1){
+                bFinished=true;
+            }
         }
     }
 }
@@ -772,8 +869,8 @@ void Tweet::destroy(){
     for(int i=0; i<image.shapes.size();i++){
         image.shapes[i]->remove();
     }
-            image.shapes.clear();
-        image.face.clear();
+    image.shapes.clear();
+    image.face.clear();
     image.particles.clear();
     for(int i=0;i<user.letters.size();i++){
         user.letters[i]->remove();
@@ -786,10 +883,10 @@ void Tweet::destroy(){
 }
 
 void Tweet::switchKey(Particle::Keyframe key, int which){
-
+    
     if(key.path!="gravity"){
         if(which==0){
-        tweetToKinematic();
+            tweetToKinematic();
         }
         else if(which==1){
             imgToKinematic();
@@ -801,7 +898,7 @@ void Tweet::switchKey(Particle::Keyframe key, int which){
     //if switching into physics state
     else{
         if(which==0){
-        tweetToPhysics();
+            tweetToPhysics();
         }
         else if(which==1){
             imgToPhysics();
@@ -809,9 +906,9 @@ void Tweet::switchKey(Particle::Keyframe key, int which){
         else if(which==2){
             userToPhysics();
         }
+        
+    }
     
-}
-
 }
 
 

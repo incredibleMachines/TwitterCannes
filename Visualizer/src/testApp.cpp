@@ -59,7 +59,7 @@ void testApp::setup(){
 
 
 void testApp::loadSQL(){
-        ofxSQLiteSelect sel = sqlite->select("id, approved_at, created_at, user_id, user_image, user_name, user_screen_name, text, media_url, category, starred")
+        ofxSQLiteSelect sel = sqlite->select("user_image, user_name, user_screen_name, text, media_url")
         .from("tweets")
         .execute().begin();
     db newList;
@@ -69,8 +69,8 @@ void testApp::loadSQL(){
             newList.user_screen_name = sel.getString();
             newList.text = sel.getString();
             newList.media_url = sel.getString();
-            sel.next();
             list.push_back(newList);
+            sel.next();
     }
                 listCount=0;
 }

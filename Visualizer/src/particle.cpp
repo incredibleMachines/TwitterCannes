@@ -8,6 +8,9 @@
 
 #include "particle.h"
 
+Particle::Keyframe::Keyframe(){}
+Particle::Keyframe::~Keyframe(){}
+
 void Particle::setup(Keyframe pixelPos, float index) {
     
 	pixel=pixelPos;
@@ -129,6 +132,12 @@ void Particle::goToPosition(Keyframe goTo){
 }
 
 void Particle::calcPosition(Keyframe goTo){
+
+    
+    ofPoint min=goTo.posMin;
+    ofPoint max=goTo.posMax;
+
+    
     
     if(goTo.type.x=="pixel"){
         calc.pos.x=pixel.pos.x;
@@ -136,15 +145,15 @@ void Particle::calcPosition(Keyframe goTo){
     else if(goTo.type.x=="previous"){
         calc.pos.x=current.pos.x;
     }
-    else if(goTo.posMin.x!=NULL||goTo.posMax.x!=NULL){
-        if(calc.type.x=="pixel_relative"){
+    else if(goTo.posMin.x!=0||goTo.posMax.x!=0){
+        if(goTo.type.x=="pixel_relative"){
             calc.pos.x=pixel.pos.x+ofRandom(goTo.posMin.x, goTo.posMax.x);
         }
         else if(goTo.type.x=="previous_relative"){
             calc.pos.x=current.pos.x+ofRandom(goTo.posMin.x, goTo.posMax.x);
         }
         else{
-            calc.pos.x=ofRandom(goTo.posMin.x, goTo.posMax.x);
+            calc.pos.x =ofRandom(min.x, max.x);
         }
     }
     else{
@@ -158,6 +167,8 @@ void Particle::calcPosition(Keyframe goTo){
             calc.pos.x=goTo.pos.x;
         }
     }
+    
+    
     
     if(goTo.type.y=="pixel"){
         calc.pos.y=pixel.pos.y;
@@ -224,13 +235,8 @@ void Particle::calcPosition(Keyframe goTo){
         calc.duration=goTo.duration;
     }
     
-    if (goTo.interpolations.size()>1){
-        int number=ofRandom(0,goTo.interpolations.size());
-        calc.interpolation=goTo.interpolations[number];
-    }
-    else{
-        calc.interpolation=goTo.interpolations[0];
-    }
+    cout<<goTo.interpolation<<endl;
+    calc.interpolation=goTo.interpolation;
     
     calc.path=goTo.path;
 }

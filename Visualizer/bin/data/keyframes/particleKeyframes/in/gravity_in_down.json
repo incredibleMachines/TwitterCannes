@@ -14,14 +14,14 @@
                     "z": ""
                 },
                 "min": {
-                    "x": "-8",
+                    "x": "-50",
                     "y": "50",
-                    "z": "-42"
+                    "z": "05"
                 },
                 "max": {
                     "x": "28",
                     "y": "100",
-                    "z": "-40"
+                    "z": "15"
                 }
             },
             "gravity": {
@@ -32,13 +32,9 @@
             "duration": {
                 "min": "",
                 "max": "",
-                "actual": "1"
+                "actual": ""
             },
-            "interpolations": [
-                {
-                    "interpolation": "linear"
-                }
-            ]
+        "interpolation": "linear"
         },
         {
             "path": "gravity",
@@ -74,11 +70,8 @@
                 "max": "",
                 "actual": "8000"
             },
-            "interpolations": [
-                {
                     "interpolation": "linear"
-                }
-            ]
+
         },
         {
             "path": "line",
@@ -114,11 +107,8 @@
                 "max": "",
                 "actual": "5000"
             },
-            "interpolations": [
-                {
+
                     "interpolation": "linear"
-                }
-            ]
         },
         {
             "path": "line",
@@ -154,11 +144,8 @@
                 "max": "",
                 "actual": "5000"
             },
-            "interpolations": [
-                {
+
                     "interpolation": "linear"
-                }
-            ]
         }
     ]
 }
