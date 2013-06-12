@@ -18,6 +18,8 @@
 
 void Tweet::loadTweet(db item, ofxBulletWorldRigid* _world, Alphabet* _gotham){
     
+    cout<<"load"<<endl;
+    
     tweetPos=ofPoint(-70,50,5);
     boxScale=ofPoint(.2,.2,.2);
     imagePos=ofPoint(-10,-10,-70);
@@ -35,6 +37,10 @@ void Tweet::loadTweet(db item, ofxBulletWorldRigid* _world, Alphabet* _gotham){
     user.bNewKey=true;
     world=_world;
     bImage=false;
+    bFinished=false;
+    image.bFinished=false;
+    user.bFinished=false;
+    
     
     boxShape = ofBtGetBoxCollisionShape(boxScale.x*tileW, boxScale.y*tileH, boxScale.z*tileD);
     ofxJSONElement json;
@@ -43,8 +49,15 @@ void Tweet::loadTweet(db item, ofxBulletWorldRigid* _world, Alphabet* _gotham){
         bool success=pic.loadImage(item.media_url);
         if(success){
             bImage=true;
-            cout<<item.media_url<<endl;
+           cout<<item.media_url<<endl;
         }
+        else{
+            image.bFinished=true;
+        }
+    }
+    
+    else{
+        image.bFinished=true;
     }
     
     bool success=json.open("keyframes/contentBlockKeyframes/test.json");
@@ -124,6 +137,7 @@ void Tweet::loadTweet(db item, ofxBulletWorldRigid* _world, Alphabet* _gotham){
         loadParticleKeyframes(imgIn, KEYFRAME_IMAGE);
         loadParticleKeyframes(imgOut,KEYFRAME_IMAGE);
     }
+    
     loadParticleKeyframes(userIn, KEYFRAME_USER);
     loadParticleKeyframes(userOut,KEYFRAME_USER);
     
@@ -225,8 +239,8 @@ void Tweet::draw(){
         ofGetOpenGLMatrixFromRigidBody( letters[i]->getRigidBody(), m );
         glPushMatrix();
         glMultMatrixf( m );
-        glTranslatef((-particles[i].size.x)/2*tweetScale.x, (-particles[i].size.y)/2*tweetScale.y, (-particles[i].size.z)/2*tweetScale.z);
-//        gotham->draw(particles[i].letter,tweetScale);
+        glTranslatef((-particles[i].size.x)/2, (-particles[i].size.y)/2, (-particles[i].size.z)/2);
+        gotham->draw(particles[i].letter,tweetScale);
         glPopMatrix();
         glPopAttrib();
         white.unbind();
@@ -633,7 +647,7 @@ void Tweet::tweetToPhysics(){
                 trans.setRotation( btQuaternion(btVector3(rotQuat.x(), rotQuat.y(), rotQuat.z()), newRot) );
                 letters[i]->remove();
                 letters[i]->addMesh(gotham->letters[particles[i].letter]->mesh,tweetScale,false);
-                letters[i]->create(world->world,trans, 1.);
+                letters[i]->create(world->world,trans, 10.);
                 letters[i]->add();
                 letters[i]->setProperties(.1,1);
                 particles[i].goToPosition(tweetKeyframes[tweetKeyframe]);
@@ -707,7 +721,7 @@ void Tweet::updateTweet(){
             letters[i]->getRigidBody()->getMotionState()->setWorldTransform( trans );
             letters[i]->activate();
         }
-        if (moving==0){
+        if (moving==0&&bFinished==false){
             bNewKey=true;
             tweetKeyframe++;
             if(tweetKeyframe>tweetKeyframes.size()-1){
@@ -726,7 +740,7 @@ void Tweet::updateTweet(){
                 moving++;
             }
         }
-        if (moving==0){
+        if (moving==0&&bFinished==false){
             bNewKey=true;
             tweetKeyframe++;
             if(tweetKeyframe>tweetKeyframes.size()-1){
@@ -765,11 +779,11 @@ void Tweet::updateImg(){
             image.shapes[i]->activate();
         }
         
-        if (moving==0){
+        if (moving==0&&image.bFinished==false){
             image.bNewKey=true;
             imageKeyframe++;
             if(imageKeyframe>imageKeyframes.size()-1){
-                bFinished=true;
+                image.bFinished=true;
             }
         }
         
@@ -785,11 +799,11 @@ void Tweet::updateImg(){
                 moving++;
             }
         }
-        if (moving==0){
+        if (moving==0&&image.bFinished==false){
             image.bNewKey=true;
             imageKeyframe++;
             if(imageKeyframe>imageKeyframes.size()-1){
-                bFinished=true;
+                image.bFinished=true;
             }
         }
         
@@ -829,11 +843,11 @@ void Tweet::updateUser(){
         }
         
         
-        if (moving==0){
+        if (moving==0&&user.bFinished==false){
             user.bNewKey=true;
             userKeyframe++;
             if(userKeyframe>userKeyframes.size()-1){
-                bFinished=true;
+                user.bFinished=true;
             }
         }
     }
@@ -850,11 +864,11 @@ void Tweet::updateUser(){
             }
         }
         
-        if (moving==0){
+        if (moving==0&&user.bFinished==false){
             user.bNewKey=true;
             userKeyframe++;
             if(userKeyframe>userKeyframes.size()-1){
-                bFinished=true;
+                user.bFinished=false;
             }
         }
     }

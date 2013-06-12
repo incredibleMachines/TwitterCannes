@@ -235,7 +235,6 @@ void Particle::calcPosition(Keyframe goTo){
         calc.duration=goTo.duration;
     }
     
-    cout<<goTo.interpolation<<endl;
     calc.interpolation=goTo.interpolation;
     
     calc.path=goTo.path;

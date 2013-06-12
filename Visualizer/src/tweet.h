@@ -22,8 +22,6 @@ public:
     string user_screen_name;
     string text;
     string media_url;
-    int category;
-    int starred;
 };
 
 class Tweet {

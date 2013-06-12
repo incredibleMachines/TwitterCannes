@@ -53,7 +53,10 @@ void testApp::setup(){
     //GUI and hashtag mesh loading
     loadHashtag();
     
+    list[0].text="100000000d0ddfaskjdhflkajsh asdkfjhaslkdjfh";
+    
     tweet.loadTweet(list[0], &world, &gotham);
+    
     
 }
 
@@ -63,6 +66,7 @@ void testApp::loadSQL(){
         .from("tweets")
         .execute().begin();
     db newList;
+    
         while (sel.hasNext()) {
             newList.user_image = sel.getString();
             newList.user_name = sel.getString();
@@ -101,9 +105,7 @@ void testApp::drawObjects(){
             ofSetColor(0,255,0);
             ofSphere(hashMeshes[i].getCentroid().x,hashMeshes[i].getCentroid().y+30,hashMeshes[i].getCentroid().z,10);
         }
-         white.unbind();
         hashMeshes[i].draw();
-         white.unbind();
         ofSetColor(255,255,255);
         glPopMatrix();
         glPopClientAttrib();
@@ -121,10 +123,17 @@ void testApp::update(){
 //updates bullet objects
     world.update();
     
+//    cout<<list.size()<<endl;
+    
     if(tweet.bFinished==true&&tweet.image.bFinished==true&&tweet.user.bFinished==true){
         tweet.destroy();
         listCount++;
+        if(listCount>list.size()-1){
+            listCount=0;
+        }
+        
         tweet.loadTweet(list[listCount], &world, &gotham);
+        
         cout<<"destroy"<<endl;
     }
     else{
@@ -148,9 +157,9 @@ void testApp::draw(){
     float shadowY = ofMap(mouseY, 0, ofGetHeight(), -100, 100);
     
     shadowLightLeft.lookAt( ofVec3f(0.0,0.0,0.0) );
-//    shadowLightLeft.orbit( 90, -70, 90, ofVec3f(0.0,0.0,0.0) );
+    shadowLightLeft.orbit( 90, -70, 90, ofVec3f(0.0,0.0,0.0) );
 //    shadowLightLeft.orbit( 90, -80, 90, ofVec3f(0.0,0.0,0.0) );
-    shadowLightLeft.orbit( shadowX, shadowY, 90, ofVec3f(0.0,0.0,0.0) );
+//    shadowLightLeft.orbit( shadowX, shadowY, 90, ofVec3f(0.0,0.0,0.0) );
 
     
 //    cout << shadowY << " " << shadowX << endl;

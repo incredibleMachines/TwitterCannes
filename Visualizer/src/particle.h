@@ -69,6 +69,7 @@ public:
     public:
         Keyframe();
         ~Keyframe();
+        
         class keyPoint{
         public:
             string x;
