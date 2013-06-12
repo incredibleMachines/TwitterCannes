@@ -15,6 +15,17 @@
 #include "ofTextConverter.h"
 #include "ofxJSONElement.h"
 
+class db{
+public:
+    string user_image;
+    string user_name;
+    string user_screen_name;
+    string text;
+    string media_url;
+    int category;
+    int starred;
+};
+
 class Tweet {
     
 public:
@@ -38,6 +49,7 @@ public:
         string location;
         vector<ofTexture> face;
         bool bNewKey;
+        bool bFinished;
         
     };
     
@@ -47,6 +59,7 @@ public:
         vector<ofxBulletCustomShape*> letters;
         vector<Particle> particles;
         bool bNewKey;
+        bool bFinished;
     };
     
     class Animation{
@@ -57,10 +70,11 @@ public:
         
     };
     
-    void loadTweet(string _text, string _ID, string _img, string _username, string _handle, string _profileimage, ofxBulletWorldRigid* _world, Alphabet* _gotham);
+    void loadTweet(db item, ofxBulletWorldRigid* _world, Alphabet* _gotham);
     void loadImage(string _image);
     void loadUser(string _username, string _handle, string _profileimage);
     
+    bool bFinished;
     TweetImage image;
     TweetUser user;
     vector<ofxBulletCustomShape* > letters;
@@ -94,6 +108,12 @@ public:
     ofPoint handleScale;
     void loadParticleKeyframes(Animation anim, int which);
     ofTexture white;
+    
+    void destroy();
+    
+    bool bImage;
+    
+    void switchKey(Particle::Keyframe key, int which);
 };
 
 

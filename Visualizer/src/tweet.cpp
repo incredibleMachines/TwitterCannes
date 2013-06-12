@@ -12,9 +12,13 @@
 #define tileH 40
 #define tileD 10
 
-void Tweet::loadTweet(string _text, string _ID, string _img, string _username, string _handle, string _profileimage, ofxBulletWorldRigid* _world, Alphabet* _gotham){
+#define KEYFRAME_TWEET 0
+#define KEYFRAME_IMAGE 1
+#define KEYFRAME_USER 2
+
+void Tweet::loadTweet(db item, ofxBulletWorldRigid* _world, Alphabet* _gotham){
     
-    tweetPos=ofPoint(-45,20,5);
+    tweetPos=ofPoint(-7665,50,2);
     boxScale=ofPoint(.2,.2,.2);
     imagePos=ofPoint(-10,-10,-70);
     tweetScale=ofPoint(.1,.1,.1);
@@ -101,15 +105,15 @@ void Tweet::loadTweet(string _text, string _ID, string _img, string _username, s
     
     ofPoint pos=tweetPos;
     
-    loadParticleKeyframes(tweetIn, 0);
-    loadParticleKeyframes(tweetOut,0);
-    loadParticleKeyframes(imgIn, 1);
-    loadParticleKeyframes(imgOut,1);
-    loadParticleKeyframes(userIn, 2);
-    loadParticleKeyframes(userOut,2);
+    loadParticleKeyframes(tweetIn, KEYFRAME_TWEET);
+    loadParticleKeyframes(tweetOut,KEYFRAME_TWEET);
+    loadParticleKeyframes(imgIn, KEYFRAME_IMAGE);
+    loadParticleKeyframes(imgOut,KEYFRAME_IMAGE);
+    loadParticleKeyframes(userIn, KEYFRAME_USER);
+    loadParticleKeyframes(userOut,KEYFRAME_USER);
     
     
-    ofUniString tweetText= ofTextConverter::toUTF32(_text);
+    ofUniString tweetText= ofTextConverter::toUTF32(item.text);
     
     for (int i=0;i<tweetText.length();i++){
         
@@ -145,85 +149,20 @@ void Tweet::loadTweet(string _text, string _ID, string _img, string _username, s
         }
     }
     
-    if(_img!=""){
+    if(item.media_url!=""){
         cout<<"load"<<endl;
-            loadImage(_img);
+            loadImage(item.media_url);
+        bImage=true;
         }
-    loadUser(_username, _handle, _profileimage);
+    loadUser(item.user_name, item.user_screen_name, item.user_image);
     
 }
 
 void Tweet::update(){
     
-    //check whether individual particles have completed the duration of their transition
-    int moving=0;
-    for(int i=0;i<particles.size();i++){
-        if(!particles[i].targetReached){
-            moving++;
-        }
-    }
-    
-    //if all have reached, trigger next keyframe position
-    if (moving==0){
-        bNewKey=true;
-        tweetKeyframe++;
-        if(tweetKeyframe>tweetKeyframes.size()-1){
-            tweetKeyframe=0;
-        }
-    }
-    
-    moving=0;
-    
-    for(int i=0;i<image.particles.size();i++){
-        if(!image.particles[i].targetReached){
-            moving++;
-        }
-    }
-    
-    //if all have reached, trigger next keyframe position
-    if (moving==0){
-        image.bNewKey=true;
-        imageKeyframe++;
-        if(imageKeyframe>imageKeyframes.size()-1){
-            imageKeyframe=0;
-        }
-    }
-    
-    moving=0;
-
-    for(int i=0;i<user.particles.size();i++){
-        if(!user.particles[i].targetReached){
-            moving++;
-        }
-    }
-    
-    //if all have reached, trigger next keyframe position
-    if (moving==0){
-        user.bNewKey=true;
-        userKeyframe++;
-        if(userKeyframe>userKeyframes.size()-1){
-            userKeyframe=0;
-        }
-    }
-    
     //set new particle destinations
     if(bNewKey==true){
-        
-        //Destroy particles action - triggers image switch and removes bullet objects/position vectors
-        
-        if(tweetKeyframes[tweetKeyframe].path=="destroy"){
-            
-        }
-        
-        else if(tweetKeyframes[tweetKeyframe].path!="gravity"){
-            tweetToKinematic();
-        }
-        
-        //if switching into physics state
-        else{
-            tweetToPhysics();
-        }
-        
+        switchKey(tweetKeyframes[tweetKeyframe],KEYFRAME_TWEET);
         bNewKey=false;
     }
     
@@ -233,20 +172,8 @@ void Tweet::update(){
         updateTweet();
     }
     
-    if (image.bNewKey==true){
-        if(imageKeyframes[imageKeyframe].path=="destroy"){
-            
-        }
-        
-        else if(imageKeyframes[imageKeyframe].path!="gravity"){
-            imgToKinematic();
-        }
-        
-        //if switching into physics state
-        else{
-            imgToPhysics();
-        }
-        
+    if(bImage==true){
+        switchKey(imageKeyframes[imageKeyframe],KEYFRAME_IMAGE);
         image.bNewKey=false;
     }
     
@@ -255,19 +182,7 @@ void Tweet::update(){
     }
     
     if (user.bNewKey==true){
-        if(userKeyframes[userKeyframe].path=="destroy"){
-            
-        }
-        
-        else if(userKeyframes[userKeyframe].path!="gravity"){
-            userToKinematic();
-        }
-        
-        //if switching into physics state
-        else{
-            userToPhysics();
-        }
-        
+        switchKey(userKeyframes[userKeyframe],KEYFRAME_USER);
         user.bNewKey=false;
     }
     
@@ -696,8 +611,12 @@ void Tweet::userToPhysics(){
 
 void Tweet::updateTweet(){
     if(tweetKeyframes[tweetKeyframe].path!="gravity"){
+        int moving=0;
         for (int i=0;i<letters.size();i++){
             particles[i].update();
+            if(!particles[i].targetReached){
+                moving++;
+            }
             btTransform trans;
             ofPoint temp=particles[i].current.pos;
             trans.setOrigin( btVector3( btScalar(temp.x), btScalar(temp.y), btScalar(temp.z)) );
@@ -718,21 +637,43 @@ void Tweet::updateTweet(){
             letters[i]->getRigidBody()->getMotionState()->setWorldTransform( trans );
             letters[i]->activate();
         }
+        if (moving==0){
+            bNewKey=true;
+            tweetKeyframe++;
+            if(tweetKeyframe>tweetKeyframes.size()-1){
+                bFinished=true;
+            }
+        }
     }
     
     //if in physics state - do nothing other than keep track of duration
     
     else{
+        int moving=0;
         for (int i=0;i<letters.size();i++){
             particles[i].update();
+            if(!particles[i].targetReached){
+                moving++;
+            }
+        }
+        if (moving==0){
+            bNewKey=true;
+            tweetKeyframe++;
+            if(tweetKeyframe>tweetKeyframes.size()-1){
+                bFinished=true;
+            }
         }
     }
 }
 
 void Tweet::updateImg(){
     if(imageKeyframes[imageKeyframe].path!="gravity"){
+        int moving=0;
         for (int i=0;i<image.shapes.size();i++){
             image.particles[i].update();
+                if(!image.particles[i].targetReached){
+                    moving++;
+            }
             btTransform trans;
             ofPoint temp=image.particles[i].current.pos;
             trans.setOrigin( btVector3( btScalar(temp.x), btScalar(temp.y), btScalar(temp.z)) );
@@ -753,14 +694,35 @@ void Tweet::updateImg(){
             image.shapes[i]->getRigidBody()->getMotionState()->setWorldTransform( trans );
             image.shapes[i]->activate();
         }
+        
+        if (moving==0){
+            image.bNewKey=true;
+            imageKeyframe++;
+            if(imageKeyframe>imageKeyframes.size()-1){
+                bFinished=true;
+            }
+        }
+
     }
     
     //if in physics state - do nothing other than keep track of duration
     
     else{
+        int moving=0;
         for (int i=0;i<image.shapes.size();i++){
             image.particles[i].update();
+            if(!image.particles[i].targetReached){
+                moving++;
+            }
         }
+        if (moving==0){
+            image.bNewKey=true;
+            imageKeyframe++;
+            if(imageKeyframe>imageKeyframes.size()-1){
+                bFinished=true;
+            }
+        }
+
     }
     
 }
@@ -799,6 +761,57 @@ void Tweet::updateUser(){
             user.particles[i].update();
         }
     }
+}
+
+void Tweet::destroy(){
+    for (int i=0;i<letters.size();i++){
+        letters[i]->remove();
+    }
+    letters.clear();
+    particles.clear();
+    for(int i=0; i<image.shapes.size();i++){
+        image.shapes[i]->remove();
+    }
+            image.shapes.clear();
+        image.face.clear();
+    image.particles.clear();
+    for(int i=0;i<user.letters.size();i++){
+        user.letters[i]->remove();
+    }
+    user.letters.clear();
+    user.particles.clear();
+    tweetKeyframes.clear();
+    imageKeyframes.clear();
+    userKeyframes.clear();
+}
+
+void Tweet::switchKey(Particle::Keyframe key, int which){
+
+    if(key.path!="gravity"){
+        if(which==0){
+        tweetToKinematic();
+        }
+        else if(which==1){
+            imgToKinematic();
+        }
+        else if(which==2){
+            userToKinematic();
+        }
+    }
+    //if switching into physics state
+    else{
+        if(which==0){
+        tweetToPhysics();
+        }
+        else if(which==1){
+            imgToPhysics();
+        }
+        else if(which==2){
+            userToPhysics();
+        }
+    
+}
+
 }
 
 

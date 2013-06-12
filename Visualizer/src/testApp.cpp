@@ -13,34 +13,7 @@ void testApp::setup(){
     sqlite = new ofxSQLite("twitterCannesLions.db");
     
     gotham.setup();
-    
-    ofxSQLiteSelect sel = sqlite->select("id, approved_at, created_at, user_id, user_image, user_name, user_screen_name, text, media_url, category, starred")
-    .from("tweets")
-    .execute().begin();
-    
-    
-    string id;
-    string user_image;
-    string user_name;
-    string user_screen_name;
-    string text;
-    string media_url;
-    
-	while (sel.hasNext()) {
-        
-         id = sel.getString();
-        string approved_at = sel.getString();
-        string created_at = sel.getString();
-        string user_id = sel.getString();
-        user_image = sel.getString();
-        user_name = sel.getString();
-        user_screen_name = sel.getString();
-        text = sel.getString();
-        media_url = sel.getString();
-        int category = sel.getInt();
-        int starred = sel.getInt();
-		sel.next();
-	}
+    loadSQL();
     
     bDebug=false;
     bGUI=false;
@@ -80,10 +53,27 @@ void testApp::setup(){
     //GUI and hashtag mesh loading
     loadHashtag();
     
-    tweet.loadTweet(text, id, media_url, user_name, user_screen_name, user_image, &world, &gotham);
+    tweet.loadTweet(list[0], &world, &gotham);
     
 }
 
+
+void testApp::loadSQL(){
+        ofxSQLiteSelect sel = sqlite->select("id, approved_at, created_at, user_id, user_image, user_name, user_screen_name, text, media_url, category, starred")
+        .from("tweets")
+        .execute().begin();
+    db newList;
+        while (sel.hasNext()) {
+            newList.user_image = sel.getString();
+            newList.user_name = sel.getString();
+            newList.user_screen_name = sel.getString();
+            newList.text = sel.getString();
+            newList.media_url = sel.getString();
+            sel.next();
+            list.push_back(newList);
+    }
+                listCount=0;
+}
 //--------------------------------------------------------------
 void testApp::drawObjects(){
     
@@ -131,7 +121,17 @@ void testApp::update(){
 //updates bullet objects
     world.update();
     
-    tweet.update();
+    if(tweet.bFinished==true&&tweet.image.bFinished==true&&tweet.user.bFinished==true){
+        tweet.destroy();
+        listCount++;
+        tweet.loadTweet(list[listCount], &world, &gotham);
+        cout<<"destroy"<<endl;
+    }
+    else{
+        tweet.update();
+    }
+    
+   
     
 }
 
@@ -144,12 +144,14 @@ void testApp::draw(){
     ofDisableArbTex();
     ofPushMatrix();
         
-    float shadowX = ofMap(mouseX, 0, ofGetWidth(), 0, 200);
+    float shadowX = ofMap(mouseX, 0, ofGetWidth(), -100, 100);
     float shadowY = ofMap(mouseY, 0, ofGetHeight(), -100, 100);
     
     shadowLightLeft.lookAt( ofVec3f(0.0,0.0,0.0) );
 //    shadowLightLeft.orbit( 90, -70, 90, ofVec3f(0.0,0.0,0.0) );
-    shadowLightLeft.orbit( 90, -80, 90, ofVec3f(0.0,0.0,0.0) );
+//    shadowLightLeft.orbit( 90, -80, 90, ofVec3f(0.0,0.0,0.0) );
+    shadowLightLeft.orbit( shadowX, shadowY, 90, ofVec3f(0.0,0.0,0.0) );
+
     
 //    cout << shadowY << " " << shadowX << endl;
 
@@ -204,7 +206,6 @@ void testApp::draw(){
     tweet.draw();
     material.end();
     
-    ofPopMatrix();
 
     
     shadowLightLeft.disable();
@@ -215,6 +216,8 @@ void testApp::draw(){
         world.drawDebug();
         glPopMatrix();
     }
+    ofPopMatrix();
+
     
     camera.end();
     

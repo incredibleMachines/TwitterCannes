@@ -63,10 +63,8 @@
 #define PARTICLE_POS_PREVIOUS 3
 #define PARTICLE_POS_PREVIOUS_RELATIVE 4
 
-
 class Particle{
 public:
-    
     class Keyframe{
     public:
         

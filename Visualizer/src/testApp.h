@@ -15,6 +15,20 @@
 class testApp : public ofBaseApp {
 	
 public:
+    
+    class Hashletter{
+    public:
+        ofPoint pos;
+        ofPoint rot;
+        ofPoint scale;
+        bool active;
+        string key;
+        ofPoint size;
+        ofRectangle checkbox;
+    };
+    
+    vector<db> list;
+    
 	void setup();
 	void update();
 	void draw();
@@ -24,6 +38,7 @@ public:
 
     void loadHashtag();
     void drawGUI();
+    void loadSQL();
     
     void keyPressed(int key);
     void mousePressed(int x, int y, int button);
@@ -49,24 +64,7 @@ public:
     ofTexture white;
     
     Alphabet gotham;
-       
-    class Hashletter{
-    public:
-        ofPoint pos;
-        ofPoint rot;
-        ofPoint scale;
-        bool active;
-        string key;
-        ofPoint size;
-        ofRectangle checkbox;
-    };
     
-    class Content{
-    public:
-        ofPoint pos;
-    };
-    
-    Content image;
     vector<Hashletter> hashletters;
     vector<ofMesh> hashMeshes;
     ofxAssimpModelLoader hashModel;
@@ -76,6 +74,8 @@ public:
     btBoxShape*					boxShape;
     
     ofxXmlSettings settings;
+    
+    int listCount;
     
     bool bGUI;
     int camState;

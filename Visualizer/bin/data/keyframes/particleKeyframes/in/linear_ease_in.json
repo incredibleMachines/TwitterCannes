@@ -1,0 +1,164 @@
+{
+    "particles": [
+        {
+            "path": "line",
+            "type": {
+                "x": "absolute",
+                "y": "absolute",
+                "z": "absolute"
+            },
+            "pos": {
+                "set": {
+                    "x": "",
+                    "y": "",
+                    "z": ""
+                },
+                "min": {
+                    "x": "-8",
+                    "y": "50",
+                    "z": "-42"
+                },
+                "max": {
+                    "x": "28",
+                    "y": "100",
+                    "z": "-40"
+                }
+            },
+            "gravity": {
+                "x": "",
+                "y": "",
+                "z": ""
+            },
+            "duration": {
+                "min": "",
+                "max": "",
+                "actual": "1"
+            },
+            "interpolations": [
+                {
+                    "interpolation": "linear"
+                }
+            ]
+        },
+        {
+            "path": "gravity",
+            "type": {
+                "x": "pixel",
+                "y": "pixel",
+                "z": "previous"
+            },
+            "pos": {
+                "set": {
+                    "x": "",
+                    "y": "",
+                    "z": ""
+                },
+                "min": {
+                    "x": "",
+                    "y": "",
+                    "z": ""
+                },
+                "max": {
+                    "x": "",
+                    "y": "",
+                    "z": ""
+                }
+            },
+            "gravity": {
+                "x": "",
+                "y": "-500",
+                "z": ""
+            },
+            "duration": {
+                "min": "",
+                "max": "",
+                "actual": "8000"
+            },
+            "interpolations": [
+                {
+                    "interpolation": "linear"
+                }
+            ]
+        },
+        {
+            "path": "line",
+            "type": {
+                "x": "pixel",
+                "y": "pixel",
+                "z": "pixel"
+            },
+            "pos": {
+                "set": {
+                    "x": "",
+                    "y": "",
+                    "z": ""
+                },
+                "min": {
+                    "x": "",
+                    "y": "",
+                    "z": ""
+                },
+                "max": {
+                    "x": "",
+                    "y": "",
+                    "z": ""
+                }
+            },
+            "gravity": {
+                "x": "0",
+                "y": "0",
+                "z": "0"
+            },
+            "duration": {
+                "min": "",
+                "max": "",
+                "actual": "5000"
+            },
+            "interpolations": [
+                {
+                    "interpolation": "linear"
+                }
+            ]
+        },
+        {
+            "path": "line",
+            "type": {
+                "x": "pixel",
+                "y": "pixel",
+                "z": "pixel"
+            },
+            "pos": {
+                "set": {
+                    "x": "",
+                    "y": "",
+                    "z": ""
+                },
+                "min": {
+                    "x": "",
+                    "y": "",
+                    "z": ""
+                },
+                "max": {
+                    "x": "",
+                    "y": "",
+                    "z": ""
+                }
+            },
+            "gravity": {
+                "x": "0",
+                "y": "0",
+                "z": "0"
+            },
+            "duration": {
+                "min": "",
+                "max": "",
+                "actual": "5000"
+            },
+            "interpolations": [
+                {
+                    "interpolation": "linear"
+                }
+            ]
+        }
+    ]
+}
