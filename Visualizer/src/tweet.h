@@ -111,6 +111,8 @@ public:
     void switchKey(Particle::Keyframe key, int which);
     
     ofPoint hashMin, hashMax;
+    
+    string tweetType;
 };
 
 

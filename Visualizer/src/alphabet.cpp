@@ -41,9 +41,8 @@ void Alphabet::draw(int c, ofPoint scale){
 }
 
 ofPoint Alphabet::getSize(int c){
-    if(c>32&&c<256){
-        return letters[c]->size;
-    }
+    if(c>32&&c<256) return letters[c]->size;
+    
 
     
 //    ofPoint max=letters[c]->model.getSceneMax(true);
@@ -52,7 +51,12 @@ ofPoint Alphabet::getSize(int c){
 }
 
 ofMesh Alphabet::getMesh(int c){
-    if(c>32&&c<256){
-    return letters[c]->mesh;
-    }
+    if(c>32&&c<256) return letters[c]->mesh;
+    
+}
+
+bool Alphabet::testForMesh(int c){
+    if(c>32&&c<256) return true;
+    else return false;
+    
 }

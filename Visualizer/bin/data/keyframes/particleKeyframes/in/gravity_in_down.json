@@ -15,7 +15,7 @@
                 },
                 "min": {
                     "x": "",
-                    "y": "50",
+                    "y": "6	0",
                     "z": ""
                 },
                 "max": {
@@ -142,7 +142,7 @@
             "duration": {
                 "min": "",
                 "max": "",
-                "actual": "10000"
+                "actual": "1000"
             },
 
                     "interpolation": "linear"

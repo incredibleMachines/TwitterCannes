@@ -33,5 +33,7 @@ public:
     ofxAssimpModelLoader newModel;
     
     float maxY;
+    
+    bool testForMesh(int c);
 
 };
