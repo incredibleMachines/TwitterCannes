@@ -294,7 +294,6 @@ void Tweet::draw(){
     if(bImage==true){
 //        ofRotate(180,0,1,0);
         for (int i=0;i<image.shapes.size();i++){
-            
             image.face[i].bind();
             image.shapes[i]->draw();
             image.face[i].unbind();

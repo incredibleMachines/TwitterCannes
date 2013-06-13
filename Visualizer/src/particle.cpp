@@ -45,8 +45,6 @@ void Particle::update(){
     ofPoint b = start.pos;
     ofPoint c = target.pos - start.pos;
     float d = target.duration;
-    cout<<target.path<<endl;
-    cout<<target.interpolation<<endl;
     
     if (target.path == "line") {
         
@@ -149,6 +147,16 @@ void Particle::calcPosition(Keyframe goTo){
     else if(goTo.type.x=="previous"){
         calc.pos.x=current.pos.x;
     }
+    else if(goTo.type.x=="off_screen"){
+        int random=ofRandom(0.,2.);
+        if (random>1){
+            calc.pos.x=ofRandom(-80,-120);
+        }
+        else{
+            calc.pos.x=ofRandom(80,120);
+        }
+        
+    }
     else if(goTo.type.x=="hashtag"){
         calc.pos.x=ofRandom(hashMin.x, hashMax.x);
     }
@@ -183,6 +191,16 @@ void Particle::calcPosition(Keyframe goTo){
     else if(goTo.type.y=="previous"){
         calc.pos.y=current.pos.y;
     }
+    else if(goTo.type.y=="off_screen"){
+        int random=ofRandom(0.,2.);
+        if (random>1){
+            calc.pos.y=ofRandom(60,80);
+        }
+        else{
+            calc.pos.y=ofRandom(-80,-60);
+        }
+        
+    }
     else if(goTo.type.y=="hashtag"){
         calc.pos.y=ofRandom(hashMin.y, hashMax.y);
     }
@@ -215,6 +233,17 @@ void Particle::calcPosition(Keyframe goTo){
     else if(goTo.type.z=="hashtag"){
         calc.pos.z=ofRandom(hashMin.z, hashMax.z);
     }
+    else if(goTo.type.y=="off_screen"){
+        int random=ofRandom(0.,2.);
+        if (random>1){
+            calc.pos.y=ofRandom(-80,-120);
+        }
+        else{
+            calc.pos.y=ofRandom(50,70);
+        }
+        
+    }
+    
     else if(goTo.type.z=="previous"){
         calc.pos.z=current.pos.z;
     }
