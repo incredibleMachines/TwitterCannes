@@ -101,7 +101,7 @@ public:
         
     };
     
-    void setup(Keyframe pixel, float index);
+    void setup(Keyframe pixel, float index, ofPoint _hashMin, ofPoint _hashMax);
         void setup(Keyframe pixel, float index, int c, ofPoint _size, ofPoint _hashMin, ofPoint _hashMax);
     void update();
     void draw();

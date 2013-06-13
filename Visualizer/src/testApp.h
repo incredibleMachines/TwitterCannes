@@ -10,6 +10,7 @@
 #include "shadowMapLight.h"
 #include "tweet.h"
 #include "ofxSQLite.h"
+#include "ofxSyphon.h"
 
 
 class testApp : public ofBaseApp {
@@ -100,6 +101,11 @@ public:
     
     ofPoint hashMin;
     ofPoint hashMax;
+    
+    ///Syphon
+    ofTexture tex;
+	ofxSyphonServer mainOutputSyphonServer;
+	ofxSyphonServer individualTextureSyphonServer;
 
 
 };

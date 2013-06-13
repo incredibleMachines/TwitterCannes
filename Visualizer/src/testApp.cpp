@@ -15,6 +15,8 @@ void testApp::setup(){
     gotham.setup();
     loadSQL();
     
+    tex.allocate(1920,917,GL_RGBA);
+    
     bDebug=false;
     bGUI=false;
     bShadowsOn=true;
@@ -54,10 +56,11 @@ void testApp::setup(){
     //GUI and hashtag mesh loading
     loadHashtag();
     
-    list[0].text="!#$%";
+//    list[0].text="!#$%";
+    listCount=1;
     
     tweet.setup(hashMin,hashMax,&world, &gotham);
-    tweet.loadTweet(list[0]);
+    tweet.loadTweet(list[listCount]);
     
     
 }
@@ -78,7 +81,6 @@ void testApp::loadSQL(){
             list.push_back(newList);
             sel.next();
     }
-                listCount=0;
 }
 //--------------------------------------------------------------
 void testApp::drawObjects(){
@@ -99,7 +101,7 @@ void testApp::drawObjects(){
         btScalar	m[16];
         ofGetOpenGLMatrixFromRigidBody( hashCollision[i]->getRigidBody(), m );
         glPushMatrix();
-        ofSetColor(255,255,255);
+//        ofSetColor(255,255,255);
         glMultMatrixf( m );
         glTranslatef(-hashletters[i].size.x*scale.x/2, -hashletters[i].size.y*scale.y/2, -hashletters[i].size.z*scale.z/2);
         ofScale(scale.x,scale.y,scale.z);
@@ -133,10 +135,13 @@ void testApp::update(){
         if(listCount>list.size()-1){
             listCount=0;
         }
+
+        cout<<"destroy"<<endl;
+        cout<<listCount<<endl;
         
         tweet.loadTweet(list[listCount]);
         
-        cout<<"destroy"<<endl;
+
     }
     else{
         tweet.update();
@@ -152,7 +157,7 @@ void testApp::draw(){
 	glEnable(GL_DEPTH_TEST);
     ofDisableAlphaBlending();
     ofEnableLighting();
-    ofDisableArbTex();
+//    ofDisableArbTex();
     ofPushMatrix();
         
     float shadowX = ofMap(mouseX, 0, ofGetWidth(), -100, 100);
@@ -216,9 +221,9 @@ void testApp::draw(){
         
     //bind image textures and draw bullet shapes
     
-    material.begin();   
+//    material.begin();   
     tweet.draw();
-    material.end();
+//    material.end();
     
 
     
@@ -244,6 +249,8 @@ void testApp::draw(){
     ofPopMatrix();
     
     glDisable(GL_DEPTH_TEST);
+    
+//    mainOutputSyphonServer.publishScreen();
     
     if(bGUI==true){
         drawGUI();

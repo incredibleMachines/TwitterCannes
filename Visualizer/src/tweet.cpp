@@ -10,7 +10,7 @@
 
 #define tileW 40
 #define tileH 40
-#define tileD 10
+#define tileD 40
 
 #define KEYFRAME_TWEET 0
 #define KEYFRAME_IMAGE 1
@@ -19,9 +19,9 @@
 
 void Tweet::setup(ofPoint _hashMin, ofPoint _hashMax, ofxBulletWorldRigid *_world, Alphabet *_gotham){
     tweetPos=ofPoint(-70,50,5);
-    boxScale=ofPoint(.2,.2,.2);
-    imagePos=ofPoint(-10,-10,-70);
     tweetScale=ofPoint(.1,.1,.1);
+    boxScale=ofPoint(.1,.1,.05);
+    imagePos=ofPoint(-10,-10,2);
     userPos=ofPoint(-80,-40,25);
     userScale=ofPoint(.1,.1,.1);
     handleScale=ofPoint(.1,.09,.1);
@@ -29,7 +29,7 @@ void Tweet::setup(ofPoint _hashMin, ofPoint _hashMax, ofxBulletWorldRigid *_worl
     world=_world;
     gotham=_gotham;
 
-      boxShape = ofBtGetBoxCollisionShape(boxScale.x*tileW, boxScale.y*tileH, boxScale.z*tileD);
+    boxShape = ofBtGetBoxCollisionShape(boxScale.x*tileW, boxScale.y*tileH, boxScale.z*tileD);
     
     hashMin=_hashMin;
     hashMax=_hashMax;
@@ -263,7 +263,9 @@ void Tweet::draw(){
     }
     
     if(bImage==true){
+//        ofRotate(180,0,1,0);
         for (int i=0;i<image.shapes.size();i++){
+            glEnable(GL_TEXTURE);
             image.face[i].bind();
             image.shapes[i]->draw();
             image.face[i].unbind();
@@ -297,16 +299,16 @@ void Tweet::draw(){
 }
 
 void Tweet::loadImage(string _image){
-    ofImage pic;
-    image.location=_image;
     image.bNewKey=true;
-    pic.loadImage(_image);
+    
     pic.setImageType(OF_IMAGE_COLOR);
-    pic.resize(pic.width/2, pic.height/2);
+//    pic.resize(pic.width, pic.height);
     pic.mirror(false, false);
     
     int i=0;
     
+    ofTexture newFace;
+    ofImage tileImage;
     
     for (int x = 0; x < pic.width / tileW; x++){
         for (int y = 0; y < pic.height / tileH; y++){
@@ -317,6 +319,12 @@ void Tweet::loadImage(string _image){
             temp.pos.y=y*tileH*boxScale.y+imagePos.y;
             temp.pos.z=imagePos.z;
             
+            Particle particle;
+            particle.setup(temp,x+x*y, hashMin, hashMax);
+            image.particles.push_back(particle);
+            particle.start.pos=image.particles[i].target.pos;
+            particle.goToPosition(imageKeyframes[imageKeyframe]);
+
             //create Bullet shapes for image visualization
             image.shapes.push_back( new ofxBulletBox() );
             
@@ -326,28 +334,20 @@ void Tweet::loadImage(string _image){
             image.shapes[image.shapes.size()-1]->add();
             image.shapes[image.shapes.size()-1]->enableKinematic();
             
-            //crop and allocate image boxes to tiles
-            ofTexture newFace;
-            ofImage tileImage;
+//            //crop and allocate image boxes to tiles
+
+            ofEnableNormalizedTexCoords();
             tileImage.allocate(tileW, tileH, OF_IMAGE_COLOR);
             tileImage.cropFrom(pic, x*tileW, y*tileH, tileW, tileH);
             tileImage.mirror(false,true);
-            ofEnableNormalizedTexCoords();
+            tileImage.loadImage("red.png");
             newFace.allocate(tileW,tileH, GL_RGB,true);
             newFace=tileImage.getTextureReference();
             image.face.push_back(newFace);
             
             //create particles for controlling static shape position/rotation
             
-            Particle particle;
-            particle.setup(temp,x+x*y);
-            image.particles.push_back(particle);
-        }
-    }
-    
-    for(int i=0;i<image.particles.size();i++){
-        image.particles[i].goToPosition(imageKeyframes[imageKeyframe]);
-        image.particles[i].start.pos=image.particles[i].target.pos;
+            }
     }
     
 }
@@ -666,6 +666,8 @@ void Tweet::tweetToPhysics(){
 
 void Tweet::imgToPhysics(){
     world->setGravity(ofVec3f(imageKeyframes[imageKeyframe].gravity.x,imageKeyframes[imageKeyframe].gravity.y,imageKeyframes[imageKeyframe].gravity.z));
+    if(tweetKeyframe!=0){
+        if(tweetKeyframes[tweetKeyframe-1].path!="gravity"){
     for (int i=0;i<image.shapes.size();i++){
         btTransform trans;
         ofPoint temp=image.shapes[i]->getPosition();
@@ -676,9 +678,11 @@ void Tweet::imgToPhysics(){
         image.shapes[i]->remove();
         image.shapes[i]->init(boxShape);
         image.shapes[i]->create(world->world,trans, 10);
-        image.shapes[i]->setProperties(.1,1);
         image.shapes[i]->add();
+        image.shapes[i]->setProperties(.1,1);
         image.particles[i].goToPosition(imageKeyframes[imageKeyframe]);
+    }
+    }
     }
     
 }
@@ -888,17 +892,20 @@ void Tweet::destroy(){
     }
     letters.clear();
     particles.clear();
+    
     for(int i=0; i<image.shapes.size();i++){
         image.shapes[i]->remove();
     }
     image.shapes.clear();
     image.face.clear();
     image.particles.clear();
+    
     for(int i=0;i<user.letters.size();i++){
         user.letters[i]->remove();
     }
     user.letters.clear();
     user.particles.clear();
+    
     tweetKeyframes.clear();
     imageKeyframes.clear();
     userKeyframes.clear();

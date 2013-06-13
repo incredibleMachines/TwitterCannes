@@ -11,7 +11,7 @@
 Particle::Keyframe::Keyframe(){}
 Particle::Keyframe::~Keyframe(){}
 
-void Particle::setup(Keyframe pixelPos, float index) {
+void Particle::setup(Keyframe pixelPos, float index, ofPoint _hashMin, ofPoint _hashMax) {
     
 	pixel=pixelPos;
     myIndex=index;

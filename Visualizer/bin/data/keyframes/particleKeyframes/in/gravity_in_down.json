@@ -142,7 +142,7 @@
             "duration": {
                 "min": "",
                 "max": "",
-                "actual": "15000"
+                "actual": "10000"
             },
 
                     "interpolation": "linear"
