@@ -16,10 +16,8 @@
 #define KEYFRAME_IMAGE 1
 #define KEYFRAME_USER 2
 
-void Tweet::loadTweet(db item, ofxBulletWorldRigid* _world, Alphabet* _gotham){
-    
-    cout<<"load"<<endl;
-    
+
+void Tweet::setup(ofPoint _hashMin, ofPoint _hashMax, ofxBulletWorldRigid *_world, Alphabet *_gotham){
     tweetPos=ofPoint(-70,50,5);
     boxScale=ofPoint(.2,.2,.2);
     imagePos=ofPoint(-10,-10,-70);
@@ -28,13 +26,23 @@ void Tweet::loadTweet(db item, ofxBulletWorldRigid* _world, Alphabet* _gotham){
     userScale=ofPoint(.1,.1,.1);
     handleScale=ofPoint(.1,.09,.1);
     
+    world=_world;
     gotham=_gotham;
+
+      boxShape = ofBtGetBoxCollisionShape(boxScale.x*tileW, boxScale.y*tileH, boxScale.z*tileD);
     
+    hashMin=_hashMin;
+    hashMax=_hashMax;
+}
+void Tweet::loadTweet(db item){
+    
+    cout<<"load"<<endl;
+
     tweetKeyframe=0;
     imageKeyframe=0;
     userKeyframe=0;
     
-    world=_world;
+    
     
     bImage=false;
     
@@ -45,7 +53,7 @@ void Tweet::loadTweet(db item, ofxBulletWorldRigid* _world, Alphabet* _gotham){
     user.bNewKey=true;
     image.bNewKey=true;
     
-    boxShape = ofBtGetBoxCollisionShape(boxScale.x*tileW, boxScale.y*tileH, boxScale.z*tileD);
+  
     ofxJSONElement json;
     
     if(item.media_url!=""){
@@ -152,23 +160,28 @@ void Tweet::loadTweet(db item, ofxBulletWorldRigid* _world, Alphabet* _gotham){
         if (tweetText[i]==32){
             pos.x+=10;
             if(pos.x>40){
-                pos.y-=5;
+                pos.y-=10;
                 pos.x=tweetPos.x;
             }
         }
         else if(tweetText[i]>32&&tweetText[i]<256){
             //setup position values for displaying whole image
             Particle::Keyframe temp;
+            
+            ofVec3f boxDim;
+            boxDim=gotham->getSize(tweetText[i])*tweetScale;
+            
+            pos.x+=.5*boxDim.x+.5;
+            
             temp.pos.x=pos.x;
             temp.pos.y=pos.y;
             temp.pos.z=pos.z;
-            ofVec3f boxDim;
-            boxDim=gotham->getSize(tweetText[i])*tweetScale;
+           
             //create Bullet letters for image visualization
             //create particles for controlling static shape position/rotation
             
             Particle particle;
-            particle.setup(temp,i,tweetText[i],boxDim);
+            particle.setup(temp,i,tweetText[i],boxDim, hashMin, hashMax);
             particle.start.pos=particle.target.pos;
             particle.goToPosition(tweetKeyframes[tweetKeyframe]);
             particles.push_back(particle);
@@ -183,7 +196,7 @@ void Tweet::loadTweet(db item, ofxBulletWorldRigid* _world, Alphabet* _gotham){
             letters[letters.size()-1]->enableKinematic();
             
             
-            pos.x+=boxDim.x+2;
+            pos.x+=.5*boxDim.x+.5;
         }
     }
     
@@ -357,19 +370,11 @@ void Tweet::loadUser(string _username, string _handle, string _profileimage){
             
             
             Particle particle;
-            particle.setup(temp,i,nameText[i],boxDim);
+            particle.setup(temp,i,nameText[i],boxDim, hashMin, hashMax);
             particle.goToPosition(userKeyframes[userKeyframe]);
             particle.start.pos=particle.target.pos;
             user.particles.push_back(particle);
-            
-            //create particles for controlling static shape position/rotation
 
-//            
-//            Particle particle;
-//            particle.setup(temp,i,tweetText[i],gotham->getSize(tweetText[i]));
-//            particle.start.pos=particle.target.pos;
-//            particle.goToPosition(tweetKeyframes[tweetKeyframe]);
-//            particles.push_back(particle);
             
             //create Bullet letters for image visualization
             user.letters.push_back( new ofxBulletCustomShape() );

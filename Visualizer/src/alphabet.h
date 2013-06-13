@@ -31,5 +31,7 @@ public:
     ofMesh getMesh(int c);
     
     ofxAssimpModelLoader newModel;
+    
+    float maxY;
 
 };

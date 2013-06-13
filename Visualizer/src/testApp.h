@@ -96,6 +96,9 @@ public:
     bool    bDrawLight;
     
     ofxSQLite* sqlite;
+    
+    ofPoint hashMin;
+    ofPoint hashMax;
 
 
 };

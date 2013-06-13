@@ -9,6 +9,8 @@
 #include "alphabet.h"
 
 void Alphabet::setup(){
+    maxY=0;
+    int letter=0;
     cout<<ofGetFrameNum()<<endl;
     for(int i=0;i<256;i++){
         Letter* newLetter=new Letter();;
@@ -18,10 +20,15 @@ void Alphabet::setup(){
             newModel.loadModel(modelPath,false);
             newLetter->mesh=newModel.getMesh(0);
             newLetter->size=newModel.getSceneMax()-newModel.getSceneMin();
+            if (newLetter->size.y>maxY){
+                maxY=newLetter->size.y;
+                letter=i;
+            }
             newModel.clear();
         }
         letters.push_back(newLetter);
     }
+    cout<<maxY<<"  "<<letter<<endl;
 }
 
 void Alphabet::draw(int c, ofPoint scale){

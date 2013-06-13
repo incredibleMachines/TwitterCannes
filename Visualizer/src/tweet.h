@@ -28,6 +28,7 @@ class Tweet {
     
 public:
     
+    void setup(ofPoint _hashMin, ofPoint _hashMax, ofxBulletWorldRigid* _world, Alphabet* _gotham);
     void update();
     void draw();
     void tweetToKinematic();
@@ -68,7 +69,7 @@ public:
         
     };
     
-    void loadTweet(db item, ofxBulletWorldRigid* _world, Alphabet* _gotham);
+    void loadTweet(db item);
     void loadImage(string _image);
     void loadUser(string _username, string _handle, string _profileimage);
     
@@ -86,12 +87,7 @@ public:
     
     Alphabet* gotham;
     
-    Animation tweetIn;
-    Animation tweetOut;
-    Animation imgIn;
-    Animation imgOut;
-    Animation userIn;
-    Animation userOut;
+    Animation tweetIn, tweetOut, imgIn, imgOut, userIn, userOut;
     bool bNewKey;
     
     btBoxShape*					boxShape;
@@ -113,6 +109,8 @@ public:
     bool bImage;
     
     void switchKey(Particle::Keyframe key, int which);
+    
+    ofPoint hashMin, hashMax;
 };
 
 

@@ -53,9 +53,10 @@ void testApp::setup(){
     //GUI and hashtag mesh loading
     loadHashtag();
     
-    list[0].text="LLLLLLLLLLLLLLLLLLLLLLLLLLLLLL LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL LLLLLLLLLLLLLLLLLLLLLLLLLLLLLL LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL";
+//    list[0].text="iiiiiiiiiiiiiCiiiiiiCiiiiiCi";
     
-    tweet.loadTweet(list[0], &world, &gotham);
+    tweet.setup(hashMin,hashMax,&world, &gotham);
+    tweet.loadTweet(list[0]);
     
     
 }
@@ -132,7 +133,7 @@ void testApp::update(){
             listCount=0;
         }
         
-        tweet.loadTweet(list[listCount], &world, &gotham);
+        tweet.loadTweet(list[listCount]);
         
         cout<<"destroy"<<endl;
     }
@@ -369,6 +370,10 @@ void testApp::loadHashtag()
     }
     //    ofEnableArbTex();
     settings.popTag();
+    hashMin=ofPoint(hashletters[0].pos.x,hashletters[0].pos.y, hashletters[0].pos.z-hashletters[11].scale.z*hashletters[11].size.z);
+    hashMax=ofPoint(hashletters[11].pos.x, hashletters[11].pos.y,hashletters[11].pos.z+hashletters[11].scale.z*hashletters[11].size.z);
+    cout<<"min: "<<hashMin<<endl;
+    cout<<"max: "<<hashMax<<endl;
 }
 
 
@@ -749,6 +754,8 @@ void testApp::updateCollision(int i){
     hashCollision[i]->addMesh(hashMeshes[i], scale, false);
     hashCollision[i]->add();
     hashCollision[i]->setProperties(.1, 1);
+    hashMin=ofPoint(hashletters[0].pos.x,hashletters[0].pos.y, hashletters[0].pos.z);
+    hashMax=ofPoint(hashletters[11].pos.x, hashletters[11].pos.y,hashletters[11].pos.z+hashletters[11].scale.z);
     
     
 }

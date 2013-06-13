@@ -19,13 +19,15 @@ void Particle::setup(Keyframe pixelPos, float index) {
     
 }
 
-void Particle::setup(Keyframe pixelPos, float index, int c, ofPoint _size) {
+void Particle::setup(Keyframe pixelPos, float index, int c, ofPoint _size, ofPoint _hashMin, ofPoint _hashMax) {
         
 	pixel=pixelPos;
     myIndex=index;
     size=_size;
     letter=c;
     targetReached=false;
+    hashMin=_hashMin;
+    hashMax=_hashMax;
     
 }
 
@@ -145,6 +147,9 @@ void Particle::calcPosition(Keyframe goTo){
     else if(goTo.type.x=="previous"){
         calc.pos.x=current.pos.x;
     }
+    else if(goTo.type.x=="hashtag"){
+        calc.pos.x=ofRandom(hashMin.x, hashMax.x);
+    }
     else if(goTo.posMin.x!=0||goTo.posMax.x!=0){
         if(goTo.type.x=="pixel_relative"){
             calc.pos.x=pixel.pos.x+ofRandom(goTo.posMin.x, goTo.posMax.x);
@@ -176,6 +181,9 @@ void Particle::calcPosition(Keyframe goTo){
     else if(goTo.type.y=="previous"){
         calc.pos.y=current.pos.y;
     }
+    else if(goTo.type.y=="hashtag"){
+        calc.pos.y=ofRandom(hashMin.y, hashMax.y);
+    }
     else if(goTo.posMin.y!=NULL&&goTo.posMax.y!=NULL){
         if(goTo.type.y=="pixel_relative"){
             calc.pos.y=pixel.pos.y+ofRandom(goTo.posMin.y, goTo.posMax.y);
@@ -201,6 +209,9 @@ void Particle::calcPosition(Keyframe goTo){
     
     if(goTo.type.z=="pixel"){
         calc.pos.z=pixel.pos.z;
+    }
+    else if(goTo.type.z=="hashtag"){
+        calc.pos.z=ofRandom(hashMin.z, hashMax.z);
     }
     else if(goTo.type.z=="previous"){
         calc.pos.z=current.pos.z;

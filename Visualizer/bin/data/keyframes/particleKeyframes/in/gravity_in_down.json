@@ -3,9 +3,9 @@
         {
             "path": "line",
             "type": {
-                "x": "absolute",
+                "x": "hashtag",
                 "y": "absolute",
-                "z": "absolute"
+                "z": "hashtag"
             },
             "pos": {
                 "set": {
@@ -14,14 +14,14 @@
                     "z": ""
                 },
                 "min": {
-                    "x": "-60",
+                    "x": "",
                     "y": "50",
-                    "z": "05"
+                    "z": ""
                 },
                 "max": {
-                    "x": "88",
+                    "x": "",
                     "y": "100",
-                    "z": "15"
+                    "z": ""
                 }
             },
             "gravity": {
