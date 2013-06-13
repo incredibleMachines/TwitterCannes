@@ -39,7 +39,7 @@ void testApp::update(){
 //--------------------------------------------------------------
 void testApp::fetchTweets(){
     
-	string url = "http://ec2-23-23-188-178.compute-1.amazonaws.com:9000/?" + urls[urlCounter];
+	string url = "http://127.0.0.1:9000/?" + urls[urlCounter];
     cout << "\nFetching url: " + url << endl;
 
     parsed = json.open(url);
