@@ -10,6 +10,15 @@ Instructions:
  		
 	Install Node.js
 		http://nodejs.org/
+
+	Create image folder & set permissions
+		sudo mkdir /twitter
+		sudo mkdir /twitter/user_images
+		sudo mkdir /twitter/media_images
+
+		sudo chmod -R 777 /twitter
+		sudo chmod -R 777 /twitter/user_images
+		sudo chmod -R 777 /twitter/media_images
 	
 	Go into LocalServer root folder
 		cd /path/to/LocalServer
