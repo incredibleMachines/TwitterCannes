@@ -39,9 +39,9 @@
         {
             "path": "gravity",
             "type": {
-                "x": "pixel",
-                "y": "pixel",
-                "z": "previous"
+                "x": "",
+                "y": "",
+                "z": ""
             },
             "pos": {
                 "set": {
@@ -142,7 +142,7 @@
             "duration": {
                 "min": "",
                 "max": "",
-                "actual": "5000"
+                "actual": "15000"
             },
 
                     "interpolation": "linear"

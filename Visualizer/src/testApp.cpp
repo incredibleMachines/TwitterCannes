@@ -53,7 +53,7 @@ void testApp::setup(){
     //GUI and hashtag mesh loading
     loadHashtag();
     
-//    list[0].text="iiiiiiiiiiiiiCiiiiiiCiiiiiCi";
+    list[0].text="!#$%";
     
     tweet.setup(hashMin,hashMax,&world, &gotham);
     tweet.loadTweet(list[0]);
