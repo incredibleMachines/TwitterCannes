@@ -94,6 +94,7 @@ public:
     float   lightAngle;
     bool    bDrawDepth;
     bool    bDrawLight;
+    bool    bShadowsOn;
     
     ofxSQLite* sqlite;
 
