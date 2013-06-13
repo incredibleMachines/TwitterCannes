@@ -11,7 +11,6 @@
 void Alphabet::setup(){
     maxY=0;
     int letter=0;
-    cout<<ofGetFrameNum()<<endl;
     for(int i=0;i<256;i++){
         Letter* newLetter=new Letter();;
         newLetter->ascii=i;
@@ -28,7 +27,6 @@ void Alphabet::setup(){
         }
         letters.push_back(newLetter);
     }
-    cout<<maxY<<"  "<<letter<<endl;
 }
 
 void Alphabet::draw(int c, ofPoint scale){

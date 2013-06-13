@@ -45,6 +45,8 @@ void Particle::update(){
     ofPoint b = start.pos;
     ofPoint c = target.pos - start.pos;
     float d = target.duration;
+    cout<<target.path<<endl;
+    cout<<target.interpolation<<endl;
     
     if (target.path == "line") {
         

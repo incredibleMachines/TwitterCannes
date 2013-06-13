@@ -32,7 +32,7 @@
             "duration": {
                 "min": "",
                 "max": "",
-                "actual": "10000"
+                "actual": "1"
             },
             "interpolations": [
                 {

@@ -1,41 +1,6 @@
 {
     "particles": [
-        {
-            "path": "line",
-            "type": {
-                "x": "hashtag",
-                "y": "absolute",
-                "z": "hashtag"
-            },
-            "pos": {
-                "set": {
-                    "x": "",
-                    "y": "",
-                    "z": ""
-                },
-                "min": {
-                    "x": "",
-                    "y": "6	0",
-                    "z": ""
-                },
-                "max": {
-                    "x": "",
-                    "y": "100",
-                    "z": ""
-                }
-            },
-            "gravity": {
-                "x": "",
-                "y": "",
-                "z": ""
-            },
-            "duration": {
-                "min": "",
-                "max": "",
-                "actual": "1000"
-            },
-        "interpolation": "linear"
-        },
+        
         {
             "path": "gravity",
             "type": {
@@ -51,12 +16,12 @@
                 },
                 "min": {
                     "x": "",
-                    "y": "",
+                    "y": "60",
                     "z": ""
                 },
                 "max": {
                     "x": "",
-                    "y": "",
+                    "y": "100",
                     "z": ""
                 }
             },
@@ -70,7 +35,7 @@
                 "max": "",
                 "actual": "5000"
             },
-                    "interpolation": "linear"
+                    "interpolation": "cubic_in_out"
 
         },
         {

@@ -29,7 +29,7 @@
                            "in": {
                            "speed": "1",
                            "delay": "0",
-                           "animation": "gravity_in_down.json"
+                           "animation": "gravity_in_down_right.json"
                            },
                            "out": {
                            "speed": "1",

@@ -57,7 +57,8 @@ void testApp::setup(){
     loadHashtag();
     
 //    list[0].text="!#$%";
-    listCount=1;
+    list[0].media_url="red.png";
+    listCount=0;
     
     tweet.setup(hashMin,hashMax,&world, &gotham);
     tweet.loadTweet(list[listCount]);
@@ -137,7 +138,6 @@ void testApp::update(){
         }
 
         cout<<"destroy"<<endl;
-        cout<<listCount<<endl;
         
         tweet.loadTweet(list[listCount]);
         
@@ -157,7 +157,7 @@ void testApp::draw(){
 	glEnable(GL_DEPTH_TEST);
     ofDisableAlphaBlending();
     ofEnableLighting();
-//    ofDisableArbTex();
+    ofDisableArbTex();
     ofPushMatrix();
         
     float shadowX = ofMap(mouseX, 0, ofGetWidth(), -100, 100);
@@ -169,7 +169,7 @@ void testApp::draw(){
 //    shadowLightLeft.orbit( shadowX, shadowY, 90, ofVec3f(0.0,0.0,0.0) );
 
     
-//    cout << shadowY << " " << shadowX << endl;
+    cout << shadowY << " " << shadowX << endl;
 
     // lat, long, rad, center
 
@@ -221,11 +221,10 @@ void testApp::draw(){
         
     //bind image textures and draw bullet shapes
     
-//    material.begin();   
+    material.begin();
     tweet.draw();
-//    material.end();
+    material.end();
     
-
     
     shadowLightLeft.disable();
     
@@ -236,14 +235,13 @@ void testApp::draw(){
         glPopMatrix();
     }
     ofPopMatrix();
-
     
     camera.end();
     
     shadowLightLeft.unbindShadowMapTexture();
 
     shader.end();
-    
+//
     
     ofDisableLighting();
     ofPopMatrix();
@@ -270,7 +268,7 @@ void testApp::setupGL(){
     background.add();
     background.setProperties(.1,1);
     
-    whiteImg.loadImage("textures/whiteBig.png");
+    whiteImg.loadImage("red.png");
     white=whiteImg.getTextureReference();
 }
 
@@ -379,12 +377,13 @@ void testApp::loadHashtag()
         hashMeshes.push_back(hashModel.getMesh(0));
         hashModel.clear();
     }
+    
+    ofColor blue=ofColor(0.1,.1,.1);
     //    ofEnableArbTex();
-    settings.popTag();
-    hashMin=ofPoint(hashletters[0].pos.x,hashletters[0].pos.y, hashletters[0].pos.z-hashletters[11].scale.z*hashletters[11].size.z);
-    hashMax=ofPoint(hashletters[11].pos.x, hashletters[11].pos.y,hashletters[11].pos.z+hashletters[11].scale.z*hashletters[11].size.z);
-    cout<<"min: "<<hashMin<<endl;
-    cout<<"max: "<<hashMax<<endl;
+                            settings.popTag();
+    hashMin=ofPoint(hashletters[0].pos.x,hashletters[0].pos.y, hashletters[0].pos.z-hashletters[11].scale.z*hashletters[11].size.z*2);
+    hashMax=ofPoint(hashletters[11].pos.x, hashletters[11].pos.y,hashletters[11].pos.z);
+
 }
 
 
