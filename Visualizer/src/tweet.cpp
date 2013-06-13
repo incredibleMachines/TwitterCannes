@@ -33,14 +33,17 @@ void Tweet::loadTweet(db item, ofxBulletWorldRigid* _world, Alphabet* _gotham){
     tweetKeyframe=0;
     imageKeyframe=0;
     userKeyframe=0;
-    bNewKey=true;
-    user.bNewKey=true;
+    
     world=_world;
+    
     bImage=false;
+    
     bFinished=false;
     image.bFinished=false;
     user.bFinished=false;
-    
+    bNewKey=true;
+    user.bNewKey=true;
+    image.bNewKey=true;
     
     boxShape = ofBtGetBoxCollisionShape(boxScale.x*tileW, boxScale.y*tileH, boxScale.z*tileD);
     ofxJSONElement json;
@@ -150,7 +153,7 @@ void Tweet::loadTweet(db item, ofxBulletWorldRigid* _world, Alphabet* _gotham){
             pos.x+=10;
             if(pos.x>40){
                 pos.y-=5;
-                pos.x=-45;
+                pos.x=tweetPos.x;
             }
         }
         else if(tweetText[i]>32&&tweetText[i]<256){

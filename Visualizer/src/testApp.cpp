@@ -53,7 +53,7 @@ void testApp::setup(){
     //GUI and hashtag mesh loading
     loadHashtag();
     
-    list[0].text="100000000d0ddfaskjdhflkajsh asdkfjhaslkdjfh";
+    list[0].text="LLLLLLLLLLLLLLLLLLLLLLLLLLLLLL LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL LLLLLLLLLLLLLLLLLLLLLLLLLLLLLL LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL";
     
     tweet.loadTweet(list[0], &world, &gotham);
     

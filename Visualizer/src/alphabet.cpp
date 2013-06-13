@@ -15,7 +15,7 @@ void Alphabet::setup(){
         newLetter->ascii=i;
         if(i>32){
             string modelPath="GothamAsciiMeshes/"+ofToString(i)+".obj";
-            newModel.loadModel(modelPath);
+            newModel.loadModel(modelPath,false);
             newLetter->mesh=newModel.getMesh(0);
             newLetter->size=newModel.getSceneMax()-newModel.getSceneMin();
             newModel.clear();
