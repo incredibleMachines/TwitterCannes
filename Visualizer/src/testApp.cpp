@@ -17,6 +17,7 @@ void testApp::setup(){
     
     bDebug=false;
     bGUI=false;
+    bShadowsOn=true;
     
     camState=0;
     
@@ -173,7 +174,10 @@ void testApp::draw(){
     ofScale(0.3, 0.3, 0.3);
 
     drawObjects(); // render to shader map
-    tweet.draw();
+    
+    if(bShadowsOn){
+        tweet.draw();
+    }
     
     ofPopMatrix();
 
@@ -736,7 +740,9 @@ void testApp::keyReleased(int key){
         case 'd':
             bDebug=!bDebug;
             break;
-            
+        case 'l':
+            bShadowsOn=!bShadowsOn;
+            break;
     }
 }
 
