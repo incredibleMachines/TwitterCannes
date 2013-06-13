@@ -34,4 +34,6 @@ public:
 
     float lastUpdated, updateInterval;
     
+    vector <ofImage> images;
+    
 };

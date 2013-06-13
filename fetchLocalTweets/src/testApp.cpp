@@ -13,11 +13,11 @@ void testApp::setup(){
     // limit: how many tweets to return
     // category: Celebrities, Executive+Tweets, Speaker+Quotes
     // starred: true/false
-    urls.push_back("limit=3");
+    urls.push_back("limit=10");
     urls.push_back("limit=10&starred=true");
-    urls.push_back("limit=10&category=Executive+Tweets");
-    urls.push_back("limit=10&category=Executive+Tweets&starred=true");
-    
+    urls.push_back("limit=10&category=Speaker+Quotes");
+    urls.push_back("limit=10&category=Celebrities&starred=true");
+
     // to cycle through different URLs
     urlCounter = 0;
     
@@ -58,7 +58,19 @@ void testApp::fetchTweets(){
             string text = data["text"].asString();
             string media_url = data["media_url"].asString();
             
-            // Probably want to load ofImages here
+            // Can load ofImages here
+            if (user_image != "") {
+                cout << "Adding image: " + user_image << endl;
+                ofImage userImage;
+                userImage.loadImage(user_image);
+                images.push_back(userImage);
+            }
+            if (media_url != "") {
+                cout << "Adding image: " + media_url << endl;
+                ofImage mediaImage;
+                mediaImage.loadImage(media_url);
+                images.push_back(mediaImage);
+            }
             
             cout << "@"+user_screen_name+" "+text << endl;
         }
@@ -75,6 +87,20 @@ void testApp::fetchTweets(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
+
+    int x, y = 0;
+    
+    for (int i = 0; i < images.size(); i++) {
+        ofImage image = images[i];
+        image.resize(50, 50);
+
+        x++;
+        if (x > (ofGetWidth() / 50)) {
+            x = 0;
+            y++;
+        }
+        image.draw(x*50, y*50);
+    }
     
 }
 
