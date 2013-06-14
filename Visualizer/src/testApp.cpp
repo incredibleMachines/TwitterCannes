@@ -2,7 +2,7 @@
 
 #define USE_DOF true
 #define CAM_MOVE false
-#define CAM_MOUSE false
+#define CAM_MOUSE true
 #define FACES false
 
 
@@ -56,7 +56,7 @@ void testApp::setup(){
     //GUI and hashtag mesh loading
     loadHashtag();
     
-    listCount=0;
+    listCount=1;
     
     tweet.setup(hashMin,hashMax,&world, &gotham);
     tweet.loadTweet(list[listCount]);

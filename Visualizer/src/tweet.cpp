@@ -20,7 +20,7 @@
 void Tweet::setup(ofPoint _hashMin, ofPoint _hashMax, ofxBulletWorldRigid *_world, Alphabet *_gotham){
     tweetPos=ofPoint(-70,50,5);
     tweetScale=ofPoint(.1,.1,.1);
-    boxScale=ofPoint(.15,.15,.02);
+    imageScale=ofPoint(.15,.15,.02);
     imagePos=ofPoint(-10,-10,2);
     userPos=ofPoint(-80,-40,25);
     userScale=ofPoint(.1,.1,.1);
@@ -29,7 +29,7 @@ void Tweet::setup(ofPoint _hashMin, ofPoint _hashMax, ofxBulletWorldRigid *_worl
     world=_world;
     gotham=_gotham;
 
-    boxShape = ofBtGetBoxCollisionShape(boxScale.x*tileW, boxScale.y*tileH, boxScale.z*tileD);
+    boxShape = ofBtGetBoxCollisionShape(imageScale.x*tileW, imageScale.y*tileH, imageScale.z*tileD);
     
     hashMin=_hashMin;
     hashMax=_hashMax;
@@ -349,19 +349,21 @@ void Tweet::loadImage(string _image){
     image.bNewKey=true;
     
     pic.setImageType(OF_IMAGE_COLOR);
-    pic.resize(pic.width, pic.height);
     pic.mirror(true, false);
+
+    imageScale=ofPoint(140./pic.height,140./pic.height,.02);
+    imagePos=ofPoint(-(pic.width/2)*imageScale.x,-(pic.height/2)*imageScale.y,0);
     
-    int i=0;
-    
+    boxShape = ofBtGetBoxCollisionShape(imageScale.x*tileW, imageScale.y*tileH, imageScale.z*tileD);
+
     
     for (int x = 0; x < pic.width / tileW; x++){
         for (int y = 0; y < pic.height / tileH; y++){
             
             //setup position values for displaying whole image
             Particle::Keyframe temp;
-            temp.pos.x=x*tileW*boxScale.x+imagePos.x;
-            temp.pos.y=y*tileH*boxScale.y+imagePos.y;
+            temp.pos.x=x*tileW*imageScale.x+imagePos.x;
+            temp.pos.y=y*tileH*imageScale.y+imagePos.y;
             temp.pos.z=imagePos.z;
             
             Particle particle;
@@ -373,11 +375,21 @@ void Tweet::loadImage(string _image){
             //create Bullet shapes for image visualization
             image.shapes.push_back( new ofxBulletBox() );
             
+            if(tweetType!="gravity"){
             ((ofxBulletBox*)image.shapes[image.shapes.size()-1])->init(boxShape);
             ((ofxBulletBox*)image.shapes[image.shapes.size()-1])->create(world->world,particle.target.pos,0.);
-            image.shapes[image.shapes.size()-1]->setProperties(.1,1);
             image.shapes[image.shapes.size()-1]->add();
+            image.shapes[image.shapes.size()-1]->setProperties(.1,1);
             image.shapes[image.shapes.size()-1]->enableKinematic();
+            }
+            
+            else{
+                world->setGravity(ofVec3f(imageKeyframes[imageKeyframe].gravity.x,imageKeyframes[imageKeyframe].gravity.y,imageKeyframes[imageKeyframe].gravity.z));
+                ((ofxBulletBox*)image.shapes[image.shapes.size()-1])->init(boxShape);
+                ((ofxBulletBox*)image.shapes[image.shapes.size()-1])->create(world->world,particle.target.pos,0.);
+                image.shapes[image.shapes.size()-1]->add();
+                image.shapes[image.shapes.size()-1]->setProperties(.1,1);
+            }
             
 //            //crop and allocate image boxes to tiles
 

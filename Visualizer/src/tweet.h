@@ -97,7 +97,7 @@ public:
     btBoxShape*					boxShape;
     ofxBulletWorldRigid* world;
     
-    ofPoint boxScale;
+    ofPoint imageScale;
     ofPoint imagePos;
     ofPoint tweetScale;
     ofPoint tweetPos;
