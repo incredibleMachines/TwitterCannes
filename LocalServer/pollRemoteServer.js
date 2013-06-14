@@ -90,9 +90,9 @@ function insertOrUpdate(json){
 				"user_id":json.user_id,
 				"user_name":json.user_name,
 				"user_screen_name":json.user_screen_name,
-				"user_image":json.user_image,
+				"user_image":"", //json.user_image,
 				"text":json.text,
-				"media_url":json.media_url,
+				"media_url":"", //json.media_url,
 				"lang":json.lang,
 				"status":json.status,
 				"category":json.category, //
@@ -103,15 +103,15 @@ function insertOrUpdate(json){
 
 			};
 
-			if (obj.user_image != "") {
-				var user_image_path = "/twitter/user_images/" + obj.user_id + "." + obj.user_image.split('.').reverse()[0];
-				fetchImage(obj.user_image, user_image_path);
-				obj.user_image = user_image_path;
+			if (json.user_image != "") {
+				var user_image_path = "/twitter/user_images/" + obj.user_id + "." + json.user_image.split('.').reverse()[0];
+				fetchUserImage(json.user_image, user_image_path, obj.id);
+				//obj.user_image = user_image_path;
 			}
-			if (obj.media_url != "") {
-				var media_url_path = "/twitter/media_images/" + obj.id + "." + obj.media_url.split('.').reverse()[0];
-				fetchImage(obj.media_url, media_url_path);
-				obj.media_url = media_url_path;
+			if (json.media_url != "") {
+				var media_url_path = "/twitter/media_images/" + obj.id + "." + json.media_url.split('.').reverse()[0];
+				fetchMediaImage(json.media_url, media_url_path, obj.id);
+				//obj.media_url = media_url_path;
 			}
 
 			collection.insert(obj, {safe:true},function(err,doc){
@@ -133,8 +133,40 @@ function insertOrUpdate(json){
 
 }
 
-var fetchImage = function(uri, outfile) {
+var fetchUserImage = function(uri, outfile, tweet_id) {
+
 	request.head(uri, function(err, res, body) {
-		request(uri).pipe(fs.createWriteStream(outfile));
+
+		console.log("\nFetching user image...");
+		console.log("URI: " + uri);
+		console.log("Outfile: " + outfile);
+		console.log("Tweet ID: " + tweet_id);
+
+		console.log("Status: " + res.statusCode);
+		console.log("Content-length: " + res.headers['content-length']);
+
+		if (res.headers['content-length'] > 0) {
+			request(uri).pipe(fs.createWriteStream(outfile));
+			collection.update({ id: tweet_id }, { $set: { user_image: outfile }}, function(err) { if (err) throw err; })
+		}
+	});
+};
+
+var fetchMediaImage = function(uri, outfile, tweet_id) {
+	
+	request.head(uri, function(err, res, body) {
+		
+		console.log("Fetching media image...");
+		console.log("URI: " + uri);
+		console.log("Outfile: " + outfile);
+		console.log("Tweet ID: " + tweet_id);
+
+		console.log("Status: " + res.statusCode);
+		console.log("Content-length: " + res.headers['content-length']);
+
+		if (res.headers['content-length'] > 0) {
+			request(uri).pipe(fs.createWriteStream(outfile));
+			collection.update({ id: tweet_id }, { $set: { media_url: outfile }}, function(err) { if (err) throw err; })
+		}
 	});
 };
