@@ -138,16 +138,16 @@ $cursor = $collection->find(array('status' => $status))->skip($skip)->limit($lim
         <table class="table table-striped">
     		<thead>
     			<tr>
-    				<th width="10%">
+    				<th width="11%">
     					Moderate
     				</th>
-    				<th width="10%">
+    				<th width="12%">
     					Category
     				</th>
     				<th width="15%">
     					User
     				</th>
-    				<th width="35%">
+    				<th width="32%">
     					Text
     				</th>
     				<th width="30%">
@@ -159,10 +159,11 @@ $cursor = $collection->find(array('status' => $status))->skip($skip)->limit($lim
                 <?php foreach ($cursor as $doc) { ?>
     			<tr id="<?= $doc['_id'] ?>">
     				<td>
-    					<div class="btn-group">
+    					<div class="btn-group" style="display:inline-block">
     						<a class="btn btn-small approve"><i class="icon-ok"></i></a>
     						<a class="btn btn-small deny"><i class="icon-remove"></i></a>
     					</div>
+                        <a class="btn btn-small favorite <?= $doc['starred'] ? 'btn-danger' : '' ?>"><i class="icon-heart <?= $doc['starred'] ? 'icon-white' : '' ?>"></i></a>
     				</td>
     				<td>
     					<div class="btn-group">

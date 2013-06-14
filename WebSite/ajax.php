@@ -39,6 +39,23 @@ if ($_GET['mode'] == 'category') {
 }
 
 // --------------------------------------------------
+// Tweet moderation -- mark as favorite
+// --------------------------------------------------
+if ($_GET['mode'] == 'favorite') {
+
+	$collection = new MongoCollection($db, 'tweets');
+	
+	if ($_GET['action'] == 'true') {
+		$collection->update(array('_id' => $id),  array( '$set' => array('starred' => true, 'approved_at' => $date)) );
+		print $_GET['id'];
+	}
+	if ($_GET['action'] == 'false') {
+		$collection->update(array('_id' => $id),  array( '$set' => array('starred' => false, 'approved_at' => $date)) );
+		print $_GET['id'];
+	}
+}
+
+// --------------------------------------------------
 // Whitelist/Following moderation -- add or remove users
 // --------------------------------------------------
 if ($_GET['mode'] == 'whitelist' || $_GET['mode'] == 'following') {

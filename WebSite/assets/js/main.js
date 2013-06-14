@@ -28,6 +28,27 @@ $('.category-select li').click(function() {
 	});
 });
 
+// Tweet moderation -- set/unset a favorite
+$('.favorite').click(function(){
+	var id = $(this).parents('tr').attr('id');
+	var favorited = $(this).hasClass('btn-danger');
+	var button = this;
+	
+	if (favorited) {
+		$.get(url, { id: id, mode: 'favorite', action: false }, function(data) {
+			$(button).removeClass('btn-danger');
+			$(button).children('.icon-heart').removeClass('icon-white');
+		});
+	} else {
+		$.get(url, { id: id, mode: 'favorite', action: true }, function(data) {
+			$(button).addClass('btn-danger');
+			$(button).children('.icon-heart').addClass('icon-white');
+		});
+	}
+
+});
+
+
 // Whitelist moderation -- add or remove users
 $('form#whitelist-add').submit(function() {
 	var handle = $('form#whitelist-add input').val();
