@@ -52,7 +52,7 @@ public:
         bool bNewKey;
         bool bFinished;
         string type;
-        
+        int width, height;
     };
     
     class TweetUser{
@@ -119,6 +119,7 @@ public:
     string tweetType;
     
     int animationCount;
+    
 };
 
 

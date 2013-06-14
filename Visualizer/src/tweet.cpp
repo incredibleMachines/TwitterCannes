@@ -18,22 +18,21 @@
 
 
 void Tweet::setup(ofPoint _hashMin, ofPoint _hashMax, ofxBulletWorldRigid *_world, Alphabet *_gotham){
+    hashMin=_hashMin;
+    hashMax=_hashMax;
+    animationCount=0;
     tweetPos=ofPoint(-70,50,5);
-    tweetScale=ofPoint(.1,.1,.1);
+    
     imageScale=ofPoint(.15,.15,.02);
     imagePos=ofPoint(-10,-10,2);
-    userPos=ofPoint(-80,-40,25);
-    userScale=ofPoint(.1,.1,.1);
-    handleScale=ofPoint(.07,.07,.07);
-    
+    userPos=ofPoint(hashMin.x,-30,hashMax.z);
+        
     world=_world;
     gotham=_gotham;
 
     boxShape = ofBtGetBoxCollisionShape(imageScale.x*tileW, imageScale.y*tileH, imageScale.z*tileD);
     
-    hashMin=_hashMin;
-    hashMax=_hashMax;
-    animationCount=0;
+
 }
 void Tweet::loadTweet(db item){
     
@@ -42,6 +41,11 @@ void Tweet::loadTweet(db item){
     tweetKeyframe=0;
     imageKeyframe=0;
     userKeyframe=0;
+    
+    tweetScale=ofPoint(.1,.1,.1);
+    userScale=ofPoint(.1,.1,.1);
+    handleScale=ofPoint(.07,.07,.07);
+
     
     
     
@@ -149,8 +153,6 @@ void Tweet::loadTweet(db item){
         animationCount=0;
     }
     
-    ofPoint pos=tweetPos;
-    
     loadParticleKeyframes(tweetIn, KEYFRAME_TWEET);
     loadParticleKeyframes(tweetOut,KEYFRAME_TWEET);
     
@@ -165,12 +167,22 @@ void Tweet::loadTweet(db item){
     
     ofUniString tweetText= ofTextConverter::toUTF32(item.text);
     
+    ofPoint pos=tweetPos;
+    
+    if(bImage==true){
+        pos=ofPoint(hashMin.x,-30,5);
+        tweetScale=ofPoint(tweetScale.x,tweetScale.y,tweetScale.z*.5);
+    }
+    
+
+    
+    
     for (int i=0;i<tweetText.length();i++){
         
         if (tweetText[i]==32){
-            pos.x+=10;
+            pos.x+=5;
             if(pos.x>40){
-                pos.y-=6;
+                pos.y-=7;
                 pos.x=tweetPos.x;
             }
         }
@@ -292,10 +304,20 @@ void Tweet::draw(){
 void Tweet::drawImg(){    
     if(bImage==true){
         //        ofRotate(180,0,1,0);
+        bool bBlack=false;
         for (int i=0;i<image.shapes.size();i++){
+            if(i<.35*(image.height*image.width)){
+                bBlack=true;
+            }
+            else if(i>.35*(image.height*image.width)&&i%image.width==0) bBlack=false;
+            if(bBlack==true){
+                ofSetColor(150,150,150);
+            }
             image.face[i].bind();
             image.shapes[i]->draw();
             image.face[i].unbind();
+            
+            ofSetColor(255,255,255);
         }
     }
     
@@ -303,7 +325,6 @@ void Tweet::drawImg(){
 
 void Tweet::drawLetters(){
     for (int i=0;i<letters.size();i++){
-        white.bind();
         //        letters[i]->draw();
         glPushAttrib(GL_ALL_ATTRIB_BITS);
         glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS);
@@ -317,11 +338,9 @@ void Tweet::drawLetters(){
         gotham->draw(particles[i].letter,tweetScale);
         glPopMatrix();
         glPopAttrib();
-        white.unbind();
     }
     
     for (int i=0;i<user.letters.size();i++){
-        white.bind();
         //        letters[i]->draw();
         glPushAttrib(GL_ALL_ATTRIB_BITS);
         glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS);
@@ -341,7 +360,6 @@ void Tweet::drawLetters(){
         glPopMatrix();
         glPopClientAttrib();
         glPopAttrib();
-        white.unbind();
     }
     
     
@@ -357,17 +375,20 @@ void Tweet::loadImage(string _image){
     imagePos=ofPoint(-(pic.width/2)*imageScale.x,-(pic.height/2)*imageScale.y,0);
     
     boxShape = ofBtGetBoxCollisionShape(imageScale.x*tileW, imageScale.y*tileH, imageScale.z*tileD);
-
     
+    image.width=pic.width/tileW;
+    image.height=pic.height/tileH;
+
+    for (int y = 0; y < pic.height / tileH; y++){ 
     for (int x = 0; x < pic.width / tileW; x++){
-        for (int y = 0; y < pic.height / tileH; y++){
+
             
             //setup position values for displaying whole image
             Particle::Keyframe temp;
             temp.pos.x=x*tileW*imageScale.x+imagePos.x;
             temp.pos.y=y*tileH*imageScale.y+imagePos.y;
             temp.pos.z=imagePos.z;
-            
+        
             Particle particle;
             particle.setup(temp,x+x*y, hashMin, hashMax);
             particle.goToPosition(imageKeyframes[imageKeyframe]);
@@ -415,6 +436,13 @@ void Tweet::loadImage(string _image){
 void Tweet::loadUser(string _username, string _handle, string _profileimage){
     ofPoint pos=userPos;
     
+    if(bImage==true){
+        pos=ofPoint(hashMin.x,-18,5);
+        userScale=ofPoint(userScale.x,userScale.y,userScale.z*.5);
+        handleScale=ofPoint(handleScale.x,handleScale.y,handleScale.z*.5);
+        
+    }
+    
     _handle="@"+_handle;
     
     ofUniString nameText= ofTextConverter::toUTF32(_username);
@@ -429,7 +457,7 @@ void Tweet::loadUser(string _username, string _handle, string _profileimage){
             pos.x+=.5*boxDim.x+.5;
             
             temp.pos.x=pos.x;
-            temp.pos.y=pos.y;
+            temp.pos.y=pos.y+gotham->letters[nameText[i]]->offset;
             temp.pos.z=pos.z;
 
             
@@ -441,7 +469,6 @@ void Tweet::loadUser(string _username, string _handle, string _profileimage){
             user.bNewKey=false;
             
             if(tweetType!="gravity"){
-                
                 user.letters.push_back( new ofxBulletCustomShape() );
                 user.letters[user.letters.size()-1]->addMesh(gotham->getMesh(nameText[i]),userScale,true);
                 user.letters[user.letters.size()-1]->create(world->world,particle.target.pos,0.);
@@ -472,7 +499,7 @@ void Tweet::loadUser(string _username, string _handle, string _profileimage){
             pos.x+=.5*boxDim.x+.5;
             
             temp.pos.x=pos.x;
-            temp.pos.y=pos.y;
+            temp.pos.y=pos.y+gotham->letters[handleText[i]]->offset;;
             temp.pos.z=pos.z;
             
             

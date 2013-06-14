@@ -857,15 +857,15 @@
 				D38956B4176A650200307E99 /* alphabet.cpp */,
 				D38956B5176A650200307E99 /* alphabet.h */,
 				D38956B8176A650200307E99 /* main.cpp */,
-				D38956B9176A650200307E99 /* ofPennerEasing */,
+				D38956D2176A650200307E99 /* particle.h */,
 				D38956D1176A650200307E99 /* particle.cpp */,
 				D38956D4176A650200307E99 /* shadowMapLight.h */,
-				D38956D2176A650200307E99 /* particle.h */,
 				D38956D3176A650200307E99 /* shadowMapLight.cpp */,
-				D38956D5176A650200307E99 /* testApp.cpp */,
 				D38956D6176A650200307E99 /* testApp.h */,
-				D38956D7176A650200307E99 /* tweet.cpp */,
+				D38956D5176A650200307E99 /* testApp.cpp */,
 				D38956D8176A650200307E99 /* tweet.h */,
+				D38956D7176A650200307E99 /* tweet.cpp */,
+				D38956B9176A650200307E99 /* ofPennerEasing */,
 			);
 			path = src;
 			sourceTree = "<group>";
