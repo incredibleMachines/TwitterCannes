@@ -17,24 +17,24 @@
                        "in": {
                            "speed": "1",
                            "delay": "4000",
-                           "animation": "gravity_in_down.json"
+                           "animation": "random_x_y_in_cubic.json"
                        },
                        "out": {
                            "speed": "1",
                            "delay": "2000",
-                           "animation": "gravity_in_down.json"
+                           "animation": "random_x_y_out_cubic.json"
                        }
                    },
                        "image": {
                            "in": {
                            "speed": "1",
                            "delay": "0",
-                           "animation": "gravity_in_up.json"
+                           "animation": "random_x_y_in_cubic.json"
                            },
                            "out": {
                            "speed": "1",
                            "delay": "0",
-                           "animation": "gravity_in_down.json"
+                           "animation": "random_x_y_out_cubic.json"
                            }
                        }
                    }]

@@ -58,7 +58,7 @@ void testApp::setup(){
     loadHashtag();
     
 //    list[0].text="!#$%";
-    list[0].media_url="red.png";
+//    list[0].media_url="red.png";
     listCount=0;
     
     tweet.setup(hashMin,hashMax,&world, &gotham);
@@ -167,9 +167,6 @@ void testApp::draw(){
     //    shadowLightLeft.orbit( 90, -80, 90, ofVec3f(0.0,0.0,0.0) );
     //    shadowLightLeft.orbit( shadowX, shadowY, 90, ofVec3f(0.0,0.0,0.0) );
     
-    
-    cout << shadowY << " " << shadowX << endl;
-    
     // lat, long, rad, center
     
     // render linear depth buffer from light view
@@ -188,7 +185,6 @@ void testApp::draw(){
     shadowLightLeft.endShadowMap();
     
     // render final scene
-        glClearColor(0.0, 0.0, 0.0, 0.0);
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     
     shader.begin();
@@ -247,6 +243,9 @@ void testApp::draw(){
     ofPopMatrix();
     glDisable(GL_DEPTH_TEST);
     
+
+//
+    glDisable(GL_CULL_FACE);
     mainOutputSyphonServer.publishScreen();
     
     if(bGUI==true){
