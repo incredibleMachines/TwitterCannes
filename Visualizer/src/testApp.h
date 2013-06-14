@@ -11,6 +11,7 @@
 #include "tweet.h"
 #include "ofxSQLite.h"
 #include "ofxSyphon.h"
+#include "ofxJSONElement.h"
 
 
 class testApp : public ofBaseApp {
@@ -40,6 +41,7 @@ public:
     void loadHashtag();
     void drawGUI();
     void loadSQL();
+    void fetchTweets();
     
     void keyPressed(int key);
     void mousePressed(int x, int y, int button);
@@ -114,7 +116,9 @@ public:
     //debugging iamge loading
     ofImage image;
 
-
+    // urls for batches of different types of tweets
+    vector <string> urls;
+    int urlCounter;
 
 };
 

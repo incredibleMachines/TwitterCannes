@@ -16,7 +16,23 @@ void testApp::setup(){
     sqlite = new ofxSQLite("twitterCannesLions.db");
     
     gotham.setup();
-    loadSQL();
+    // loadSQL();
+
+    // setup our get queries
+    // these are the options for query
+    // limit: how many tweets to return
+    // category: Celebrities, Executive+Tweets, Speaker+Quotes
+    // starred: true/false
+    urls.push_back("limit=3");
+    urls.push_back("limit=3&starred=true");
+    urls.push_back("limit=3&category=Speaker+Quotes");
+    urls.push_back("limit=3&category=Celebrities");
+    
+    // to cycle through different URLs
+    urlCounter = 0;
+    
+    fetchTweets();
+    
     
     tex.allocate(ofGetWidth(),ofGetHeight(),GL_RGBA);
     
@@ -83,6 +99,51 @@ void testApp::loadSQL(){
             sel.next();
     }
 }
+
+void testApp::fetchTweets(){
+    
+    ofxJSONElement json;
+    db newList;
+    list.clear();
+    
+	string url = "http://127.0.0.1:9000/?" + urls[urlCounter];
+    cout << "\nFetching url: " + url << endl;
+    
+    bool parsed = json.open(url);
+    
+    if (parsed) {
+        
+        for (int i=0; i < json.size(); i++) {
+            
+            // Grab current data out of results
+            ofxJSONElement data = json[i];
+            
+            newList.user_name = data["user_name"].asString();
+            newList.user_screen_name = data["user_screen_name"].asString();
+            newList.user_image = data["user_image"].asString();
+            
+            newList.text = data["text"].asString();
+            newList.media_url = data["media_url"].asString();
+            
+            list.push_back(newList);
+            
+            cout << "@"+newList.user_screen_name;
+            if (newList.media_url != "") cout << " with image";
+            cout << endl;
+        }
+        
+    } else {
+        cout  << "Failed to parse JSON" << endl;
+    }
+    
+    // magic
+    // (increase counter and wrap around to 0 once we hit the end)
+    urlCounter = ++urlCounter % urls.size();
+    
+}
+
+
+
 //--------------------------------------------------------------
 void testApp::drawObjects(){
     
@@ -181,6 +242,8 @@ void testApp::update(){
         tweet.destroy();
         listCount++;
         if(listCount>list.size()-1){
+            cout << "got to last tweet in queue, moving to new set of tweets!" << endl;
+            fetchTweets();
             listCount=0;
         }
 
