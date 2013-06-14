@@ -7,13 +7,37 @@ $collection = new MongoCollection($db, 'tweets');
 $status = isset($_GET['status']) ? $_GET['status'] : 'Pending';
 $page  = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 $limit = isset($_GET['limit']) ? (int) $_GET['limit'] : 10;
+$search = isset($_GET['search']) ? $_GET['search'] : '';
 $skip  = ($page - 1) * $limit;
 $next  = ($page + 1);
 $prev  = ($page - 1);
 $sort  = array('approved_at' => -1, 'created_at' => -1);
 
+if ($search != '') {
+    $split = explode(' ', $search);
+    for ($i = 0; $i < sizeOf($split); $i++) {
+        $or[] = array('user_name' => new MongoRegex("/$split[$i]/i"));
+        $or[] = array('user_screen_name' => new MongoRegex("/$split[$i]/i"));
+        $or[] = array('text' => new MongoRegex("/$split[$i]/i"));
+    }
+}
+
+$and = array(
+    array('status' => $status)
+);
+if ($or) {
+    $and[] = array('$or' => $or);
+}
+
+$find = array(
+    '$and' => $and
+);
+
+
+// $find = array('user_screen_name'=> array('$regex' => 'matt'));
+
 $total = $collection->count();
-$cursor = $collection->find(array('status' => $status))->skip($skip)->limit($limit)->sort($sort);
+$cursor = $collection->find($find)->skip($skip)->limit($limit)->sort($sort);
 
 ?>
 
@@ -77,7 +101,9 @@ $cursor = $collection->find(array('status' => $status))->skip($skip)->limit($lim
     	<h1>
     		#CannesLions Moderation Admin
     	</h1>
+
     	<br>
+
     	<ul class="nav nav-tabs">
             <li <?= ($status == 'Pending') ? 'class="active"' : '' ?>>
     			<a href="main.php?status=Pending">Pending</a>
@@ -95,8 +121,18 @@ $cursor = $collection->find(array('status' => $status))->skip($skip)->limit($lim
     			<a href="following.php">Following</a>
     		</li>
     	</ul>
+
+        <form class="form-inline form-search-tweets" action="main.php" method="get">
+            <input type="hidden" name="status" value="<?= $status ?>">
+            <div class="input-append">
+                <input type="text" name="search" placeholder="Search">
+                <button type="submit" class="btn"><i class="icon-search"></i></button>
+            </div>
+        </form>
+
+        <!--
     	<div class="btn-group">
-    		<a class="btn btn-small dropdown-toggle" data-toggle="dropdown">
+    		<a class="btn dropdown-toggle" data-toggle="dropdown">
                 #CannesLions &nbsp;<span class="caret"></span>
             </a>
     		<ul class="dropdown-menu">
@@ -123,8 +159,7 @@ $cursor = $collection->find(array('status' => $status))->skip($skip)->limit($lim
     			</li>
     		</ul>
     	</div>
-    	
-        <br><br>
+        -->
 
         <ul class="pager pager-mini">
             <li class="previous <?php if ($page == 1) print 'disabled' ?>">
@@ -159,7 +194,7 @@ $cursor = $collection->find(array('status' => $status))->skip($skip)->limit($lim
                 <?php foreach ($cursor as $doc) { ?>
     			<tr id="<?= $doc['_id'] ?>">
     				<td>
-    					<div class="btn-group" style="display:inline-block">
+    					<div class="btn-group">
     						<a class="btn btn-small approve"><i class="icon-ok"></i></a>
     						<a class="btn btn-small deny"><i class="icon-remove"></i></a>
     					</div>
@@ -186,7 +221,7 @@ $cursor = $collection->find(array('status' => $status))->skip($skip)->limit($lim
     					<?= $doc['user_name'] ?>
     				</td>
     				<td>
-    					<?= $doc['text'] ?>
+    					<a href="http://twitter.com/<?= $doc['user_screen_name'] ?>/status/<?= $doc['id'] ?>" target="_blank"><?= $doc['text'] ?></a>
     				</td>
     				<td>
     					<?php if ($doc['media_url']) { ?><img class="img-polaroid moderate-image" src="<?= $doc['media_url'] ?>"><?php } ?>
