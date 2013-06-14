@@ -8,9 +8,9 @@
 
 #include "tweet.h"
 
-#define tileW 40
-#define tileH 40
-#define tileD 40
+#define tileW 20
+#define tileH 20
+#define tileD 20
 
 #define KEYFRAME_TWEET 0
 #define KEYFRAME_IMAGE 1
@@ -20,11 +20,11 @@
 void Tweet::setup(ofPoint _hashMin, ofPoint _hashMax, ofxBulletWorldRigid *_world, Alphabet *_gotham){
     tweetPos=ofPoint(-70,50,5);
     tweetScale=ofPoint(.1,.1,.1);
-    boxScale=ofPoint(.1,.1,.05);
+    boxScale=ofPoint(.15,.15,.02);
     imagePos=ofPoint(-10,-10,2);
     userPos=ofPoint(-80,-40,25);
     userScale=ofPoint(.1,.1,.1);
-    handleScale=ofPoint(.1,.09,.1);
+    handleScale=ofPoint(.07,.07,.07);
     
     world=_world;
     gotham=_gotham;
@@ -330,12 +330,12 @@ void Tweet::drawLetters(){
         glPushMatrix();
         glMultMatrixf( m );
         glTranslatef(-user.particles[i].size.x/2, -user.particles[i].size.y/2, -user.particles[i].size.z/2);
-        //        if(user.particles[i].handle==true){
-        //            gotham->draw(user.particles[i].letter,handleScale);
-        //        }
-        //        else{
+        if(user.particles[i].handle==true){
+            gotham->draw(user.particles[i].letter,handleScale);
+        }
+        else{
         gotham->draw(user.particles[i].letter,userScale);
-        //        }
+                }
         glPopMatrix();
         glPopClientAttrib();
         glPopAttrib();
@@ -350,12 +350,10 @@ void Tweet::loadImage(string _image){
     
     pic.setImageType(OF_IMAGE_COLOR);
     pic.resize(pic.width, pic.height);
-    pic.mirror(false, false);
+    pic.mirror(true, false);
     
     int i=0;
     
-    ofTexture newFace;
-    ofImage tileImage;
     
     for (int x = 0; x < pic.width / tileW; x++){
         for (int y = 0; y < pic.height / tileH; y++){
@@ -384,6 +382,8 @@ void Tweet::loadImage(string _image){
 //            //crop and allocate image boxes to tiles
 
             ofEnableNormalizedTexCoords();
+            ofTexture newFace;
+            ofImage tileImage;
             tileImage.allocate(tileW, tileH, OF_IMAGE_COLOR);
             tileImage.cropFrom(pic, x*tileW, y*tileH, tileW, tileH);
             tileImage.mirror(false,true);
@@ -409,7 +409,7 @@ void Tweet::loadUser(string _username, string _handle, string _profileimage){
             //setup position values for displaying whole image
             Particle::Keyframe temp;
             ofVec3f boxDim;
-                        boxDim=gotham->getSize(nameText[i])*userScale;
+            boxDim=gotham->getSize(nameText[i])*userScale;
             pos.x+=.5*boxDim.x+.5;
             
             temp.pos.x=pos.x;
@@ -437,7 +437,7 @@ void Tweet::loadUser(string _username, string _handle, string _profileimage){
             else{
                 world->setGravity(ofVec3f(tweetKeyframes[tweetKeyframe].gravity.x,tweetKeyframes[tweetKeyframe].gravity.y,tweetKeyframes[tweetKeyframe].gravity.z));
                  user.letters.push_back( new ofxBulletCustomShape() );
-                 user.letters[user.letters.size()-1]->addMesh(gotham->getMesh(nameText[i]),tweetScale,true);
+                 user.letters[user.letters.size()-1]->addMesh(gotham->getMesh(nameText[i]),userScale,true);
                  user.letters[user.letters.size()-1]->create(world->world,particle.target.pos,10.);
                  user.letters[user.letters.size()-1]->add();
                  user.letters[user.letters.size()-1]->setProperties(.1,1);
@@ -447,37 +447,48 @@ void Tweet::loadUser(string _username, string _handle, string _profileimage){
         }
     }
     
-    //    for (int i=0;i<handleText.length();i++){
-    //
-    //        if(handleText[i]>32){
-    //        //setup position values for displaying whole image
-    //        Particle::Keyframe temp;
-    //        temp.pos.x=pos.x;
-    //        temp.pos.y=pos.y;
-    //        temp.pos.z=pos.z;
-    //        ofVec3f boxDim;
-    //        boxDim=gotham->getSize(handleText[i])*handleScale;
-    //        //create Bullet letters for image visualization
-    //        user.letters.push_back( new ofxBulletCustomShape() );
-    //        ofQuaternion startRot=ofQuaternion(0,0,1,PI);
-    //        user.letters[user.letters.size()-1]->addMesh(gotham->getMesh(handleText[i]),handleScale,true);
-    //        user.letters[user.letters.size()-1]->create(world->world,userKeyframes[userKeyframe].pos,startRot,10.);
-    //        user.letters[user.letters.size()-1]->add();
-    //        user.letters[user.letters.size()-1]->setProperties(.1,.1);
-    //        user.letters[user.letters.size()-1]->enableKinematic();
-    //
-    //        //create particles for controlling static shape position/rotation
-    //        Particle particle;
-    //        particle.setup(temp,i,handleText[i],boxDim);
-    //        particle.handle=true;
-    //        user.particles.push_back(particle);
-    //        pos.x+=boxDim.x+2;
-    //        }
-    //    }
-    
-    for(int i=0;i<user.particles.size();i++){
-        user.particles[i].start.pos=user.particles[i].target.pos;
-        user.particles[i].calcPosition(userKeyframes[userKeyframe]);
+    for (int i=0;i<handleText.length();i++){
+        if(handleText[i]>32&&handleText[i]<256){
+            //setup position values for displaying whole image
+            Particle::Keyframe temp;
+            ofVec3f boxDim;
+            boxDim=gotham->getSize(handleText[i])*handleScale;
+            pos.x+=.5*boxDim.x+.5;
+            
+            temp.pos.x=pos.x;
+            temp.pos.y=pos.y;
+            temp.pos.z=pos.z;
+            
+            
+            Particle particle;
+            particle.setup(temp,i,handleText[i],boxDim, hashMin, hashMax);
+            particle.goToPosition(userKeyframes[userKeyframe]);
+            particle.start.pos=particle.target.pos;
+            particle.handle=true;
+            user.particles.push_back(particle);
+            user.bNewKey=false;
+            
+            if(tweetType!="gravity"){
+                
+                user.letters.push_back( new ofxBulletCustomShape() );
+                user.letters[user.letters.size()-1]->addMesh(gotham->getMesh(handleText[i]),handleScale,true);
+                user.letters[user.letters.size()-1]->create(world->world,particle.target.pos,0.);
+                user.letters[user.letters.size()-1]->add();
+                user.letters[user.letters.size()-1]->setProperties(.1,1);
+                user.letters[user.letters.size()-1]->enableKinematic();
+            }
+            
+            else{
+                world->setGravity(ofVec3f(tweetKeyframes[tweetKeyframe].gravity.x,tweetKeyframes[tweetKeyframe].gravity.y,tweetKeyframes[tweetKeyframe].gravity.z));
+                user.letters.push_back( new ofxBulletCustomShape() );
+                user.letters[user.letters.size()-1]->addMesh(gotham->getMesh(handleText[i]),handleScale,true);
+                user.letters[user.letters.size()-1]->create(world->world,particle.target.pos,10.);
+                user.letters[user.letters.size()-1]->add();
+                user.letters[user.letters.size()-1]->setProperties(.1,1);
+            }
+            
+            pos.x+=.5*boxDim.x+.5;
+        }
     }
 }
 

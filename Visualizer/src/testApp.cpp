@@ -11,8 +11,7 @@ void testApp::setup(){
     
     ofSetVerticalSync(true);
 	ofSetFrameRate(30);
-    ofDisableArbTex();
-    
+
     // in bin, not data
     sqlite = new ofxSQLite("twitterCannesLions.db");
     
@@ -57,8 +56,6 @@ void testApp::setup(){
     //GUI and hashtag mesh loading
     loadHashtag();
     
-//    list[0].text="!#$%";
-//    list[0].media_url="red.png";
     listCount=0;
     
     tweet.setup(hashMin,hashMax,&world, &gotham);
@@ -108,6 +105,10 @@ void testApp::drawObjects(){
         glMultMatrixf( m );
         glTranslatef(-hashletters[i].size.x*scale.x/2, -hashletters[i].size.y*scale.y/2, -hashletters[i].size.z*scale.z/2);
         ofScale(scale.x,scale.y,scale.z);
+        ofRotate(hashletters[i].rot.y,1,0,0);
+        ofRotate(hashletters[i].rot.x,0,1,0);
+        ofRotate(hashletters[i].rot.z,0,0,1);
+        
         if(bGUI==true&&hashletters[i].active==true){
             ofSetColor(0,255,0);
             ofSphere(hashMeshes[i].getCentroid().x,hashMeshes[i].getCentroid().y+30,hashMeshes[i].getCentroid().z,10);
@@ -207,7 +208,7 @@ void testApp::draw(){
     float shadowY = ofMap(mouseY, 0, ofGetHeight(), -100, 100);
     
     shadowLightLeft.lookAt( ofVec3f(0.0,0.0,0.0) );
-    shadowLightLeft.orbit( 90, -70, 90, ofVec3f(0.0,0.0,0.0) );
+    shadowLightLeft.orbit( 90, -80, 90, ofVec3f(0.0,0.0,0.0) );
     //    shadowLightLeft.orbit( 90, -80, 90, ofVec3f(0.0,0.0,0.0) );
     //    shadowLightLeft.orbit( shadowX, shadowY, 90, ofVec3f(0.0,0.0,0.0) );
     
@@ -285,7 +286,7 @@ void testApp::draw(){
     
     
     ofPopMatrix();
-    glDisable(GL_DEPTH_TEST);
+
     ofDisableLighting();
 
     glDisable(GL_CULL_FACE);
@@ -296,7 +297,6 @@ void testApp::draw(){
     ofScale(0.3, 0.3, 0.3);
     ofRotate(90, 0, 1, 0);
     ofRotate(330,1,0,0);
-
     
     material.begin();
     tweet.drawImg();
@@ -307,13 +307,15 @@ void testApp::draw(){
     ///// for image loading debugging!
     ofPushMatrix();
     ofScale(1, -1);
-    image.draw(ofPoint(0,0), 20, 20);
+//    image.draw(ofPoint(0,0), 20, 20);
     ofPopMatrix();
     /////
     
     ofPopMatrix();
 
     camera.end();
+    
+        glDisable(GL_DEPTH_TEST);
 
     mainOutputSyphonServer.publishScreen();
 
@@ -336,7 +338,7 @@ void testApp::setupGL(){
     background.add();
     background.setProperties(.1,1);
     
-    whiteImg.loadImage("red.png");
+    whiteImg.loadImage("textures/white.png");
     white=whiteImg.getTextureReference();
 }
 
@@ -435,7 +437,7 @@ void testApp::loadHashtag()
         ofPoint temp=hashletters[i].pos;
         trans.setOrigin( btVector3( btScalar(temp.x), btScalar(temp.y), btScalar(temp.z)) );
         ofPoint rot = hashletters[i].rot;
-        btQuaternion rotate=btQuaternion(rot.x,rot.y,rot.z,ofDegToRad(1));
+        btQuaternion rotate=btQuaternion(0,0,0,ofDegToRad(1));
         trans.setRotation(rotate);
         hashCollision[i]->addMesh(hashModel.getMesh(0), scale, false);
         hashCollision[i]->create( world.world, trans,0.);
@@ -827,7 +829,7 @@ void testApp::updateCollision(int i){
     ofPoint temp=hashletters[i].pos;
     trans.setOrigin( btVector3( btScalar(temp.x), btScalar(temp.y), btScalar(temp.z)) );
     ofPoint rot = hashletters[i].rot;
-    btQuaternion rotate=btQuaternion(rot.x,rot.y,rot.z,ofDegToRad(1));
+    btQuaternion rotate=btQuaternion(0,0,0,ofDegToRad(1));
     trans.setRotation(rotate);
     ofVec3f scale=hashletters[i].scale;
     hashCollision[i]->remove();

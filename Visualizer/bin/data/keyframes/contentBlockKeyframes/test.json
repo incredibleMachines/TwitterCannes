@@ -1,5 +1,6 @@
 {
     "animations": [
+    			
                    {
                        "tweet": {
                        "in": {
@@ -31,6 +32,7 @@
                            "delay": "0",
                            "animation": "random_x_y_in_cubic.json"
                            },
+                           
                            "out": {
                            "speed": "1",
                            "delay": "2000",
@@ -46,7 +48,7 @@
                        },
                        "out": {
                            "speed": "1",
-                           "delay": "0",
+                           "delay": "2000",
                            "animation": "pixel_z_out_cubic.json"
                        }
                    },
@@ -58,7 +60,7 @@
                        },
                        "out": {
                            "speed": "1",
-                           "delay": "0",
+                           "delay": "2000",
                            "animation": "pixel_z_out_cubic.json"
                        }
                    },
@@ -70,7 +72,7 @@
                            },
                            "out": {
                            "speed": "1",
-                           "delay": "0",
+                           "delay": "2000",
                            "animation": "pixel_z_out_cubic.json"
                            }
                        }
@@ -84,7 +86,7 @@
                        },
                        "out": {
                            "speed": "1",
-                           "delay": "0",
+                           "delay": "2000",
                            "animation": "gravity_out_up.json"
                        }
                    },
@@ -96,7 +98,7 @@
                        },
                        "out": {
                            "speed": "1",
-                           "delay": "0",
+                           "delay": "2000",
                            "animation": "gravity_out_up.json"
                        }
                    },
@@ -108,7 +110,7 @@
                            },
                            "out": {
                            "speed": "1",
-                           "delay": "0",
+                           "delay": "2000",
                            "animation": "gravity_out_up.json"
                            }
                        }
@@ -122,7 +124,7 @@
                        },
                        "out": {
                            "speed": "1",
-                           "delay": "0",
+                           "delay": "2000",
                            "animation": "random_x_y_out_cubic.json"
                        }
                    },
@@ -134,7 +136,7 @@
                        },
                        "out": {
                            "speed": "1",
-                           "delay": "0",
+                           "delay": "2000",
                            "animation": "random_x_y_out_cubic.json"
                        }
                    },
@@ -146,7 +148,7 @@
                            },
                            "out": {
                            "speed": "1",
-                           "delay": "0",
+                           "delay": "2000",
                            "animation": "random_x_y_out_cubic.json"
                            }
                        }
