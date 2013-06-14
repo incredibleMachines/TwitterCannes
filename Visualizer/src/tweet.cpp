@@ -91,6 +91,7 @@ void Tweet::loadTweet(db item){
     if(delay!="") tweetIn.delay=ofToInt(delay);
     else tweetIn.delay=0;
     
+    
     tweetOut.path="keyframes/particleKeyframes/out/"+json["animations"][i]["tweet"]["out"]["animation"].asString();
     
     speed=json["animations"][i]["tweet"]["out"]["speed"].asString();
@@ -522,36 +523,26 @@ void Tweet::loadParticleKeyframes(Animation anim, int which){
         
         
         stringNum=json["particles"][i]["pos"]["set"]["x"].asString();
-        if(stringNum!=""){
-            temp.pos.x=ofToInt(stringNum);
-        }
+        if(stringNum!="") temp.pos.x=ofToInt(stringNum);
         else temp.pos.x=NULL;
+        
         stringNum=json["particles"][i]["pos"]["set"]["y"].asString();
-        if(stringNum!=""){
-            temp.pos.y=ofToInt(stringNum);
-        }
+        if(stringNum!="") temp.pos.y=ofToInt(stringNum);
         else temp.pos.y=NULL;
+        
         stringNum=json["particles"][i]["pos"]["set"]["z"].asString();
-        if(stringNum!=""){
-            temp.pos.z=ofToInt(stringNum);
-        }
+        if(stringNum!="") temp.pos.z=ofToInt(stringNum);
         else temp.pos.z=NULL;
         
         
         stringNum = json["particles"][i]["pos"]["min"]["x"].asString();
-        if(stringNum!=""){
-            temp.posMin.x=ofToInt(stringNum);
-        }
+        if(stringNum!="") temp.posMin.x=ofToInt(stringNum);
         else temp.posMin.x=NULL;
         stringNum = json["particles"][i]["pos"]["min"]["y"].asString();
-        if(stringNum!=""){
-            temp.posMin.y=ofToInt(stringNum);
-        }
+        if(stringNum!="") temp.posMin.y=ofToInt(stringNum);
         else temp.posMin.y=NULL;
         stringNum = json["particles"][i]["pos"]["min"]["z"].asString();
-        if(stringNum!=""){
-            temp.posMin.z=ofToInt(stringNum);
-        }
+        if(stringNum!="") temp.posMin.z=ofToInt(stringNum);
         else temp.posMin.z=NULL;
         
         
