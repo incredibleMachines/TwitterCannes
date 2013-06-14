@@ -108,6 +108,9 @@ public:
     ofTexture tex;
 	ofxSyphonServer mainOutputSyphonServer;
 	ofxSyphonServer individualTextureSyphonServer;
+    
+    //debugging iamge loading
+    ofImage image;
 
 
 

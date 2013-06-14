@@ -64,6 +64,7 @@ void testApp::setup(){
     tweet.setup(hashMin,hashMax,&world, &gotham);
     tweet.loadTweet(list[listCount]);
     
+    image.loadImage("media_images/344805828068524035.jpg");
     
 }
 
@@ -177,7 +178,8 @@ void testApp::draw(){
     drawObjects(); // render to shader map
     
     if(bShadowsOn){
-        tweet.draw();
+        tweet.drawLetters();
+        tweet.drawImg();
     }
     
     ofPopMatrix();
@@ -257,6 +259,13 @@ void testApp::draw(){
     tweet.drawImg();
     material.end();
     
+    ///// for image loading debugging!
+    ofPushMatrix();
+    ofScale(1, -1);
+    image.draw(ofPoint(0,0), 20, 20);
+    ofPopMatrix();
+    /////
+    
     ofPopMatrix();
 
     camera.end();
@@ -266,6 +275,7 @@ void testApp::draw(){
     if(bGUI==true){
         drawGUI();
     }
+    
     
 }
 
