@@ -49,6 +49,7 @@ public:
         vector<ofTexture> face;
         bool bNewKey;
         bool bFinished;
+        string type;
         
     };
     
@@ -59,6 +60,7 @@ public:
         vector<Particle> particles;
         bool bNewKey;
         bool bFinished;
+        string type;
     };
     
     class Animation{
@@ -111,6 +113,8 @@ public:
     void switchKey(Particle::Keyframe key, int which);
     
     ofPoint hashMin, hashMax;
+    
+    string tweetType;
 };
 
 

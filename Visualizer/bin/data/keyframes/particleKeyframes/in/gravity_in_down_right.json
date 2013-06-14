@@ -1,41 +1,40 @@
 {
     "particles": [
-
         {
             "path": "gravity",
             "type": {
-                "x": "hashtag",
+                "x": "absolute",
                 "y": "absolute",
-                "z": "hashtag"
+                "z": "absolute"
             },
             "pos": {
                 "set": {
                     "x": "",
-                    "y": "-60",
+                    "y": "",
                     "z": ""
                 },
                 "min": {
-                    "x": "",
-                    "y": "-50",
-                    "z": ""
+                    "x": "100",
+                    "y": "60",
+                    "z": "hashtag"
                 },
                 "max": {
-                    "x": "",
-                    "y": "",
+                    "x": "130",
+                    "y": "80",
                     "z": ""
                 }
             },
             "gravity": {
-                "x": "",
-                "y": "100",
+                "x": "-300",
+                "y": "-200",
                 "z": ""
             },
             "duration": {
                 "min": "",
                 "max": "",
-                "actual": "5000"
+                "actual": "3000"
             },
-                    "interpolation": ""
+                    "interpolation": "linear"
 
         },
         {
@@ -71,46 +70,9 @@
                 "min": "",
                 "max": "",
                 "actual": "5000"
-            },
-
-                    "interpolation": "cubic_in_out"
-        },
-        {
-            "path": "line",
-            "type": {
-                "x": "pixel",
-                "y": "pixel",
-                "z": "pixel"
-            },
-            "pos": {
-                "set": {
-                    "x": "",
-                    "y": "",
-                    "z": ""
-                },
-                "min": {
-                    "x": "",
-                    "y": "",
-                    "z": ""
-                },
-                "max": {
-                    "x": "",
-                    "y": "",
-                    "z": ""
-                }
-            },
-            "gravity": {
-                "x": "0",
-                "y": "0",
-                "z": "0"
-            },
-            "duration": {
-                "min": "",
-                "max": "",
-                "actual": "1000"
             },
 
                     "interpolation": "linear"
         }
-    ]
+            ]
 }

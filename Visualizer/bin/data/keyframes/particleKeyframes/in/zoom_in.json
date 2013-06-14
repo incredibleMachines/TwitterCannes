@@ -3,25 +3,25 @@
         {
             "path": "line",
             "type": {
-                "x": "absolute",
-                "y": "absolute",
-                "z": "absolute"
+                "x": "pixel",
+                "y": "pixel",
+                "z": "off_screen"
             },
             "pos": {
                 "set": {
                     "x": "",
                     "y": "",
-                    "z": ""
+                    "z": "50"
                 },
                 "min": {
-                    "x": "-80",
-                    "y": "50",
-                    "z": "120"
+                    "x": "",
+                    "y": "",
+                    "z": ""
                 },
                 "max": {
-                    "x": "28",
-                    "y": "100",
-                    "z": "150"
+                    "x": "",
+                    "y": "",
+                    "z": ""
                 }
             },
             "gravity": {
@@ -32,13 +32,9 @@
             "duration": {
                 "min": "",
                 "max": "",
-                "actual": "100"
+                "actual": "1000"
             },
-            "interpolations": [
-                {
                     "interpolation": "linear"
-                }
-            ]
         },
         {
             "path": "line",
@@ -54,14 +50,14 @@
                     "z": ""
                 },
                 "min": {
-                    "x": "-80",
-                    "y": "50",
-                    "z": "120"
+                    "x": "",
+                    "y": "",
+                    "z": ""
                 },
                 "max": {
-                    "x": "28",
-                    "y": "100",
-                    "z": "150"
+                    "x": "",
+                    "y": "",
+                    "z": ""
                 }
             },
             "gravity": {
@@ -72,13 +68,9 @@
             "duration": {
                 "min": "",
                 "max": "",
-                "actual": "3000"
+                "actual": "2000"
             },
-            "interpolations": [
-                {
                     "interpolation": "linear"
-                }
-            ]
         }
                     ]
         }

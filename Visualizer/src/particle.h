@@ -91,7 +91,7 @@ public:
         int durationMin=0;
         int durationMax=0;
         
-        string path="linear";
+        string path;
         string interpolation;
         ofPoint gravity;
         

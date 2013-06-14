@@ -11,7 +11,6 @@
 void Alphabet::setup(){
     maxY=0;
     int letter=0;
-    cout<<ofGetFrameNum()<<endl;
     for(int i=0;i<256;i++){
         Letter* newLetter=new Letter();;
         newLetter->ascii=i;
@@ -28,7 +27,6 @@ void Alphabet::setup(){
         }
         letters.push_back(newLetter);
     }
-    cout<<maxY<<"  "<<letter<<endl;
 }
 
 void Alphabet::draw(int c, ofPoint scale){
@@ -41,9 +39,8 @@ void Alphabet::draw(int c, ofPoint scale){
 }
 
 ofPoint Alphabet::getSize(int c){
-    if(c>32&&c<256){
-        return letters[c]->size;
-    }
+    if(c>32&&c<256) return letters[c]->size;
+    
 
     
 //    ofPoint max=letters[c]->model.getSceneMax(true);
@@ -52,7 +49,12 @@ ofPoint Alphabet::getSize(int c){
 }
 
 ofMesh Alphabet::getMesh(int c){
-    if(c>32&&c<256){
-    return letters[c]->mesh;
-    }
+    if(c>32&&c<256) return letters[c]->mesh;
+    
+}
+
+bool Alphabet::testForMesh(int c){
+    if(c>32&&c<256) return true;
+    else return false;
+    
 }

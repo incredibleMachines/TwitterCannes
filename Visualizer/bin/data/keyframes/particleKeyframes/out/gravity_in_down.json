@@ -1,48 +1,13 @@
 {
     "particles": [
+        
         {
-            "path": "line",
+            "path": "gravity",
             "type": {
-                "x": "absolute",
-                "y": "absolute",
-                "z": "absolute"
-            },
-            "pos": {
-                "set": {
-                    "x": "",
-                    "y": "",
-                    "z": ""
-                },
-                "min": {
-                    "x": "-50",
-                    "y": "50",
-                    "z": "05"
-                },
-                "max": {
-                    "x": "28",
-                    "y": "100",
-                    "z": "15"
-                }
-            },
-            "gravity": {
                 "x": "",
                 "y": "",
                 "z": ""
             },
-            "duration": {
-                "min": "",
-                "max": "",
-                "actual": "1"
-            },
-        "interpolation": "linear"
-        },
-        {
-            "path": "gravity",
-            "type": {
-                "x": "pixel",
-                "y": "pixel",
-                "z": "previous"
-            },
             "pos": {
                 "set": {
                     "x": "",
@@ -51,12 +16,12 @@
                 },
                 "min": {
                     "x": "",
-                    "y": "",
+                    "y": "60",
                     "z": ""
                 },
                 "max": {
                     "x": "",
-                    "y": "",
+                    "y": "100",
                     "z": ""
                 }
             },
@@ -68,9 +33,9 @@
             "duration": {
                 "min": "",
                 "max": "",
-                "actual": "100"
+                "actual": "5000"
             },
-                    "interpolation": "linear"
+                    "interpolation": "cubic_in_out"
 
         },
         {
@@ -105,7 +70,7 @@
             "duration": {
                 "min": "",
                 "max": "",
-                "actual": "100"
+                "actual": "5000"
             },
 
                     "interpolation": "linear"
@@ -142,7 +107,7 @@
             "duration": {
                 "min": "",
                 "max": "",
-                "actual": "100"
+                "actual": "1000"
             },
 
                     "interpolation": "linear"

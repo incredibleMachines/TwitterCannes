@@ -108,5 +108,6 @@ public:
 	ofxSyphonServer individualTextureSyphonServer;
 
 
+
 };
 
