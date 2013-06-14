@@ -346,7 +346,7 @@ void Tweet::loadImage(string _image){
     image.bNewKey=true;
     
     pic.setImageType(OF_IMAGE_COLOR);
-//    pic.resize(pic.width, pic.height);
+    pic.resize(pic.width, pic.height);
     pic.mirror(false, false);
     
     int i=0;
