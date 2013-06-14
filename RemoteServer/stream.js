@@ -272,6 +272,7 @@ function TwitterService() {
 				var s = split[i].replace(/"/g, '');
 				if (s.substring(0, 4) == 'http') {
 					split.splice(i, 1);
+					i--;
 				}
 			}
 			var tweet_text_insert = split.join(' ');
