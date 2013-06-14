@@ -9,6 +9,9 @@
 //--------------------------------------------------------------
 void testApp::setup(){
     
+    ofSetVerticalSync(true);
+	ofSetFrameRate(30);
+    ofDisableArbTex();
     
     // in bin, not data
     sqlite = new ofxSQLite("twitterCannesLions.db");
@@ -31,9 +34,6 @@ void testApp::setup(){
     world.setup();
     world.enableCollisionEvents();
     world.setCamera(&camera);
-    
-    ofSetVerticalSync(true);
-	ofSetFrameRate(30);
     
     //camera, lighting, dof setup
     setupGL();
@@ -200,10 +200,10 @@ void testApp::draw(){
     
     // draw background for projecting shadows onto
     ofPushMatrix();
-    ofScale(6,6,6);
-    ofRotate(90, 0, 1, 0);
-    ofRotate(330,1,0,0);
-    ofRect(-15, -15, 30, 30);
+        ofScale(6,6,6);
+        ofRotate(90, 0, 1, 0);
+        ofRotate(330,1,0,0);
+        ofRect(-15, -15, 30, 30);
     ofPopMatrix();
     
     ofPushMatrix();
@@ -218,7 +218,7 @@ void testApp::draw(){
     //bind image textures and draw bullet shapes
     
     material.begin();
-    tweet.draw();
+    tweet.drawLetters();
     material.end();
     
     
@@ -237,17 +237,32 @@ void testApp::draw(){
     shadowLightLeft.unbindShadowMapTexture();
     
     shader.end();
-    //
     
-    ofDisableLighting();
+    
     ofPopMatrix();
     glDisable(GL_DEPTH_TEST);
+    ofDisableLighting();
+
+    glDisable(GL_CULL_FACE);
     
 
-//
-    glDisable(GL_CULL_FACE);
-    mainOutputSyphonServer.publishScreen();
+    camera.begin();
+    ofPushMatrix();
+    ofScale(0.3, 0.3, 0.3);
+    ofRotate(90, 0, 1, 0);
+    ofRotate(330,1,0,0);
+
     
+    material.begin();
+    tweet.drawImg();
+    material.end();
+    
+    ofPopMatrix();
+
+    camera.end();
+
+    mainOutputSyphonServer.publishScreen();
+
     if(bGUI==true){
         drawGUI();
     }

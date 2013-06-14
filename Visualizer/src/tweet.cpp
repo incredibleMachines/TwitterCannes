@@ -281,6 +281,7 @@ void Tweet::update(){
 
 
 void Tweet::draw(){
+    /*
     for (int i=0;i<letters.size();i++){
         white.bind();
         //        letters[i]->draw();
@@ -331,6 +332,66 @@ void Tweet::draw(){
         glPopAttrib();
         white.unbind();
     }
+    */
+}
+
+void Tweet::drawImg(){
+    draw();
+    
+    if(bImage==true){
+        //        ofRotate(180,0,1,0);
+        for (int i=0;i<image.shapes.size();i++){
+            image.face[i].bind();
+            image.shapes[i]->draw();
+            image.face[i].unbind();
+        }
+    }
+    
+}
+
+void Tweet::drawLetters(){
+    for (int i=0;i<letters.size();i++){
+        white.bind();
+        //        letters[i]->draw();
+        glPushAttrib(GL_ALL_ATTRIB_BITS);
+        glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS);
+        glEnable(GL_NORMALIZE);
+        glDisable(GL_CULL_FACE);
+        btScalar	m[16];
+        ofGetOpenGLMatrixFromRigidBody( letters[i]->getRigidBody(), m );
+        glPushMatrix();
+        glMultMatrixf( m );
+        glTranslatef((-particles[i].size.x)/2, (-particles[i].size.y)/2, (-particles[i].size.z)/2);
+        gotham->draw(particles[i].letter,tweetScale);
+        glPopMatrix();
+        glPopAttrib();
+        white.unbind();
+    }
+    
+    for (int i=0;i<user.letters.size();i++){
+        white.bind();
+        //        letters[i]->draw();
+        glPushAttrib(GL_ALL_ATTRIB_BITS);
+        glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS);
+        glEnable(GL_NORMALIZE);
+        glDisable(GL_CULL_FACE);
+        btScalar	m[16];
+        ofGetOpenGLMatrixFromRigidBody(user.letters[i]->getRigidBody(), m );
+        glPushMatrix();
+        glMultMatrixf( m );
+        glTranslatef(-user.particles[i].size.x/2, -user.particles[i].size.y/2, -user.particles[i].size.z/2);
+        //        if(user.particles[i].handle==true){
+        //            gotham->draw(user.particles[i].letter,handleScale);
+        //        }
+        //        else{
+        gotham->draw(user.particles[i].letter,userScale);
+        //        }
+        glPopMatrix();
+        glPopClientAttrib();
+        glPopAttrib();
+        white.unbind();
+    }
+    
     
 }
 

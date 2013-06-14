@@ -31,6 +31,8 @@ public:
     void setup(ofPoint _hashMin, ofPoint _hashMax, ofxBulletWorldRigid* _world, Alphabet* _gotham);
     void update();
     void draw();
+    void drawImg();
+    void drawLetters();
     void tweetToKinematic();
     void imgToKinematic();
     void userToKinematic();
