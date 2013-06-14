@@ -1,22 +1,21 @@
 {
     "particles": [
-
-        {
-            "path": "gravity",
+    {
+            "path": "line",
             "type": {
-                "x": "hashtag",
-                "y": "absolute",
-                "z": "hashtag"
+                "x": "pixel",
+                "y": "pixel",
+                "z": "pixel"
             },
             "pos": {
                 "set": {
                     "x": "",
-                    "y": "-60",
+                    "y": "",
                     "z": ""
                 },
                 "min": {
                     "x": "",
-                    "y": "-50",
+                    "y": "",
                     "z": ""
                 },
                 "max": {
@@ -27,23 +26,22 @@
             },
             "gravity": {
                 "x": "",
-                "y": "100",
+                "y": "",
                 "z": ""
             },
             "duration": {
                 "min": "",
                 "max": "",
-                "actual": "5000"
+                "actual": ""
             },
                     "interpolation": ""
-
         },
         {
             "path": "line",
             "type": {
                 "x": "pixel",
                 "y": "pixel",
-                "z": "pixel"
+                "z": "off_screen"
             },
             "pos": {
                 "set": {
@@ -63,54 +61,19 @@
                 }
             },
             "gravity": {
-                "x": "0",
-                "y": "0",
-                "z": "0"
+                "x": "",
+                "y": "",
+                "z": ""
             },
             "duration": {
-                "min": "",
-                "max": "",
-                "actual": "5000"
+                "min": "1000",
+                "max": "3000",
+                "actual": ""
             },
-
-                    "interpolation": "cubic_in_out"
-        },
-        {
-            "path": "line",
-            "type": {
-                "x": "pixel",
-                "y": "pixel",
-                "z": "pixel"
-            },
-            "pos": {
-                "set": {
-                    "x": "",
-                    "y": "",
-                    "z": ""
-                },
-                "min": {
-                    "x": "",
-                    "y": "",
-                    "z": ""
-                },
-                "max": {
-                    "x": "",
-                    "y": "",
-                    "z": ""
-                }
-            },
-            "gravity": {
-                "x": "0",
-                "y": "0",
-                "z": "0"
-            },
-            "duration": {
-                "min": "",
-                "max": "",
-                "actual": "1000"
-            },
-
                     "interpolation": "linear"
+        }
+        
+                    ]
         }
     ]
 }

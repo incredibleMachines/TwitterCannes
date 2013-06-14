@@ -115,6 +115,8 @@ public:
     ofPoint hashMin, hashMax;
     
     string tweetType;
+    
+    int animationCount;
 };
 
 

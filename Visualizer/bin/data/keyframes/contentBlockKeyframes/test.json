@@ -4,7 +4,7 @@
                        "tweet": {
                        "in": {
                            "speed": "1",
-                           "delay": "1000",
+                           "delay": "0",
                            "animation": "random_x_y_in_cubic.json"
                        },
                        "out": {
@@ -16,7 +16,7 @@
                        "user": {
                        "in": {
                            "speed": "1",
-                           "delay": "4000",
+                           "delay": "0",
                            "animation": "random_x_y_in_cubic.json"
                        },
                        "out": {
@@ -33,9 +33,124 @@
                            },
                            "out": {
                            "speed": "1",
+                           "delay": "2000",
+                           "animation": "random_x_y_out_cubic.json"
+                           }
+                       }
+                   },{
+                       "tweet": {
+                       "in": {
+                           "speed": "1",
+                           "delay": "0",
+                           "animation": "pixel_z_in_cubic.json"
+                       },
+                       "out": {
+                           "speed": "1",
+                           "delay": "0",
+                           "animation": "pixel_z_out_cubic.json"
+                       }
+                   },
+                       "user": {
+                       "in": {
+                           "speed": "1",
+                           "delay": "0",
+                           "animation": "pixel_z_in_cubic.json"
+                       },
+                       "out": {
+                           "speed": "1",
+                           "delay": "0",
+                           "animation": "pixel_z_out_cubic.json"
+                       }
+                   },
+                       "image": {
+                           "in": {
+                           "speed": "1",
+                           "delay": "0",
+                           "animation": "pixel_z_in_cubic.json"
+                           },
+                           "out": {
+                           "speed": "1",
+                           "delay": "0",
+                           "animation": "pixel_z_out_cubic.json"
+                           }
+                       }
+                   },
+                   {
+                       "tweet": {
+                       "in": {
+                           "speed": "1",
+                           "delay": "0",
+                           "animation": "gravity_in_up.json"
+                       },
+                       "out": {
+                           "speed": "1",
+                           "delay": "0",
+                           "animation": "gravity_out_up.json"
+                       }
+                   },
+                       "user": {
+                       "in": {
+                           "speed": "1",
+                           "delay": "0",
+                           "animation": "gravity_in_up.json"
+                       },
+                       "out": {
+                           "speed": "1",
+                           "delay": "0",
+                           "animation": "gravity_out_up.json"
+                       }
+                   },
+                       "image": {
+                           "in": {
+                           "speed": "1",
+                           "delay": "0",
+                           "animation": "gravity_in_up.json"
+                           },
+                           "out": {
+                           "speed": "1",
+                           "delay": "0",
+                           "animation": "gravity_out_up.json"
+                           }
+                       }
+                   },
+                   {
+                       "tweet": {
+                       "in": {
+                           "speed": "1",
+                           "delay": "0",
+                           "animation": "random_x_y_in_cubic.json"
+                       },
+                       "out": {
+                           "speed": "1",
+                           "delay": "0",
+                           "animation": "random_x_y_out_cubic.json"
+                       }
+                   },
+                       "user": {
+                       "in": {
+                           "speed": "1",
+                           "delay": "0",
+                           "animation": "random_x_y_in_cubic.json"
+                       },
+                       "out": {
+                           "speed": "1",
+                           "delay": "0",
+                           "animation": "random_x_y_out_cubic.json"
+                       }
+                   },
+                       "image": {
+                           "in": {
+                           "speed": "1",
+                           "delay": "0",
+                           "animation": "random_x_y_in_cubic.json"
+                           },
+                           "out": {
+                           "speed": "1",
                            "delay": "0",
                            "animation": "random_x_y_out_cubic.json"
                            }
                        }
-                   }]
+                   }
+                   
+                   ]
 }

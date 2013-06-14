@@ -33,6 +33,7 @@ void Tweet::setup(ofPoint _hashMin, ofPoint _hashMax, ofxBulletWorldRigid *_worl
     
     hashMin=_hashMin;
     hashMax=_hashMax;
+    animationCount=0;
 }
 void Tweet::loadTweet(db item){
     
@@ -72,10 +73,12 @@ void Tweet::loadTweet(db item){
     }
     
     bool success=json.open("keyframes/contentBlockKeyframes/test.json");
-    int i=0;
+    int i=animationCount;
     
     string speed;
     string delay;
+    
+    ofxJSONElement animations=json["animations"];
     
     tweetIn.path="keyframes/particleKeyframes/in/"+json["animations"][i]["tweet"]["in"]["animation"].asString();
     
@@ -138,6 +141,11 @@ void Tweet::loadTweet(db item){
     delay=json["animations"][i]["user"]["out"]["delay"].asString();
     if(delay!="") userOut.delay=ofToInt(delay);
     else userOut.delay=0;
+    
+    animationCount++;
+    if (animationCount>animations.size()-1){
+        animationCount=0;
+    }
     
     ofPoint pos=tweetPos;
     
@@ -923,7 +931,7 @@ void Tweet::updateUser(){
             user.bNewKey=true;
             userKeyframe++;
             if(userKeyframe>userKeyframes.size()-1){
-                user.bFinished=false;
+                user.bFinished=true;
             }
         }
     }

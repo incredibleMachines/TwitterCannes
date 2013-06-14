@@ -194,10 +194,10 @@ void Particle::calcPosition(Keyframe goTo){
     else if(goTo.type.y=="off_screen"){
         int random=ofRandom(0.,2.5);
         if (random>1){
-            calc.pos.y=ofRandom(70,90);
+            calc.pos.y=ofRandom(90,110);
         }
         else{
-            calc.pos.y=ofRandom(-90,-70);
+            calc.pos.y=ofRandom(-110,-90);
         }
         
     }
@@ -234,7 +234,7 @@ void Particle::calcPosition(Keyframe goTo){
         calc.pos.z=ofRandom(hashMin.z, hashMax.z);
     }
     else if(goTo.type.z=="off_screen"){
-        calc.pos.z=ofRandom(50,70);
+        calc.pos.z=ofRandom(150,200);
         
     }
     else if(goTo.type.z=="previous"){

@@ -5,18 +5,18 @@
             "path": "gravity",
             "type": {
                 "x": "hashtag",
-                "y": "absolute",
+                "y": "off_screen",
                 "z": "hashtag"
             },
             "pos": {
                 "set": {
                     "x": "",
-                    "y": "-60",
+                    "y": "",
                     "z": ""
                 },
                 "min": {
                     "x": "",
-                    "y": "-50",
+                    "y": "",
                     "z": ""
                 },
                 "max": {
@@ -27,7 +27,7 @@
             },
             "gravity": {
                 "x": "",
-                "y": "100",
+                "y": "75",
                 "z": ""
             },
             "duration": {
