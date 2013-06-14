@@ -109,11 +109,13 @@ function findPhoto(url, document) {
 			// Check for 301, a redirect for permanent move
 			if (response.statusCode == 301) {
 				dest = response.headers.location;
+				console.log("Getting redirected to: " + dest);
 
 				// Check if we're getting redirected to instagram
 				// Look to make sure the url string begins with "http://instagram.com"
 				// (No match would return -1)
 				if (dest.toLowerCase().indexOf("http://instagram.com") == 0) {
+					console.log("Redirected to Instagram")
 
 					// If so, make a new request to the redirected URL, and do follow redirects
 					request(url, function(error, response, body) {
@@ -134,6 +136,7 @@ function findPhoto(url, document) {
 					return '';
 				}
 			} else {
+				console.log("Status: " + response.statusCode);
 				return '';
 			}
 		}
