@@ -17,7 +17,7 @@ mongo.open(function(err,mongo){
 });
 
 
-setInterval(checkRemote, 1000*10); //one minute
+setInterval(checkRemote, 1000*60); //one minute
 
 function checkRemote(){
 	var body=''; 
