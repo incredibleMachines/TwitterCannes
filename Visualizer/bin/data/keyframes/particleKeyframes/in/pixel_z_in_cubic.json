@@ -1,0 +1,78 @@
+{
+    "particles": [
+        {
+            "path": "line",
+            "type": {
+                "x": "pixel",
+                "y": "pixel",
+                "z": "off_screen"
+            },
+            "pos": {
+                "set": {
+                    "x": "",
+                    "y": "",
+                    "z": ""
+                },
+                "min": {
+                    "x": "",
+                    "y": "",
+                    "z": ""
+                },
+                "max": {
+                    "x": "",
+                    "y": "",
+                    "z": ""
+                }
+            },
+            "gravity": {
+                "x": "",
+                "y": "",
+                "z": ""
+            },
+            "duration": {
+                "min": "",
+                "max": "",
+                "actual": "1000"
+            },
+                    "interpolation": "linear"
+        },
+        {
+            "path": "line",
+            "type": {
+                "x": "pixel",
+                "y": "pixel",
+                "z": "pixel"
+            },
+            "pos": {
+                "set": {
+                    "x": "",
+                    "y": "",
+                    "z": ""
+                },
+                "min": {
+                    "x": "",
+                    "y": "",
+                    "z": ""
+                },
+                "max": {
+                    "x": "",
+                    "y": "",
+                    "z": ""
+                }
+            },
+            "gravity": {
+                "x": "",
+                "y": "",
+                "z": ""
+            },
+            "duration": {
+                "min": "1000",
+                "max": "3000",
+                "actual": ""
+            },
+                    "interpolation": "cubic_out"
+        }
+                    ]
+        }
+    ]
+}

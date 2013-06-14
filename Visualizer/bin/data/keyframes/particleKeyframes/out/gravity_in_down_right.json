@@ -1,0 +1,78 @@
+{
+    "particles": [
+        {
+            "path": "gravity",
+            "type": {
+                "x": "absolute",
+                "y": "absolute",
+                "z": "absolute"
+            },
+            "pos": {
+                "set": {
+                    "x": "",
+                    "y": "",
+                    "z": ""
+                },
+                "min": {
+                    "x": "100",
+                    "y": "60",
+                    "z": "hashtag"
+                },
+                "max": {
+                    "x": "130",
+                    "y": "80",
+                    "z": ""
+                }
+            },
+            "gravity": {
+                "x": "-300",
+                "y": "-200",
+                "z": ""
+            },
+            "duration": {
+                "min": "",
+                "max": "",
+                "actual": "3000"
+            },
+                    "interpolation": "linear"
+
+        },
+        {
+            "path": "line",
+            "type": {
+                "x": "pixel",
+                "y": "pixel",
+                "z": "pixel"
+            },
+            "pos": {
+                "set": {
+                    "x": "",
+                    "y": "",
+                    "z": ""
+                },
+                "min": {
+                    "x": "",
+                    "y": "",
+                    "z": ""
+                },
+                "max": {
+                    "x": "",
+                    "y": "",
+                    "z": ""
+                }
+            },
+            "gravity": {
+                "x": "0",
+                "y": "0",
+                "z": "0"
+            },
+            "duration": {
+                "min": "",
+                "max": "",
+                "actual": "5000"
+            },
+
+                    "interpolation": "linear"
+        }
+            ]
+}

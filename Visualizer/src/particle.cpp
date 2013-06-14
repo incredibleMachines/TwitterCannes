@@ -148,12 +148,12 @@ void Particle::calcPosition(Keyframe goTo){
         calc.pos.x=current.pos.x;
     }
     else if(goTo.type.x=="off_screen"){
-        int random=ofRandom(0.,2.);
+        int random=ofRandom(0.,2.5);
         if (random>1){
-            calc.pos.x=ofRandom(-80,-120);
+            calc.pos.x=ofRandom(-100,-120);
         }
         else{
-            calc.pos.x=ofRandom(80,120);
+            calc.pos.x=ofRandom(100,120);
         }
         
     }
@@ -192,12 +192,12 @@ void Particle::calcPosition(Keyframe goTo){
         calc.pos.y=current.pos.y;
     }
     else if(goTo.type.y=="off_screen"){
-        int random=ofRandom(0.,2.);
+        int random=ofRandom(0.,2.5);
         if (random>1){
-            calc.pos.y=ofRandom(60,80);
+            calc.pos.y=ofRandom(70,90);
         }
         else{
-            calc.pos.y=ofRandom(-80,-60);
+            calc.pos.y=ofRandom(-90,-70);
         }
         
     }
@@ -233,17 +233,10 @@ void Particle::calcPosition(Keyframe goTo){
     else if(goTo.type.z=="hashtag"){
         calc.pos.z=ofRandom(hashMin.z, hashMax.z);
     }
-    else if(goTo.type.y=="off_screen"){
-        int random=ofRandom(0.,2.);
-        if (random>1){
-            calc.pos.y=ofRandom(-80,-120);
-        }
-        else{
-            calc.pos.y=ofRandom(50,70);
-        }
+    else if(goTo.type.z=="off_screen"){
+        calc.pos.z=ofRandom(50,70);
         
     }
-    
     else if(goTo.type.z=="previous"){
         calc.pos.z=current.pos.z;
     }

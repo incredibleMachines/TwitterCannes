@@ -91,6 +91,8 @@ public:
     ofShader shader;
     ShadowMapLight shadowLightLeft, shadowLightRight;
     ofMesh mesh;
+
+    ofFbo fbo;
     
     float   lightAngle;
     bool    bDrawDepth;

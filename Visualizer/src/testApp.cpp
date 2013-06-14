@@ -2,12 +2,13 @@
 
 #define USE_DOF true
 #define CAM_MOVE false
-#define CAM_MOUSE true
+#define CAM_MOUSE false
 #define FACES false
 
 
 //--------------------------------------------------------------
 void testApp::setup(){
+    
     
     // in bin, not data
     sqlite = new ofxSQLite("twitterCannesLions.db");
@@ -15,7 +16,7 @@ void testApp::setup(){
     gotham.setup();
     loadSQL();
     
-    tex.allocate(1920,917,GL_RGBA);
+    tex.allocate(ofGetWidth(),ofGetHeight(),GL_RGBA);
     
     bDebug=false;
     bGUI=false;
@@ -146,38 +147,36 @@ void testApp::update(){
     else{
         tweet.update();
     }
-    
    
     
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
-    
-	glEnable(GL_DEPTH_TEST);
+    glEnable(GL_DEPTH_TEST);
     ofDisableAlphaBlending();
     ofEnableLighting();
-    ofDisableArbTex();
+
     ofPushMatrix();
-        
+    
     float shadowX = ofMap(mouseX, 0, ofGetWidth(), -100, 100);
     float shadowY = ofMap(mouseY, 0, ofGetHeight(), -100, 100);
     
     shadowLightLeft.lookAt( ofVec3f(0.0,0.0,0.0) );
     shadowLightLeft.orbit( 90, -70, 90, ofVec3f(0.0,0.0,0.0) );
-//    shadowLightLeft.orbit( 90, -80, 90, ofVec3f(0.0,0.0,0.0) );
-//    shadowLightLeft.orbit( shadowX, shadowY, 90, ofVec3f(0.0,0.0,0.0) );
-
+    //    shadowLightLeft.orbit( 90, -80, 90, ofVec3f(0.0,0.0,0.0) );
+    //    shadowLightLeft.orbit( shadowX, shadowY, 90, ofVec3f(0.0,0.0,0.0) );
+    
     
     cout << shadowY << " " << shadowX << endl;
-
+    
     // lat, long, rad, center
-
+    
     // render linear depth buffer from light view
     shadowLightLeft.beginShadowMap();
     ofPushMatrix();
     ofScale(0.3, 0.3, 0.3);
-
+    
     drawObjects(); // render to shader map
     
     if(bShadowsOn){
@@ -185,10 +184,11 @@ void testApp::draw(){
     }
     
     ofPopMatrix();
-
+    
     shadowLightLeft.endShadowMap();
     
     // render final scene
+        glClearColor(0.0, 0.0, 0.0, 0.0);
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     
     shader.begin();
@@ -216,9 +216,9 @@ void testApp::draw(){
     material.begin();
     
     drawObjects(); // render to screen
-   
+    
     material.end();
-        
+    
     //bind image textures and draw bullet shapes
     
     material.begin();
@@ -239,16 +239,15 @@ void testApp::draw(){
     camera.end();
     
     shadowLightLeft.unbindShadowMapTexture();
-
+    
     shader.end();
-//
+    //
     
     ofDisableLighting();
     ofPopMatrix();
-    
     glDisable(GL_DEPTH_TEST);
     
-//    mainOutputSyphonServer.publishScreen();
+    mainOutputSyphonServer.publishScreen();
     
     if(bGUI==true){
         drawGUI();
@@ -313,7 +312,6 @@ void testApp::loadHashtag()
     int numberOfSavedPoints = settings.getNumTags("LETTER");
     
     int idCount=0;
-    //    ofDisableArbTex();
     for(int i = 0; i < 13; i++){
         
         //LOAD POSITION SETTINGS FROM MASTER SETTINGS XML DOCUMENT

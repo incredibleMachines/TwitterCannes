@@ -532,11 +532,17 @@ void Tweet::loadParticleKeyframes(Animation anim, int which){
         stringNum= json["particles"][i]["duration"]["actual"].asString();
         if(stringNum!=""){
             temp.duration=anim.speed*ofToInt(stringNum);
+            if(i==0){
+                temp.duration+=anim.delay*ofToInt(stringNum);
+            }
         }
         else temp.duration=NULL;
         stringNum= json["particles"][i]["duration"]["max"].asString();
         if(stringNum!=""){
             temp.durationMax=anim.speed*ofToInt(stringNum);
+            if(i==0){
+                temp.durationMax+=anim.delay*ofToInt(stringNum);
+            }
         }
         else temp.durationMax=NULL;
         
@@ -545,6 +551,9 @@ void Tweet::loadParticleKeyframes(Animation anim, int which){
         
         if(stringNum!=""){
             temp.durationMin=anim.speed*ofToInt(stringNum);
+            if(i==0){
+                temp.durationMin+=anim.delay*ofToInt(stringNum);
+            }
         }
         else temp.durationMin=NULL;
         

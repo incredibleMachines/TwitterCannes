@@ -3,15 +3,15 @@
         {
             "path": "line",
             "type": {
-                "x": "pixel",
-                "y": "pixel",
-                "z": "off_screen"
+                "x": "off_screen",
+                "y": "off_screen",
+                "z": "pixel"
             },
             "pos": {
                 "set": {
                     "x": "",
                     "y": "",
-                    "z": "50"
+                    "z": ""
                 },
                 "min": {
                     "x": "",
@@ -32,7 +32,7 @@
             "duration": {
                 "min": "",
                 "max": "",
-                "actual": "1000"
+                "actual": "1"
             },
                     "interpolation": "linear"
         },
@@ -66,11 +66,11 @@
                 "z": ""
             },
             "duration": {
-                "min": "",
-                "max": "",
-                "actual": "2000"
+                "min": "1000",
+                "max": "3000",
+                "actual": ""
             },
-                    "interpolation": "linear"
+                    "interpolation": "cubic_in"
         }
                     ]
         }

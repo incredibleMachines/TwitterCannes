@@ -1,11 +1,11 @@
 {
     "particles": [
         {
-            "path": "line",
+            "path": "gravity",
             "type": {
                 "x": "absolute",
                 "y": "absolute",
-                "z": "absolute"
+                "z": "hashtag"
             },
             "pos": {
                 "set": {
@@ -14,65 +14,26 @@
                     "z": ""
                 },
                 "min": {
-                    "x": "-8",
-                    "y": "50",
-                    "z": "-42"
+                    "x": "-180",
+                    "y": "60",
+                    "z": ""
                 },
                 "max": {
-                    "x": "28",
-                    "y": "100",
-                    "z": "-40"
+                    "x": "-80",
+                    "y": "80",
+                    "z": ""
                 }
             },
             "gravity": {
-                "x": "",
-                "y": "",
+                "x": "300",
+                "y": "-200",
                 "z": ""
             },
             "duration": {
                 "min": "",
                 "max": "",
-                "actual": "1"
+                "actual": "3000"
             },
-
-                    "interpolation": "linear"
-
-        },
-        {
-            "path": "gravity",
-            "type": {
-                "x": "pixel",
-                "y": "pixel",
-                "z": "previous"
-            },
-            "pos": {
-                "set": {
-                    "x": "",
-                    "y": "",
-                    "z": ""
-                },
-                "min": {
-                    "x": "",
-                    "y": "",
-                    "z": ""
-                },
-                "max": {
-                    "x": "",
-                    "y": "",
-                    "z": ""
-                }
-            },
-            "gravity": {
-                "x": "",
-                "y": "-500",
-                "z": ""
-            },
-            "duration": {
-                "min": "",
-                "max": "",
-                "actual": "8000"
-            },
-
                     "interpolation": "linear"
 
         },
@@ -112,7 +73,6 @@
             },
 
                     "interpolation": "linear"
-
         },
         {
             "path": "line",
@@ -146,7 +106,7 @@
             "duration": {
                 "min": "",
                 "max": "",
-                "actual": "5000"
+                "actual": "1000"
             },
 
                     "interpolation": "linear"

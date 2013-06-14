@@ -50,6 +50,7 @@
 		D38956E8176A650200307E99 /* shadowMapLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D38956D3176A650200307E99 /* shadowMapLight.cpp */; };
 		D38956E9176A650200307E99 /* testApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D38956D5176A650200307E99 /* testApp.cpp */; };
 		D38956EA176A650200307E99 /* tweet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D38956D7176A650200307E99 /* tweet.cpp */; };
+		D3C3759F176AA0CE00BBE246 /* Syphon.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = D3C3759E176AA0CE00BBE246 /* Syphon.framework */; };
 		D3C9C4641767A46700BCBC8C /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = D3C9C44B1767A46700BCBC8C /* sqlite3.c */; };
 		D3C9C4651767A46700BCBC8C /* ofxSQLite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D3C9C44E1767A46700BCBC8C /* ofxSQLite.cpp */; };
 		D3C9C4661767A46700BCBC8C /* ofxSQLiteAbstract.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D3C9C4501767A46700BCBC8C /* ofxSQLiteAbstract.cpp */; };
@@ -105,6 +106,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				BBAB23CB13894F3D00AA2426 /* GLUT.framework in CopyFiles */,
+				D3C3759F176AA0CE00BBE246 /* Syphon.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -252,6 +254,7 @@
 		D38956D7176A650200307E99 /* tweet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tweet.cpp; sourceTree = "<group>"; };
 		D38956D8176A650200307E99 /* tweet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tweet.h; sourceTree = "<group>"; };
 		D391E6FA175B062700350556 /* settings.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = settings.xml; path = bin/data/settings.xml; sourceTree = "<group>"; };
+		D3C3759E176AA0CE00BBE246 /* Syphon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Syphon.framework; path = ../../../addons/ofxSyphon/libs/Syphon/lib/osx/Syphon.framework; sourceTree = "<group>"; };
 		D3C9C44B1767A46700BCBC8C /* sqlite3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sqlite3.c; sourceTree = "<group>"; };
 		D3C9C44C1767A46700BCBC8C /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlite3.h; sourceTree = "<group>"; };
 		D3C9C44D1767A46700BCBC8C /* sqlite3ext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlite3ext.h; sourceTree = "<group>"; };
@@ -1253,6 +1256,7 @@
 				E45BE5980E8CC70C009D7055 /* frameworks */,
 				D3E9A85E1761207B003DD4B9 /* OBJ_letters */,
 				E4EEC9E9138DF44700A80321 /* openFrameworks */,
+				D3C3759E176AA0CE00BBE246 /* Syphon.framework */,
 			);
 			sourceTree = "<group>";
 		};
