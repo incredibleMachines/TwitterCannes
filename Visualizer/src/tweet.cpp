@@ -143,6 +143,7 @@ void Tweet::loadTweet(db item){
     else userOut.delay=0;
     
     animationCount++;
+    
     if (animationCount>animations.size()-1){
         animationCount=0;
     }
@@ -412,6 +413,8 @@ void Tweet::loadImage(string _image){
 
 void Tweet::loadUser(string _username, string _handle, string _profileimage){
     ofPoint pos=userPos;
+    
+    _handle="@"+_handle;
     
     ofUniString nameText= ofTextConverter::toUTF32(_username);
     ofUniString handleText= ofTextConverter::toUTF32(_handle);

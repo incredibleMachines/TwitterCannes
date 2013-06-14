@@ -18,12 +18,12 @@
                        "in": {
                            "speed": "1",
                            "delay": "0",
-                           "animation": "random_x_y_in_cubic.json"
+                           "animation": "relative_in_left.json"
                        },
                        "out": {
                            "speed": "1",
                            "delay": "2000",
-                           "animation": "random_x_y_out_cubic.json"
+                           "animation": "relative_out_right.json"
                        }
                    },
                        "image": {

@@ -3,13 +3,13 @@
         {
             "path": "line",
             "type": {
-                "x": "pixel",
-                "y": "pixel",
-                "z": "off_screen"
+                "x": "pixel_relative",
+                "y": "pixel_relative",
+                "z": "pixel"
             },
             "pos": {
                 "set": {
-                    "x": "",
+                    "x": "-150",
                     "y": "",
                     "z": ""
                 },
@@ -66,9 +66,9 @@
                 "z": ""
             },
             "duration": {
-                "min": "1000",
-                "max": "3000",
-                "actual": ""
+                "min": "",
+                "max": "",
+                "actual": "3000"
             },
                     "interpolation": "cubic_out"
         }
