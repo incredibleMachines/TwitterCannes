@@ -281,6 +281,9 @@ void Tweet::update(){
 
 
 void Tweet::draw(){
+    
+    drawLetters();
+    drawImg();
  
 }
 
