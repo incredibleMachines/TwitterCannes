@@ -56,7 +56,8 @@ void testApp::setup(){
     //GUI and hashtag mesh loading
     loadHashtag();
     
-    listCount=1;
+    listCount=0;
+    list[0].text="!#$%&()*+,-./0123456789:;<=>?@ AÀÁÂÃÄÅÆaàáâãäåæ CÇç DÐÐ EÈÉÊËeèéêëIÌÍÎÏiìíîï MmNÑÑnñ OÒÓÔÕÖØoðòóôõöø UÙÚÛÜuùúûü YŸÝyýÿ {|}~ € ‚ƒ„…†‡ˆ‰Š‹Œ Ž‘’“”•–—˜™š›œž¡¢£¤¥¦§¨©ª«¬®¯°±²³´µ¶·¸¹º»¼½¾¿ × Þß ÷þ";
     
     tweet.setup(hashMin,hashMax,&world, &gotham);
     tweet.loadTweet(list[listCount]);

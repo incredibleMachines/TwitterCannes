@@ -10,7 +10,7 @@
                        },
                        "out": {
                            "speed": "1",
-                           "delay": "2000",
+                           "delay": "2000000",
                            "animation": "random_x_y_out_cubic.json"
                        }
                    },
