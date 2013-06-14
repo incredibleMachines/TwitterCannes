@@ -169,7 +169,7 @@ void Tweet::loadTweet(db item){
         if (tweetText[i]==32){
             pos.x+=10;
             if(pos.x>40){
-                pos.y-=10;
+                pos.y-=6;
                 pos.x=tweetPos.x;
             }
         }
@@ -183,7 +183,7 @@ void Tweet::loadTweet(db item){
             pos.x+=.5*boxDim.x+.5;
             
             temp.pos.x=pos.x;
-            temp.pos.y=pos.y;
+            temp.pos.y=pos.y+gotham->letters[tweetText[i]]->offset;
             temp.pos.z=pos.z;
            
             //create Bullet letters for image visualization

@@ -17,6 +17,7 @@ public:
         int ascii;
         ofMesh mesh;
         ofPoint size;
+        float offset;
     };
     
     void setup();
@@ -35,5 +36,7 @@ public:
     float maxY;
     
     bool testForMesh(int c);
+    
+
 
 };
