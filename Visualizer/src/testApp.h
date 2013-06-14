@@ -47,6 +47,7 @@ public:
     
     void setupLights();
     void drawObjects();
+    void drawFrontFaces();
     
     vector<Tweet::Tweet> tweets;
     Tweet::Tweet tweet;
@@ -98,6 +99,7 @@ public:
     bool    bDrawDepth;
     bool    bDrawLight;
     bool    bShadowsOn;
+    bool    bDrawBirdColor;
     
     ofxSQLite* sqlite;
     

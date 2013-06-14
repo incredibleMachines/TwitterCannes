@@ -24,6 +24,7 @@ void testApp::setup(){
     bDebug=false;
     bGUI=false;
     bShadowsOn=true;
+    bDrawBirdColor=true;
     
     camState=0;
     
@@ -44,7 +45,6 @@ void testApp::setup(){
         dof.setFocalRange(20);
         dof.setBlurAmount(1);
     }
-    
     
     if(!CAM_MOUSE){
         camera.disableMouseInput();
@@ -117,6 +117,49 @@ void testApp::drawObjects(){
         glPopMatrix();
         glPopClientAttrib();
         glPopAttrib();
+    }
+    
+}
+
+//--------------------------------------------------------------
+void testApp::drawFrontFaces(){
+    for(int i = 0; i < hashCollision.size()-1  ; i++) {
+        glPushAttrib(GL_ALL_ATTRIB_BITS);
+        glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS);
+        glEnable(GL_NORMALIZE);
+        glDisable(GL_CULL_FACE);
+        ofVec3f scale=hashletters[i].scale;
+        btScalar	m[16];
+        ofGetOpenGLMatrixFromRigidBody( hashCollision[i]->getRigidBody(), m );
+        glPushMatrix();
+        glMultMatrixf( m );
+        glTranslatef(-hashletters[i].size.x*scale.x/2, -hashletters[i].size.y*scale.y/2, hashletters[i].size.z*scale.z/2);
+        ofScale(scale.x,scale.y,.01);
+        ofSetColor(0, 0, 0);
+        hashMeshes[i].draw();
+        glPopMatrix();
+        glPopClientAttrib();
+        glPopAttrib();
+    }
+    
+    if(bDrawBirdColor){
+        glPushAttrib(GL_ALL_ATTRIB_BITS);
+        glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS);
+        glEnable(GL_NORMALIZE);
+        glDisable(GL_CULL_FACE);
+        ofVec3f scale=hashletters[hashCollision.size()-1].scale;
+        btScalar	m[16];
+        ofGetOpenGLMatrixFromRigidBody( hashCollision[hashCollision.size()-1]->getRigidBody(), m );
+        glPushMatrix();
+        glMultMatrixf( m );
+        glTranslatef(-hashletters[hashCollision.size()-1].size.x*scale.x/2, -hashletters[hashCollision.size()-1].size.y*scale.y/2, hashletters[hashCollision.size()-1].size.z*scale.z/2);
+        ofScale(scale.x,scale.y,.01);
+        ofSetColor(0, 174, 232);
+        hashMeshes[hashCollision.size()-1].draw();
+        glPopMatrix();
+        glPopClientAttrib();
+        glPopAttrib();
+         
     }
     
 }
@@ -247,7 +290,7 @@ void testApp::draw(){
 
     glDisable(GL_CULL_FACE);
     
-
+    // Here draw anything that you don't want hit by the shader (img / tex overlays)
     camera.begin();
     ofPushMatrix();
     ofScale(0.3, 0.3, 0.3);
@@ -258,6 +301,8 @@ void testApp::draw(){
     material.begin();
     tweet.drawImg();
     material.end();
+    
+    drawFrontFaces();
     
     ///// for image loading debugging!
     ofPushMatrix();
@@ -770,6 +815,9 @@ void testApp::keyReleased(int key){
             break;
         case 'l':
             bShadowsOn=!bShadowsOn;
+            break;
+        case 'b':
+            bDrawBirdColor=!bDrawBirdColor;
             break;
     }
 }
