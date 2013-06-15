@@ -419,7 +419,7 @@ void testApp::setupGL(){
     background.add();
     background.setProperties(.1,1);
     
-    whiteImg.loadImage("textures/white.png");
+    whiteImg.loadImage("textures/white.jpg");
     white=whiteImg.getTextureReference();
 }
 
@@ -429,24 +429,15 @@ void testApp::setupLights() {
     // shadow map resolution (must be power of 2), field of view, near, far
     // the larger the shadow map resolution, the better the detail, but slower
     shadowLightLeft.setup( 2048, 60.0f, 0.1f, 100.0f );
-    shadowLightLeft.setBlurLevel(10.0f); // amount to blur to soften the shadows
+    shadowLightLeft.setBlurLevel(20.0f); // amount to blur to soften the shadows
     
-    shadowLightLeft.setAmbientColor( ofFloatColor( 0.1f, 0.1f, 0.1f, 1.0f ) );
+    shadowLightLeft.setAmbientColor( ofFloatColor( 0.4f, 0.4f, 0.4f, 0.6f ) );
     shadowLightLeft.setDiffuseColor( ofFloatColor( 0.9f, 0.9f, 0.9f, 1.0f ) );
-    shadowLightLeft.setSpecularColor( ofFloatColor( 0.1f, 0.1f, 0.1f, 1.0f ) );
+    shadowLightLeft.setSpecularColor( ofFloatColor( 0.8f, 0.8f, 0.8f, 1.0f ) );
     
     shadowLightLeft.setPosition( 200.0f, 0.0f, 45.0f );
     
-//    shadowLightRight.setup( 2048, 45.0f, 0.1f, 100.0f );
-//    shadowLightRight.setBlurLevel(4.0f); // amount to blur to soften the shadows
-//    
-//    shadowLightRight.setAmbientColor( ofFloatColor( 0.0f, 0.0f, 0.0f, 1.0f ) );
-//    shadowLightRight.setDiffuseColor( ofFloatColor( 0.9f, 0.9f, 0.9f, 1.0f ) );
-//    shadowLightRight.setSpecularColor( ofFloatColor( 0.1f, 0.1f, 0.8f, 1.0f ) );
-//    
-//    shadowLightRight.setPosition( 200.0f, 0.0f, 45.0f );
-//    
-    ofSetGlobalAmbientColor( ofFloatColor( 0.05f, 0.05f, 0.05f ) );
+    ofSetGlobalAmbientColor( ofFloatColor( 0.1f, 0.1f, 0.1f ) );
 }
 
 //GUI INIT CODE - LOADS MASTER SETTINGS DOCS AND POPULATES GUI OF THEIR CONTENT
