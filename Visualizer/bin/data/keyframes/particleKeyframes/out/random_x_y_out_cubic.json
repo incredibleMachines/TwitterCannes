@@ -1,6 +1,6 @@
 {
     "particles": [
-    {
+        {
             "path": "line",
             "type": {
                 "x": "pixel",
@@ -34,7 +34,7 @@
                 "max": "",
                 "actual": "1"
             },
-                    "interpolation": ""
+            "interpolation": ""
         },
         {
             "path": "line",
@@ -70,9 +70,7 @@
                 "max": "5000",
                 "actual": ""
             },
-                    "interpolation": "cubic_out"
-        }
-                    ]
+            "interpolation": "cubic_out"
         }
     ]
 }
