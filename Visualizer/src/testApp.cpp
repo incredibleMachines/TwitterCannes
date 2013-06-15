@@ -11,9 +11,12 @@ void testApp::setup(){
     
     ofSetVerticalSync(true);
 	ofSetFrameRate(30);
+//    fbo.allocate(2048,1080);
+//    tex.allocate(2048,1080, GL_RGB);
+
 
     // in bin, not data
-    sqlite = new ofxSQLite("twitterCannesLions.db");
+//    sqlite = new ofxSQLite("twitterCannesLions.db");
     
     gotham.setup();
     // loadSQL();
@@ -262,6 +265,7 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
+//    fbo.begin();
     glEnable(GL_DEPTH_TEST);
     ofDisableAlphaBlending();
     ofEnableLighting();
@@ -380,6 +384,11 @@ void testApp::draw(){
     camera.end();
     
         glDisable(GL_DEPTH_TEST);
+//    fbo.end();
+//    
+//    tex=fbo.getTextureReference();
+//    tex.draw(0,0);
+
 
     mainOutputSyphonServer.publishScreen();
 
