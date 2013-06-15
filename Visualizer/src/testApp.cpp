@@ -2,7 +2,7 @@
 
 #define USE_DOF true
 #define CAM_MOVE false
-#define CAM_MOUSE true
+#define CAM_MOUSE false 
 #define FACES false
 
 
@@ -14,23 +14,7 @@ void testApp::setup(){
     ofSetWindowShape(2048,1080);
     cout<<ofGetWindowSize()<<endl;
     
-    ofFbo::Settings settings;
-    settings.textureTarget=GL_TEXTURE_RECTANGLE_ARB;
-    settings.width=2048;
-    settings.height=1080;
-    settings.internalformat=GL_RGBA;
-//    settings.useDepth=true;
-    fbo.allocate(settings);
-    tex.allocate(2048,1080, GL_RGBA);
-    
-//    cout<<ofGetHeight()<<endl;
-
-
-    // in bin, not data
-//    sqlite = new ofxSQLite("twitterCannesLions.db");
-    
     gotham.setup();
-    // loadSQL();
 
     // setup our get queries
     // these are the options for query
@@ -91,10 +75,6 @@ void testApp::setup(){
     tweet.loadTweet(list[listCount]);
     
     image.loadImage("media_images/344805828068524035.jpg");
-    
-    fbo.begin();
-    ofClear(255,255,255, 0);
-    fbo.end();
     
 }
 
@@ -278,8 +258,7 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
-    fbo.begin();
-        ofDisableAlphaBlending();
+    ofDisableAlphaBlending();
     glEnable(GL_DEPTH_TEST);
 
     ofEnableLighting();
@@ -305,9 +284,7 @@ void testApp::draw(){
     
     if(bShadowsOn){
         tweet.drawLetters();
-        fbo.begin();
         tweet.drawImg();
-        fbo.end();
     }
     
     ofPopMatrix();
@@ -387,25 +364,15 @@ void testApp::draw(){
     
     drawFrontFaces();
     
-    ///// for image loading debugging!
-    ofPushMatrix();
-    ofScale(1, -1);
-    //    image.draw(ofPoint(0,0), 20, 20);
-    ofPopMatrix();
-    /////
-    
     ofPopMatrix();
     
     camera.end();
     
     glDisable(GL_DEPTH_TEST);
-    fbo.end();
-
-//    ofEnableAlphaBlending();
-//    tex=fbo.getTextureReference();
+    
     tex.loadScreenData(0,0,2048,1080);
 
-    mainOutputSyphonServer.publishTexture(&tex);
+    mainOutputSyphonServer.publishScreen();
 
     if(bGUI==true){
         drawGUI();
