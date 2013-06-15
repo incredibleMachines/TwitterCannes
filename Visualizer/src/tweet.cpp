@@ -306,10 +306,10 @@ void Tweet::drawImg(){
         //        ofRotate(180,0,1,0);
         bool bBlack=false;
         for (int i=0;i<image.shapes.size();i++){
-            if(i<.35*(image.height*image.width)){
+            if(i<.45*(image.height*image.width)){
                 bBlack=true;
             }
-            else if(i>.35*(image.height*image.width)&&i%image.width==0) bBlack=false;
+            else if(i>.45*(image.height*image.width)&&i%image.width==0) bBlack=false;
             if(bBlack==true){
                 ofSetColor(150,150,150);
             }

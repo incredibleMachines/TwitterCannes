@@ -120,6 +120,11 @@ public:
     
     int animationCount;
     
+    ofxBulletBox* userImage;
+    btBoxShape* userShape;
+    ofPoint userImgSize;
+    ofTexture userTex;
+    
 };
 
 
