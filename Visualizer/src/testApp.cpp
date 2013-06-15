@@ -11,6 +11,8 @@ void testApp::setup(){
     
     ofSetVerticalSync(true);
 	ofSetFrameRate(30);
+    ofSetWindowShape(2048,1080);
+    cout<<ofGetWindowSize()<<endl;
     
     ofFbo::Settings settings;
     settings.textureTarget=GL_TEXTURE_RECTANGLE_ARB;
@@ -399,9 +401,9 @@ void testApp::draw(){
     glDisable(GL_DEPTH_TEST);
     fbo.end();
 
-    ofEnableAlphaBlending();
-    tex=fbo.getTextureReference();
-//    tex.loadScreenData(0,0,2048,1080);
+//    ofEnableAlphaBlending();
+//    tex=fbo.getTextureReference();
+    tex.loadScreenData(0,0,2048,1080);
 
     mainOutputSyphonServer.publishTexture(&tex);
 
