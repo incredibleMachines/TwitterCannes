@@ -226,6 +226,7 @@ void testApp::drawFrontFaces(){
 
 //--------------------------------------------------------------
 void testApp::update(){
+    SetSystemUIMode(kUIModeAllHidden, kUIOptionAutoShowMenuBar);
     
     ofSetWindowTitle( ofToString( ofGetFrameRate() ) );
     
