@@ -7,13 +7,13 @@ var update_url = 'http://ec2-23-23-188-178.compute-1.amazonaws.com:9001/update';
 $('.approve').click(function(){
 	var id = $(this).parents('tr').attr('id');
 	$.get(url, { id: id, mode: 'moderate', action: 'approve' }, function(data) {
-		$('tr[id="'+data+'"]').children().css('background-color', 'lightgreen').delay(500).slideUp('fast');
+		$('tr[id="'+data+'"]').children().css('background-color', 'lightgreen').delay(175).slideUp('fast');
 	});
 });
 $('.deny').click(function(){
 	var id = $(this).parents('tr').attr('id');
 	$.get(url, { id: id, mode: 'moderate', action: 'deny' }, function(data) {
-		$('tr[id="'+data+'"]').children().css('background-color', 'lightcoral').delay(500).slideUp('fast');
+		$('tr[id="'+data+'"]').children().css('background-color', 'lightcoral').delay(175).slideUp('fast');
 	});
 });
 
@@ -83,7 +83,7 @@ $('form#whitelist-add').submit(function() {
 $('.whitelist-remove').live('click', function() {
 	var id = $(this).parents('tr').attr('id');
 	$.get(url, { id: id, mode: 'whitelist', action: 'remove' }, function(data) {
-		$('tr[id="'+data+'"]').children().css('background-color', 'lightcoral').delay(500).slideUp('fast');
+		$('tr[id="'+data+'"]').children().css('background-color', 'lightcoral').delay(175).slideUp('fast');
 		$.get(update_url);
 	});
 });
@@ -115,7 +115,7 @@ $('form#following-add').submit(function() {
 $('.following-remove').live('click', function() {
 	var id = $(this).parents('tr').attr('id');
 	$.get(url, { id: id, mode: 'following', action: 'remove' }, function(data) {
-		$('tr[id="'+data+'"]').children().css('background-color', 'lightcoral').delay(500).slideUp('fast');
+		$('tr[id="'+data+'"]').children().css('background-color', 'lightcoral').delay(175).slideUp('fast');
 		$.get(update_url);
 	});
 });
