@@ -11,7 +11,14 @@ void testApp::setup(){
     
     ofSetVerticalSync(true);
 	ofSetFrameRate(30);
-    fbo.allocate(2048,1080,GL_RGBA);
+    
+    ofFbo::Settings settings;
+    settings.textureTarget=GL_TEXTURE_RECTANGLE_ARB;
+    settings.width=2048;
+    settings.height=1080;
+    settings.internalformat=GL_RGBA;
+//    settings.useDepth=true;
+    fbo.allocate(settings);
     tex.allocate(2048,1080, GL_RGBA);
     
 //    cout<<ofGetHeight()<<endl;
@@ -263,14 +270,12 @@ void testApp::update(){
     else{
         tweet.update();
     }
-    
 
     
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
-    ofEnableAlphaBlending();
     fbo.begin();
         ofDisableAlphaBlending();
     glEnable(GL_DEPTH_TEST);
@@ -298,7 +303,9 @@ void testApp::draw(){
     
     if(bShadowsOn){
         tweet.drawLetters();
+        fbo.begin();
         tweet.drawImg();
+        fbo.end();
     }
     
     ofPopMatrix();
@@ -337,11 +344,10 @@ void testApp::draw(){
     material.end();
     
     //bind image textures and draw bullet shapes
-    
+
     material.begin();
     tweet.drawLetters();
     material.end();
-    
     
     shadowLightLeft.disable();
     
@@ -389,7 +395,6 @@ void testApp::draw(){
     ofPopMatrix();
     
     camera.end();
-    
     
     glDisable(GL_DEPTH_TEST);
     fbo.end();

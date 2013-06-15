@@ -5,6 +5,7 @@
 //--------------------------------------------------------------
 int main(){
 	ofAppGlutWindow window; // create a window
+
 	// set width, height, mode (OF_WINDOW or OF_FULLSCREEN)
     
     // uncomment this line for antialiasing
