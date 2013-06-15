@@ -119,6 +119,8 @@ public:
     // urls for batches of different types of tweets
     vector <string> urls;
     int urlCounter;
+    
+bool bBegin;
 
 };
 

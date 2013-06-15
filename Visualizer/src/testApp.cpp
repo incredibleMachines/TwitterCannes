@@ -11,8 +11,10 @@ void testApp::setup(){
     
     ofSetVerticalSync(true);
 	ofSetFrameRate(30);
-//    fbo.allocate(2048,1080);
-//    tex.allocate(2048,1080, GL_RGB);
+    fbo.allocate(2048,1080,GL_RGBA);
+    tex.allocate(2048,1080, GL_RGBA);
+    
+//    cout<<ofGetHeight()<<endl;
 
 
     // in bin, not data
@@ -36,13 +38,11 @@ void testApp::setup(){
     
     fetchTweets();
     
-    
-    tex.allocate(ofGetWidth(),ofGetHeight(),GL_RGBA);
-    
     bDebug=false;
     bGUI=false;
     bShadowsOn=true;
     bDrawBirdColor=true;
+    bBegin=true;
     
     camState=0;
     
@@ -82,6 +82,10 @@ void testApp::setup(){
     tweet.loadTweet(list[listCount]);
     
     image.loadImage("media_images/344805828068524035.jpg");
+    
+    fbo.begin();
+    ofClear(255,255,255, 0);
+    fbo.end();
     
 }
 
@@ -259,17 +263,20 @@ void testApp::update(){
     else{
         tweet.update();
     }
-   
+    
+
     
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
-//    fbo.begin();
+    ofEnableAlphaBlending();
+    fbo.begin();
+        ofDisableAlphaBlending();
     glEnable(GL_DEPTH_TEST);
-    ofDisableAlphaBlending();
-    ofEnableLighting();
 
+    ofEnableLighting();
+    
     ofPushMatrix();
     
     float shadowX = ofMap(mouseX, 0, ofGetWidth(), -100, 100);
@@ -314,10 +321,10 @@ void testApp::draw(){
     
     // draw background for projecting shadows onto
     ofPushMatrix();
-        ofScale(6,6,6);
-        ofRotate(90, 0, 1, 0);
-        ofRotate(330,1,0,0);
-        ofRect(-15, -15, 30, 30);
+    ofScale(6,6,6);
+    ofRotate(90, 0, 1, 0);
+    ofRotate(330,1,0,0);
+    ofRect(-15, -15, 30, 30);
     ofPopMatrix();
     
     ofPushMatrix();
@@ -354,9 +361,9 @@ void testApp::draw(){
     
     
     ofPopMatrix();
-
+    
     ofDisableLighting();
-
+    
     glDisable(GL_CULL_FACE);
     
     // Here draw anything that you don't want hit by the shader (img / tex overlays)
@@ -375,22 +382,23 @@ void testApp::draw(){
     ///// for image loading debugging!
     ofPushMatrix();
     ofScale(1, -1);
-//    image.draw(ofPoint(0,0), 20, 20);
+    //    image.draw(ofPoint(0,0), 20, 20);
     ofPopMatrix();
     /////
     
     ofPopMatrix();
-
+    
     camera.end();
     
-        glDisable(GL_DEPTH_TEST);
-//    fbo.end();
-//    
-//    tex=fbo.getTextureReference();
-//    tex.draw(0,0);
+    
+    glDisable(GL_DEPTH_TEST);
+    fbo.end();
 
+    ofEnableAlphaBlending();
+    tex=fbo.getTextureReference();
+//    tex.loadScreenData(0,0,2048,1080);
 
-    mainOutputSyphonServer.publishScreen();
+    mainOutputSyphonServer.publishTexture(&tex);
 
     if(bGUI==true){
         drawGUI();
