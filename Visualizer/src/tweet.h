@@ -57,12 +57,13 @@ public:
     
     class TweetUser{
     public:
-        ofTexture profileImgTex;
+        ofTexture profile;
         vector<ofxBulletCustomShape*> letters;
         vector<Particle> particles;
         bool bNewKey;
         bool bFinished;
         string type;
+        ofxBulletBox* shape;
     };
     
     class Animation{
@@ -95,6 +96,7 @@ public:
     bool bNewKey;
     
     btBoxShape*					boxShape;
+            btBoxShape* profileBox;
     ofxBulletWorldRigid* world;
     
     ofPoint imageScale;
@@ -104,6 +106,7 @@ public:
     ofPoint userPos;
     ofPoint userScale;
     ofPoint handleScale;
+    ofPoint profileScale;
     void loadParticleKeyframes(Animation anim, int which);
     ofTexture white;
     ofImage pic;
@@ -119,11 +122,6 @@ public:
     string tweetType;
     
     int animationCount;
-    
-    ofxBulletBox* userImage;
-    btBoxShape* userShape;
-    ofPoint userImgSize;
-    ofTexture userTex;
     
 };
 

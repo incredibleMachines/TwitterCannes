@@ -50,13 +50,6 @@ void testApp::setup(){
     //camera, lighting, dof setup
     setupGL();
     
-    if (USE_DOF) {
-        dof.setup(ofGetWidth(),ofGetHeight());
-        dof.setFocalDistance(10);
-        dof.setFocalRange(20);
-        dof.setBlurAmount(1);
-    }
-    
     if(!CAM_MOUSE){
         camera.disableMouseInput();
     }
@@ -76,24 +69,6 @@ void testApp::setup(){
     
     image.loadImage("media_images/344805828068524035.jpg");
     
-}
-
-
-void testApp::loadSQL(){
-        ofxSQLiteSelect sel = sqlite->select("user_image, user_name, user_screen_name, text, media_url")
-        .from("tweets")
-        .execute().begin();
-    db newList;
-    
-        while (sel.hasNext()) {
-            newList.user_image = sel.getString();
-            newList.user_name = sel.getString();
-            newList.user_screen_name = sel.getString();
-            newList.text = sel.getString();
-            newList.media_url = sel.getString();
-            list.push_back(newList);
-            sel.next();
-    }
 }
 
 void testApp::fetchTweets(){
