@@ -68,30 +68,6 @@ void testApp::setup(){
     tweet.loadTweet(list[listCount]);
     
     image.loadImage("media_images/344805828068524035.jpg");
-<<<<<<< HEAD
-
-    
-}
-
-
-void testApp::loadSQL(){
-        ofxSQLiteSelect sel = sqlite->select("user_image, user_name, user_screen_name, text, media_url")
-        .from("tweets")
-        .execute().begin();
-    db newList;
-    
-        while (sel.hasNext()) {
-            newList.user_image = sel.getString();
-            newList.user_name = sel.getString();
-            newList.user_screen_name = sel.getString();
-            newList.text = sel.getString();
-            newList.media_url = sel.getString();
-            list.push_back(newList);
-            sel.next();
-    }
-=======
-    
->>>>>>> 55ddcd88199a2832a52733cc6ec6025fc6314e26
 }
 
 void testApp::fetchTweets(){
@@ -257,12 +233,7 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
-<<<<<<< HEAD
 
-        ofDisableAlphaBlending();
-=======
-    ofDisableAlphaBlending();
->>>>>>> 55ddcd88199a2832a52733cc6ec6025fc6314e26
     glEnable(GL_DEPTH_TEST);
 
     ofEnableLighting();
@@ -373,18 +344,7 @@ void testApp::draw(){
     camera.end();
     
     glDisable(GL_DEPTH_TEST);
-<<<<<<< HEAD
 
-
-//    ofEnableAlphaBlending();
-//    tex=fbo.getTextureReference();
-//    tex.loadScreenData(0,0,2048,1080);
-//
-=======
-    
-    tex.loadScreenData(0,0,2048,1080);
-
->>>>>>> 55ddcd88199a2832a52733cc6ec6025fc6314e26
     mainOutputSyphonServer.publishScreen();
 
     if(bGUI==true){
