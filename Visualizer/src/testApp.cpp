@@ -2,7 +2,7 @@
 
 #define USE_DOF true
 #define CAM_MOVE false
-#define CAM_MOUSE false 
+#define CAM_MOUSE true 
 #define FACES false
 
 
@@ -469,8 +469,8 @@ void testApp::loadHashtag()
     ofColor blue=ofColor(0.1,.1,.1);
     //    ofEnableArbTex();
                             settings.popTag();
-    hashMin=ofPoint(hashletters[0].pos.x,hashletters[0].pos.y, hashletters[0].pos.z-hashletters[11].scale.z*hashletters[11].size.z*2);
-    hashMax=ofPoint(hashletters[11].pos.x, hashletters[11].pos.y,hashletters[11].pos.z);
+    hashMin=ofPoint(hashletters[0].pos.x,hashletters[0].pos.y, hashletters[0].pos.z-hashletters[11].scale.z*hashletters[11].size.z*.5);
+    hashMax=ofPoint(hashletters[11].pos.x, hashletters[11].pos.y,hashletters[11].pos.z+2);
 
 }
 

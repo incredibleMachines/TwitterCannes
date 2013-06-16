@@ -21,32 +21,34 @@ void Tweet::setup(ofPoint _hashMin, ofPoint _hashMax, ofxBulletWorldRigid *_worl
     hashMin=_hashMin;
     hashMax=_hashMax;
     animationCount=0;
-
     
-    imageScale=ofPoint(.15,.15,.02);
-    imagePos=ofPoint(-10,-10,2);
-    profileScale=ofPoint(2,2,.2);
-    userPos=ofPoint(hashMin.x,-30,hashMax.z);
-        
     world=_world;
     gotham=_gotham;
-
-    boxShape = ofBtGetBoxCollisionShape(imageScale.x*tileW, imageScale.y*tileH, imageScale.z*tileD);
-    profileBox = ofBtGetBoxCollisionShape(profileScale.x*10, profileScale.y*10, profileScale.z*10);
     
-
+    masterDelay=3000;
 }
+
 void Tweet::loadTweet(db item){
     
     cout<<"load"<<endl;
-    tweetPos=ofPoint(-70,50,5);
+
     tweetKeyframe=0;
     imageKeyframe=0;
     userKeyframe=0;
     
-    tweetScale=ofPoint(.09,.09,.09);
+    tweetScale=ofPoint(.08,.08,.08);
     userScale=ofPoint(.1,.1,.1);
     handleScale=ofPoint(.07,.07,.07);
+    imageScale=ofPoint(.15,.15,.02);
+    profileScale=ofPoint(2,2,.2);
+
+    tweetPos=ofPoint(hashMin.x,43,hashMax.z);
+    imagePos=ofPoint(-10,-10,2);
+    userPos=ofPoint(hashMin.x,50,hashMax.z);
+//    userPos=ofPoint(hashMin.x,-30,hashMax.z);
+    
+    boxShape = ofBtGetBoxCollisionShape(imageScale.x*tileW, imageScale.y*tileH, imageScale.z*tileD);
+    profileBox = ofBtGetBoxCollisionShape(profileScale.x*10, profileScale.y*10, profileScale.z*10);
 
     
     
@@ -105,8 +107,8 @@ void Tweet::loadTweet(db item){
     else tweetOut.speed=1;
     
     delay=json["animations"][i]["tweet"]["out"]["delay"].asString();
-    if(delay!="") tweetOut.delay=ofToInt(delay);
-    else tweetOut.delay=0;
+    if(delay!="") tweetOut.delay=ofToInt(delay)+masterDelay;
+    else tweetOut.delay=masterDelay;
     
     if(bImage==true){
         imgIn.path="keyframes/particleKeyframes/in/"+json["animations"][i]["image"]["in"]["animation"].asString();
@@ -125,8 +127,8 @@ void Tweet::loadTweet(db item){
         else imgOut.speed=1;
         
         delay=json["animations"][i]["image"]["out"]["delay"].asString();
-        if(delay!="") imgOut.delay=ofToInt(delay);
-        else imgOut.delay=0;
+        if(delay!="") imgOut.delay=ofToInt(delay)+masterDelay;
+        else imgOut.delay=masterDelay;
     }
     
     
@@ -146,8 +148,8 @@ void Tweet::loadTweet(db item){
     else userOut.speed=1;
     
     delay=json["animations"][i]["user"]["out"]["delay"].asString();
-    if(delay!="") userOut.delay=ofToInt(delay);
-    else userOut.delay=0;
+    if(delay!="") userOut.delay=ofToInt(delay)+masterDelay;
+    else userOut.delay=masterDelay;
     
     animationCount++;
     
@@ -176,7 +178,7 @@ void Tweet::loadTweet(db item){
         tweetPos=ofPoint(hashMin.x,-25,5);
         pos=tweetPos;
         pos.x=tweetPos.x+(10*profileScale.x)/2+1;
-        tweetScale=ofPoint(tweetScale.x,tweetScale.y,tweetScale.z*.5);
+//        tweetScale=ofPoint(tweetScale.x,tweetScale.y,tweetScale.z*.5);
     }
     
 
@@ -185,9 +187,9 @@ void Tweet::loadTweet(db item){
     for (int i=0;i<tweetText.length();i++){
         
         if (tweetText[i]==32){
-            pos.x+=5;
+            pos.x+=3;
             if(pos.x>40){
-                pos.y-=7;
+                pos.y-=6;
                 pos.x=tweetPos.x+(10*profileScale.x)/2+2;
             }
         }
@@ -447,8 +449,8 @@ void Tweet::loadUser(string _username, string _handle, string _profileimage){
     
     if(bImage==true){
         pos=ofPoint(hashMin.x,-18,5);
-        userScale=ofPoint(userScale.x,userScale.y,userScale.z*.5);
-        handleScale=ofPoint(handleScale.x,handleScale.y,handleScale.z*.5);
+//        userScale=ofPoint(userScale.x,userScale.y,userScale.z*.5);
+//        handleScale=ofPoint(handleScale.x,handleScale.y,handleScale.z*.5);
         
     }
     
@@ -479,7 +481,7 @@ void Tweet::loadUser(string _username, string _handle, string _profileimage){
     
     temp.pos.x=pos.x;
     temp.pos.z=pos.z;
-    temp.pos.y=pos.y-10*profileScale.y/2+2;
+    temp.pos.y=pos.y-10*profileScale.y/2+3;
     
     Particle particle;
     particle.setup(temp,0, hashMin, hashMax);

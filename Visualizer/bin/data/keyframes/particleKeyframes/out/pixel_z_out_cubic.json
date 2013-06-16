@@ -32,9 +32,9 @@
             "duration": {
                 "min": "",
                 "max": "",
-                "actual": ""
+                "actual": "1"
             },
-                    "interpolation": ""
+                    "interpolation": "cubic_in"
         },
         {
             "path": "line",

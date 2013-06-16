@@ -123,6 +123,8 @@ public:
     
     int animationCount;
     
+    int masterDelay;
+    
 };
 
 
