@@ -91,10 +91,7 @@ void testApp::setup(){
     tweet.loadTweet(list[listCount]);
     
     image.loadImage("media_images/344805828068524035.jpg");
-    
-    fbo.begin();
-    ofClear(255,255,255, 0);
-    fbo.end();
+
     
 }
 
@@ -279,7 +276,7 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
-    fbo.begin();
+
         ofDisableAlphaBlending();
     glEnable(GL_DEPTH_TEST);
 
@@ -400,13 +397,13 @@ void testApp::draw(){
     camera.end();
     
     glDisable(GL_DEPTH_TEST);
-    fbo.end();
+
 
 //    ofEnableAlphaBlending();
 //    tex=fbo.getTextureReference();
-    tex.loadScreenData(0,0,2048,1080);
-
-    mainOutputSyphonServer.publishTexture(&tex);
+//    tex.loadScreenData(0,0,2048,1080);
+//
+    mainOutputSyphonServer.publishScreen();
 
     if(bGUI==true){
         drawGUI();

@@ -86,7 +86,7 @@
         "out": {
           "speed": "1",
           "delay": "2000",
-          "animation": "gravity_out_up.json"
+          "animation": "pixel_z_out_cubic.json"
         }
       },
       "user": {
@@ -98,7 +98,7 @@
         "out": {
           "speed": "1",
           "delay": "2000",
-          "animation": "gravity_out_up.json"
+          "animation": "pixel_z_out_cubic.json"
         }
       },
       "image": {
@@ -119,7 +119,7 @@
         "in": {
           "speed": "1",
           "delay": "0",
-          "animation": "random_x_y_in_cubic.json"
+          "animation": "gravity_in_up.json"
         },
         "out": {
           "speed": "1",
@@ -131,7 +131,7 @@
         "in": {
           "speed": "1",
           "delay": "0",
-          "animation": "random_x_y_in_cubic.json"
+          "animation": "pixel_z_in_cubic.json"
         },
         "out": {
           "speed": "1",
@@ -143,7 +143,7 @@
         "in": {
           "speed": "1",
           "delay": "0",
-          "animation": "random_x_y_in_cubic.json"
+          "animation": "gravity_in_up.json"
         },
         "out": {
           "speed": "1",
