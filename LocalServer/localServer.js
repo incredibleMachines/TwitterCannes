@@ -39,6 +39,8 @@ app.get('/',function(req, res){
 	if (req.query.starred)
 		find.starred = req.query.starred == "true" ? true : false;
 
+ if(req.query.media_url)
+               find.media_url = {$ne: ""};
 
 	// Set up options
 	var options = {}

@@ -21,7 +21,7 @@ void testApp::setup(){
     // limit: how many tweets to return
     // category: Celebrities, Executive+Tweets, Speaker+Quotes
     // starred: true/false
-    urls.push_back("limit=3");
+    urls.push_back("limit=10&media_url=1");
     urls.push_back("limit=3&starred=true");
     urls.push_back("limit=3&category=Speaker+Quotes");
     urls.push_back("limit=3&category=Celebrities");
