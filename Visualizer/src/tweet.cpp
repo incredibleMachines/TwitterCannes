@@ -21,28 +21,30 @@ void Tweet::setup(ofPoint _hashMin, ofPoint _hashMax, ofxBulletWorldRigid *_worl
     hashMin=_hashMin;
     hashMax=_hashMax;
     animationCount=0;
-    tweetPos=ofPoint(-70,50,5);
+
     
     imageScale=ofPoint(.15,.15,.02);
     imagePos=ofPoint(-10,-10,2);
+    profileScale=ofPoint(2,2,.2);
     userPos=ofPoint(hashMin.x,-30,hashMax.z);
         
     world=_world;
     gotham=_gotham;
 
     boxShape = ofBtGetBoxCollisionShape(imageScale.x*tileW, imageScale.y*tileH, imageScale.z*tileD);
+    profileBox = ofBtGetBoxCollisionShape(profileScale.x*10, profileScale.y*10, profileScale.z*10);
     
 
 }
 void Tweet::loadTweet(db item){
     
     cout<<"load"<<endl;
-
+    tweetPos=ofPoint(-70,50,5);
     tweetKeyframe=0;
     imageKeyframe=0;
     userKeyframe=0;
     
-    tweetScale=ofPoint(.1,.1,.1);
+    tweetScale=ofPoint(.09,.09,.09);
     userScale=ofPoint(.1,.1,.1);
     handleScale=ofPoint(.07,.07,.07);
 
@@ -168,9 +170,12 @@ void Tweet::loadTweet(db item){
     ofUniString tweetText= ofTextConverter::toUTF32(item.text);
     
     ofPoint pos=tweetPos;
+    pos.x=tweetPos.x+(10*profileScale.x)/2+2;
     
     if(bImage==true){
-        pos=ofPoint(hashMin.x,-30,5);
+        tweetPos=ofPoint(hashMin.x,-25,5);
+        pos=tweetPos;
+        pos.x=tweetPos.x+(10*profileScale.x)/2+1;
         tweetScale=ofPoint(tweetScale.x,tweetScale.y,tweetScale.z*.5);
     }
     
@@ -183,7 +188,7 @@ void Tweet::loadTweet(db item){
             pos.x+=5;
             if(pos.x>40){
                 pos.y-=7;
-                pos.x=tweetPos.x;
+                pos.x=tweetPos.x+(10*profileScale.x)/2+2;
             }
         }
         else if(tweetText[i]>32&&tweetText[i]<256){
@@ -301,7 +306,11 @@ void Tweet::draw(){
  
 }
 
-void Tweet::drawImg(){    
+void Tweet::drawImg(){
+    user.profile.bind();
+    user.shape->draw();
+    user.profile.unbind();
+    
     if(bImage==true){
         //        ofRotate(180,0,1,0);
         bool bBlack=false;
@@ -340,7 +349,7 @@ void Tweet::drawLetters(){
         glPopAttrib();
     }
     
-    for (int i=0;i<user.letters.size();i++){
+    for (int i=1;i<user.letters.size();i++){
         //        letters[i]->draw();
         glPushAttrib(GL_ALL_ATTRIB_BITS);
         glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS);
@@ -398,7 +407,7 @@ void Tweet::loadImage(string _image){
             //create Bullet shapes for image visualization
             image.shapes.push_back( new ofxBulletBox() );
             
-            if(tweetType!="gravity"){
+            if(image.type!="gravity"){
             ((ofxBulletBox*)image.shapes[image.shapes.size()-1])->init(boxShape);
             ((ofxBulletBox*)image.shapes[image.shapes.size()-1])->create(world->world,particle.target.pos,0.);
             image.shapes[image.shapes.size()-1]->add();
@@ -448,28 +457,84 @@ void Tweet::loadUser(string _username, string _handle, string _profileimage){
     ofUniString nameText= ofTextConverter::toUTF32(_username);
     ofUniString handleText= ofTextConverter::toUTF32(_handle);
     
+    cout<<"go"<<endl;
+    Particle::Keyframe temp;
+    ofImage profileImg;
+    pic.setImageType(OF_IMAGE_COLOR);
+//    profileImg.resize(profileImage.width()/2, profileImage.height/2);
+    profileImg.loadImage(_profileimage);
+    cout<<profileImg.height<<endl;
+    profileImg.mirror(true,true);
+    if(profileImg.width>400){
+        profileImg.resize(profileImg.width/8,profileImg.height/8);
+    }
+    else if(profileImg.width>400){
+    profileImg.resize(profileImg.width/4,profileImg.height/4);
+    }
+    else if(profileImg.width>250){
+        profileImg.resize(profileImg.width/2,profileImg.height/2);
+    }
+    user.profile.allocate(10*profileScale.x ,10*profileScale.y, GL_RGB,true);
+    user.profile=profileImg.getTextureReference();
+    
+    temp.pos.x=pos.x;
+    temp.pos.z=pos.z;
+    temp.pos.y=pos.y-10*profileScale.y/2+2;
+    
+    Particle particle;
+    particle.setup(temp,0, hashMin, hashMax);
+    particle.goToPosition(userKeyframes[userKeyframe]);
+    particle.start.pos=particle.target.pos;
+    user.particles.push_back(particle);
+    
+    
+    //create Bullet shapes for image visualization
+    
+    if(user.type!="gravity"){
+        user.shape=new ofxBulletBox();
+        user.shape->init(profileBox);
+        user.shape->create(world->world,particle.target.pos,0.);
+        user.shape->add();
+        user.shape->setProperties(.1,1);
+        user.shape->enableKinematic();
+    }
+    
+    else{
+        world->setGravity(ofVec3f(userKeyframes[userKeyframe].gravity.x,imageKeyframes[imageKeyframe].gravity.y,imageKeyframes[imageKeyframe].gravity.z));
+        user.shape=new ofxBulletBox();
+        user.shape->init(profileBox);
+        user.shape->create(world->world,particle.target.pos,0.);
+        user.shape->add();
+        user.shape->setProperties(.1,1);
+    }
+    pos.x+=(10*profileScale.x)/2+2;
+    
     for (int i=0;i<nameText.length();i++){
-        if(nameText[i]>32&&nameText[i]<256){
-            //setup position values for displaying whole image
-            Particle::Keyframe temp;
-            ofVec3f boxDim;
-            boxDim=gotham->getSize(nameText[i])*userScale;
-            pos.x+=.5*boxDim.x+.5;
-            
-            temp.pos.x=pos.x;
-            temp.pos.y=pos.y+gotham->letters[nameText[i]]->offset;
-            temp.pos.z=pos.z;
 
-            
+                if(nameText[i]>32&&nameText[i]<256){
+                    //setup position values for displaying whole image
+                    Particle::Keyframe temp;
+                    ofVec3f boxDim;
+                    boxDim=gotham->getSize(nameText[i])*userScale;
+                    
+                    pos.x+=.5*boxDim.x+.5;
+                    
+                    temp.pos.x=pos.x;
+                    temp.pos.y=pos.y+gotham->letters[nameText[i]]->offset;
+                    temp.pos.z=pos.z;
             Particle particle;
             particle.setup(temp,i,nameText[i],boxDim, hashMin, hashMax);
             particle.goToPosition(userKeyframes[userKeyframe]);
             particle.start.pos=particle.target.pos;
             user.particles.push_back(particle);
+                    
             user.bNewKey=false;
             
-            if(tweetType!="gravity"){
+            if(user.type!="gravity"){
                 user.letters.push_back( new ofxBulletCustomShape() );
+                if(i==0){
+                    user.letters.push_back( new ofxBulletCustomShape() );
+                }
                 user.letters[user.letters.size()-1]->addMesh(gotham->getMesh(nameText[i]),userScale,true);
                 user.letters[user.letters.size()-1]->create(world->world,particle.target.pos,0.);
                 user.letters[user.letters.size()-1]->add();
@@ -480,6 +545,9 @@ void Tweet::loadUser(string _username, string _handle, string _profileimage){
             else{
                 world->setGravity(ofVec3f(tweetKeyframes[tweetKeyframe].gravity.x,tweetKeyframes[tweetKeyframe].gravity.y,tweetKeyframes[tweetKeyframe].gravity.z));
                  user.letters.push_back( new ofxBulletCustomShape() );
+                if(i==0){
+                    user.letters.push_back( new ofxBulletCustomShape() );
+                }
                  user.letters[user.letters.size()-1]->addMesh(gotham->getMesh(nameText[i]),userScale,true);
                  user.letters[user.letters.size()-1]->create(world->world,particle.target.pos,10.);
                  user.letters[user.letters.size()-1]->add();
@@ -511,7 +579,7 @@ void Tweet::loadUser(string _username, string _handle, string _profileimage){
             user.particles.push_back(particle);
             user.bNewKey=false;
             
-            if(tweetType!="gravity"){
+            if(user.type!="gravity"){
                 
                 user.letters.push_back( new ofxBulletCustomShape() );
                 user.letters[user.letters.size()-1]->addMesh(gotham->getMesh(handleText[i]),handleScale,true);
@@ -725,14 +793,27 @@ void Tweet::userToKinematic(){
         
         //set vector position/rotation to bullet object position/rotation and start rotation transition
         btTransform trans;
-        ofPoint temp=user.letters[i]->getPosition();
+        ofPoint temp;
+        if(i==0){
+        temp=user.shape->getPosition();
+    }
+    else{
+        temp=user.letters[i]->getPosition();
+
+    }
         if(userKeyframe!=0){
             if(userKeyframes[userKeyframe-1].path=="gravity"){
                 user.particles[i].current.pos=temp;
             }
         }
         trans.setOrigin( btVector3( btScalar(temp.x), btScalar(temp.y), btScalar(temp.z)) );
-        ofQuaternion rotQuat = user.letters[i]->getRotationQuat();
+    ofQuaternion rotQuat;
+    if(i==0){
+    rotQuat= user.shape->getRotationQuat();
+    }
+    else{
+        rotQuat= user.letters[i]->getRotationQuat();
+    }
         float newRot = rotQuat.w();
         trans.setRotation( btQuaternion(btVector3(rotQuat.x(), rotQuat.y(), rotQuat.z()), newRot) );
         if(userKeyframe!=0){
@@ -741,10 +822,18 @@ void Tweet::userToKinematic(){
                 user.particles[i].current.quat=rotQuat;
             }
         }
-        user.letters[i]->getRigidBody()->getMotionState()->setWorldTransform( trans );
-        user.letters[i]->getRigidBody()->setActivationState(DISABLE_DEACTIVATION);
-        user.particles[i].goToPosition(userKeyframes[userKeyframe]);
-        user.letters[i]->enableKinematic();
+        if(i==0){
+            user.shape->getRigidBody()->getMotionState()->setWorldTransform( trans );
+            user.shape->getRigidBody()->setActivationState(DISABLE_DEACTIVATION);
+            user.particles[i].goToPosition(userKeyframes[userKeyframe]);
+            user.shape->enableKinematic();
+        }
+        else{
+            user.letters[i]->getRigidBody()->getMotionState()->setWorldTransform( trans );
+            user.letters[i]->getRigidBody()->setActivationState(DISABLE_DEACTIVATION);
+            user.particles[i].goToPosition(userKeyframes[userKeyframe]);
+            user.letters[i]->enableKinematic();
+        }
     }
 }
 
@@ -797,17 +886,40 @@ void Tweet::userToPhysics(){
     world->setGravity(ofVec3f(userKeyframes[userKeyframe].gravity.x,userKeyframes[userKeyframe].gravity.y,userKeyframes[userKeyframe].gravity.z));
     for (int i=0;i<user.letters.size();i++){
         btTransform trans;
-        ofPoint temp=user.letters[i]->getPosition();
+        ofPoint temp;
+        if(i==0){
+            temp=user.shape->getPosition();
+        }
+        else{
+        temp=user.letters[i]->getPosition();
+        }
         trans.setOrigin( btVector3( btScalar(temp.x), btScalar(temp.y), btScalar(temp.z)) );
-        ofQuaternion rotQuat = user.letters[i]->getRotationQuat();
+        ofQuaternion rotQuat;
+        
+        if(i==0){
+            rotQuat=user.shape->getRotationQuat();
+        }
+        else{
+            rotQuat= user.letters[i]->getRotationQuat();
+        }
         float newRot = rotQuat.w();
         trans.setRotation( btQuaternion(btVector3(rotQuat.x(), rotQuat.y(), rotQuat.z()), newRot) );
-        user.letters[i]->remove();
-        user.letters[i]->addMesh(gotham->getMesh(user.particles[i].letter),tweetScale,false);
-        user.letters[i]->create(world->world,trans, 1.);
-        user.letters[i]->add();
-        user.letters[i]->setProperties(.1,1);
+        if(i==0){
+        user.shape->remove();
+        user.shape->init(profileBox);
+        user.shape->create(world->world,trans, 1.);
+        user.shape->add();
+        user.shape->setProperties(.1,1);
         user.particles[i].goToPosition(userKeyframes[userKeyframe]);
+        }
+        else{
+            user.letters[i]->remove();
+            user.letters[i]->addMesh(gotham->getMesh(user.particles[i].letter),tweetScale,false);
+            user.letters[i]->create(world->world,trans, 1.);
+            user.letters[i]->add();
+            user.letters[i]->setProperties(.1,1);
+            user.particles[i].goToPosition(userKeyframes[userKeyframe]);
+        }
     }
 }
 
@@ -933,12 +1045,19 @@ void Tweet::updateImg(){
 void Tweet::updateUser(){
     if(userKeyframes[userKeyframe].path!="gravity"){
         int moving=0;
-        for (int i=0;i<user.letters.size();i++){
+        for (int i=0;i<user.particles.size();i++){
+            if(i<user.letters.size()){
             user.particles[i].update();
             btTransform trans;
             ofPoint temp=user.particles[i].current.pos;
             trans.setOrigin( btVector3( btScalar(temp.x), btScalar(temp.y), btScalar(temp.z)) );
-            ofQuaternion rotQuat = user.letters[i]->getRotationQuat();
+            ofQuaternion rotQuat;
+            if(i==0){
+                rotQuat = user.shape->getRotationQuat();
+            }
+            else{
+              rotQuat   = user.letters[i]->getRotationQuat();
+            }
             float newRot = rotQuat.w();
             if(user.particles[i].bRotate==true){
                 float newRot = rotQuat.w();
@@ -952,11 +1071,18 @@ void Tweet::updateUser(){
             else{
                 trans.setRotation( btQuaternion(btVector3(rotQuat.x(), rotQuat.y(), rotQuat.z()), 0) );
             }
+            if(i==0){
+                user.shape->getRigidBody()->getMotionState()->setWorldTransform( trans );
+                user.shape->activate();
+            }
+            else{
             user.letters[i]->getRigidBody()->getMotionState()->setWorldTransform( trans );
             user.letters[i]->activate();
+            }
             
             if(!user.particles[i].targetReached){
                 moving++;
+            }
             }
         }
         

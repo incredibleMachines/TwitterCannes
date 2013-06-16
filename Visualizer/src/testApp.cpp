@@ -2,7 +2,7 @@
 
 #define USE_DOF true
 #define CAM_MOVE false
-#define CAM_MOUSE true
+#define CAM_MOUSE false 
 #define FACES false
 
 
@@ -14,23 +14,7 @@ void testApp::setup(){
     ofSetWindowShape(2048,1080);
     cout<<ofGetWindowSize()<<endl;
     
-    ofFbo::Settings settings;
-    settings.textureTarget=GL_TEXTURE_RECTANGLE_ARB;
-    settings.width=2048;
-    settings.height=1080;
-    settings.internalformat=GL_RGBA;
-//    settings.useDepth=true;
-    fbo.allocate(settings);
-    tex.allocate(2048,1080, GL_RGBA);
-    
-//    cout<<ofGetHeight()<<endl;
-
-
-    // in bin, not data
-//    sqlite = new ofxSQLite("twitterCannesLions.db");
-    
     gotham.setup();
-    // loadSQL();
 
     // setup our get queries
     // these are the options for query
@@ -66,13 +50,6 @@ void testApp::setup(){
     //camera, lighting, dof setup
     setupGL();
     
-    if (USE_DOF) {
-        dof.setup(ofGetWidth(),ofGetHeight());
-        dof.setFocalDistance(10);
-        dof.setFocalRange(20);
-        dof.setBlurAmount(1);
-    }
-    
     if(!CAM_MOUSE){
         camera.disableMouseInput();
     }
@@ -91,6 +68,7 @@ void testApp::setup(){
     tweet.loadTweet(list[listCount]);
     
     image.loadImage("media_images/344805828068524035.jpg");
+<<<<<<< HEAD
 
     
 }
@@ -111,6 +89,9 @@ void testApp::loadSQL(){
             list.push_back(newList);
             sel.next();
     }
+=======
+    
+>>>>>>> 55ddcd88199a2832a52733cc6ec6025fc6314e26
 }
 
 void testApp::fetchTweets(){
@@ -276,8 +257,12 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
+<<<<<<< HEAD
 
         ofDisableAlphaBlending();
+=======
+    ofDisableAlphaBlending();
+>>>>>>> 55ddcd88199a2832a52733cc6ec6025fc6314e26
     glEnable(GL_DEPTH_TEST);
 
     ofEnableLighting();
@@ -303,9 +288,7 @@ void testApp::draw(){
     
     if(bShadowsOn){
         tweet.drawLetters();
-        fbo.begin();
         tweet.drawImg();
-        fbo.end();
     }
     
     ofPopMatrix();
@@ -385,24 +368,23 @@ void testApp::draw(){
     
     drawFrontFaces();
     
-    ///// for image loading debugging!
-    ofPushMatrix();
-    ofScale(1, -1);
-    //    image.draw(ofPoint(0,0), 20, 20);
-    ofPopMatrix();
-    /////
-    
     ofPopMatrix();
     
     camera.end();
     
     glDisable(GL_DEPTH_TEST);
+<<<<<<< HEAD
 
 
 //    ofEnableAlphaBlending();
 //    tex=fbo.getTextureReference();
 //    tex.loadScreenData(0,0,2048,1080);
 //
+=======
+    
+    tex.loadScreenData(0,0,2048,1080);
+
+>>>>>>> 55ddcd88199a2832a52733cc6ec6025fc6314e26
     mainOutputSyphonServer.publishScreen();
 
     if(bGUI==true){
