@@ -14,6 +14,8 @@ void testApp::setup(){
     ofSetWindowShape(2048,1080);
     cout<<ofGetWindowSize()<<endl;
     
+    multiTrigger=1;
+    
     gotham.setup();
 
     // setup our get queries
@@ -21,7 +23,8 @@ void testApp::setup(){
     // limit: how many tweets to return
     // category: Celebrities, Executive+Tweets, Speaker+Quotes
     // starred: true/false
-    urls.push_back("limit=10&media_url=1");
+    urls.push_back("limit=5");
+    urls.push_back("limit=9&media_url=1");
     urls.push_back("limit=3&starred=true");
     urls.push_back("limit=3&category=Speaker+Quotes");
     urls.push_back("limit=3&category=Celebrities");
@@ -65,7 +68,12 @@ void testApp::setup(){
 //    list[0].text="!#$%&()*+,-./0123456789:;<=>?@ AÀÁÂÃÄÅÆaàáâãäåæ CÇç DÐÐ EÈÉÊËeèéêëIÌÍÎÏiìíîï MmNÑÑnñ OÒÓÔÕÖØoðòóôõöø UÙÚÛÜuùúûü YŸÝyýÿ {|}~ € ‚ƒ„…†‡ˆ‰Š‹Œ Ž‘’“”•–—˜™š›œž¡¢£¤¥¦§¨©ª«¬®¯°±²³´µ¶·¸¹º»¼½¾¿ × Þß ÷þ";
     
     tweet.setup(hashMin,hashMax,&world, &gotham);
-    tweet.loadTweet(list[listCount]);
+    if(bMulti==true){
+        tweet.loadMulti(list);
+    }
+    else{
+        tweet.loadTweet(list[listCount]);
+    }
     
     image.loadImage("media_images/344805828068524035.jpg");
 }
@@ -104,6 +112,13 @@ void testApp::fetchTweets(){
         
     } else {
         cout  << "Failed to parse JSON" << endl;
+    }
+    
+    if (urlCounter==multiTrigger){
+        bMulti=true;
+    }
+    else{
+        bMulti=false;
     }
     
     // magic
@@ -220,7 +235,13 @@ void testApp::update(){
 
         cout<<"destroy"<<endl;
         
-        tweet.loadTweet(list[listCount]);
+        if(bMulti==true){
+            tweet.loadMulti(list);
+            listCount=list.size()-1;
+        }
+        else{
+            tweet.loadTweet(list[listCount]);
+        }
         
 
     }
@@ -258,8 +279,13 @@ void testApp::draw(){
     drawObjects(); // render to shader map
     
     if(bShadowsOn){
+        if(bMulti==true){
+            tweet.drawMultiImg();
+        }
+        else{
         tweet.drawLetters();
         tweet.drawImg();
+        }
     }
     
     ofPopMatrix();
@@ -300,7 +326,9 @@ void testApp::draw(){
     //bind image textures and draw bullet shapes
 
     material.begin();
-    tweet.drawLetters();
+    if(bMulti==false){
+        tweet.drawLetters();
+    }
     material.end();
     
     shadowLightLeft.disable();
@@ -334,7 +362,12 @@ void testApp::draw(){
     ofRotate(330,1,0,0);
     
     material.begin();
-    tweet.drawImg();
+    if(bMulti==true){
+        tweet.drawMultiImg();
+    }
+    else{
+        tweet.drawImg();
+    }
     material.end();
     
     drawFrontFaces();

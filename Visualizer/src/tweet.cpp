@@ -460,22 +460,13 @@ void Tweet::loadUser(string _username, string _handle, string _profileimage){
     ofUniString handleText= ofTextConverter::toUTF32(_handle);
     
     cout<<"go"<<endl;
+    ofEnableNormalizedTexCoords();
     Particle::Keyframe temp;
     ofImage profileImg;
     pic.setImageType(OF_IMAGE_COLOR);
-//    profileImg.resize(profileImage.width()/2, profileImage.height/2);
     profileImg.loadImage(_profileimage);
     cout<<profileImg.height<<endl;
     profileImg.mirror(true,true);
-    if(profileImg.width>400){
-        profileImg.resize(profileImg.width/8,profileImg.height/8);
-    }
-    else if(profileImg.width>400){
-    profileImg.resize(profileImg.width/4,profileImg.height/4);
-    }
-    else if(profileImg.width>250){
-        profileImg.resize(profileImg.width/2,profileImg.height/2);
-    }
     user.profile.allocate(10*profileScale.x ,10*profileScale.y, GL_RGB,true);
     user.profile=profileImg.getTextureReference();
     
@@ -1170,6 +1161,302 @@ void Tweet::switchKey(Particle::Keyframe key, int which){
             userToPhysics();
         }
         
+    }
+    
+}
+
+void Tweet::loadMulti(vector<db> items){
+    multis=items;
+    
+    
+    cout<<"load"<<endl;
+    
+    tweetKeyframe=0;
+    imageKeyframe=0;
+    userKeyframe=0;
+    
+    tweetScale=ofPoint(.08,.08,.08);
+    userScale=ofPoint(.1,.1,.1);
+    handleScale=ofPoint(.07,.07,.07);
+    imageScale=ofPoint(.15,.15,.02);
+    profileScale=ofPoint(2,2,.2);
+    
+    tweetPos=ofPoint(hashMin.x,43,hashMax.z);
+    imagePos=ofPoint(-10,-10,2);
+    userPos=ofPoint(hashMin.x,50,hashMax.z);
+    //    userPos=ofPoint(hashMin.x,-30,hashMax.z);
+    
+    boxShape = ofBtGetBoxCollisionShape(imageScale.x*tileW, imageScale.y*tileH, imageScale.z*tileD);
+    profileBox = ofBtGetBoxCollisionShape(profileScale.x*10, profileScale.y*10, profileScale.z*10);
+    
+    bImage=false;
+    
+    bFinished=false;
+    image.bFinished=false;
+    user.bFinished=false;
+    bNewKey=true;
+    user.bNewKey=true;
+    image.bNewKey=true;
+    
+    ofxJSONElement json;
+    
+    for(int j=0;j<multis.size();j++){
+    
+    if(multis[j].media_url!=""){
+        bool success=pic.loadImage(multis[j].media_url);
+        if(success){
+            bImage=true;
+            cout<<multis[j].media_url<<endl;
+        }
+        else{
+            image.bFinished=true;
+        }
+        pic.clear();
+    }
+    
+    else{
+        image.bFinished=true;
+    }
+    
+        if(bImage==true){
+            image.bNewKey=true;
+        }
+        
+        
+    bool success=json.open("keyframes/contentBlockKeyframes/test.json");
+    int i=0;
+    
+    string speed;
+    string delay;
+    
+    ofxJSONElement animations=json["animations"];
+    
+    tweetIn.path="keyframes/particleKeyframes/in/"+json["animations"][i]["tweet"]["in"]["animation"].asString();
+    
+    speed=json["animations"][i]["tweet"]["in"]["speed"].asString();
+    if(speed!="") tweetIn.speed=ofToInt(speed);
+    else tweetIn.speed=1;
+    
+    
+    delay=json["animations"][i]["tweet"]["in"]["delay"].asString();
+    if(delay!="") tweetIn.delay=ofToInt(delay);
+    else tweetIn.delay=0;
+    
+    
+    tweetOut.path="keyframes/particleKeyframes/out/"+json["animations"][i]["tweet"]["out"]["animation"].asString();
+    
+    speed=json["animations"][i]["tweet"]["out"]["speed"].asString();
+    if(speed!="") tweetOut.speed=ofToInt(speed);
+    else tweetOut.speed=1;
+    
+    delay=json["animations"][i]["tweet"]["out"]["delay"].asString();
+    if(delay!="") tweetOut.delay=ofToInt(delay)+masterDelay;
+    else tweetOut.delay=masterDelay;
+    
+    if(bImage==true){
+        imgIn.path="keyframes/particleKeyframes/in/"+json["animations"][i]["image"]["in"]["animation"].asString();
+        speed=json["animations"][i]["image"]["in"]["speed"].asString();
+        if(speed!="") imgIn.speed=ofToInt(speed);
+        else imgIn.speed=1;
+        
+        delay=json["animations"][i]["image"]["in"]["delay"].asString();
+        if(delay!="") imgIn.delay=ofToInt(delay);
+        else imgIn.delay=0;
+        
+        
+        imgOut.path="keyframes/particleKeyframes/out/"+json["animations"][i]["image"]["out"]["animation"].asString();
+        speed=json["animations"][i]["image"]["out"]["speed"].asString();
+        if(speed!="") imgOut.speed=ofToInt(speed);
+        else imgOut.speed=1;
+        
+        delay=json["animations"][i]["image"]["out"]["delay"].asString();
+        if(delay!="") imgOut.delay=ofToInt(delay)+masterDelay;
+        else imgOut.delay=masterDelay;
+    }
+    
+    
+    userIn.path="keyframes/particleKeyframes/in/"+json["animations"][i]["user"]["in"]["animation"].asString();
+    speed=json["animations"][i]["user"]["in"]["speed"].asString();
+    if(speed!="") userIn.speed=ofToInt(speed);
+    else userIn.speed=1;
+    
+    delay=json["animations"][i]["user"]["in"]["delay"].asString();
+    if(delay!="") userIn.delay=ofToInt(delay);
+    else userIn.delay=0;
+    
+    
+    userOut.path="keyframes/particleKeyframes/out/"+json["animations"][i]["user"]["out"]["animation"].asString();
+    speed=json["animations"][i]["user"]["out"]["speed"].asString();
+    if(speed!="") userOut.speed=ofToInt(speed);
+    else userOut.speed=1;
+    
+    delay=json["animations"][i]["user"]["out"]["delay"].asString();
+    if(delay!="") userOut.delay=ofToInt(delay)+masterDelay;
+    else userOut.delay=masterDelay;
+    
+    animationCount++;
+    
+    if (animationCount>animations.size()-1){
+        animationCount=0;
+    }
+    
+    loadParticleKeyframes(tweetIn, KEYFRAME_TWEET);
+    loadParticleKeyframes(tweetOut,KEYFRAME_TWEET);
+    
+    if(bImage==true){
+        loadParticleKeyframes(imgIn, KEYFRAME_IMAGE);
+        loadParticleKeyframes(imgOut,KEYFRAME_IMAGE);
+    }
+    
+    loadParticleKeyframes(userIn, KEYFRAME_USER);
+    loadParticleKeyframes(userOut,KEYFRAME_USER);
+    
+    
+    ofUniString tweetText= ofTextConverter::toUTF32(multis[j].text);
+    
+    ofPoint pos=tweetPos;
+    pos.x=tweetPos.x+(10*profileScale.x)/2+2;
+    
+    if(bImage==true){
+        tweetPos=ofPoint(hashMin.x,-25,5);
+        pos=tweetPos;
+        pos.x=tweetPos.x+(10*profileScale.x)/2+1;
+        //        tweetScale=ofPoint(tweetScale.x,tweetScale.y,tweetScale.z*.5);
+    }
+    
+    
+    
+    
+    for (int i=0;i<tweetText.length();i++){
+        
+        if (tweetText[i]==32){
+            pos.x+=3;
+            if(pos.x>40){
+                pos.y-=6;
+                pos.x=tweetPos.x+(10*profileScale.x)/2+2;
+            }
+        }
+        else if(tweetText[i]>32&&tweetText[i]<256){
+            //setup position values for displaying whole image
+            Particle::Keyframe temp;
+            
+            ofVec3f boxDim;
+            boxDim=gotham->getSize(tweetText[i])*tweetScale;
+            
+            pos.x+=.5*boxDim.x+.5;
+            
+            temp.pos.x=pos.x;
+            temp.pos.y=pos.y+gotham->letters[tweetText[i]]->offset;
+            temp.pos.z=pos.z;
+            
+            //create Bullet letters for image visualization
+            //create particles for controlling static shape position/rotation
+            
+            Particle particle;
+            particle.setup(temp,i,tweetText[i],boxDim, hashMin, hashMax);
+            particle.goToPosition(tweetKeyframes[tweetKeyframe]);
+            particle.start.pos=particle.target.pos;
+            particles.push_back(particle);
+            bNewKey=false;
+            
+            if(tweetType!="gravity"){
+                
+                letters.push_back( new ofxBulletCustomShape() );
+                letters[letters.size()-1]->addMesh(gotham->getMesh(tweetText[i]),tweetScale,true);
+                letters[letters.size()-1]->create(world->world,particle.target.pos,0.);
+                letters[letters.size()-1]->add();
+                letters[letters.size()-1]->setProperties(.1,.1);
+                letters[letters.size()-1]->enableKinematic();
+            }
+            
+            else{
+                world->setGravity(ofVec3f(tweetKeyframes[tweetKeyframe].gravity.x,tweetKeyframes[tweetKeyframe].gravity.y,tweetKeyframes[tweetKeyframe].gravity.z));
+                letters.push_back( new ofxBulletCustomShape() );
+                letters[letters.size()-1]->addMesh(gotham->getMesh(tweetText[i]),tweetScale,true);
+                letters[letters.size()-1]->create(world->world,particle.target.pos,10.);
+                letters[letters.size()-1]->add();
+                letters[letters.size()-1]->setProperties(.1,.1);
+            }
+            
+            
+            pos.x+=.5*boxDim.x+.5;
+            
+            
+        }
+    }
+    
+    if(bImage==true){
+        
+        imageScale=ofPoint(40,40,.02);
+        
+        imagePos=ofPoint(ofRandom(-140,140), ofRandom(-140,140),0);
+        
+        boxShape = ofBtGetBoxCollisionShape(imageScale.x, imageScale.y, imageScale.z);
+
+                //setup position values for displaying whole image
+                Particle::Keyframe temp;
+                temp.pos.x=imagePos.x;
+                temp.pos.y=imagePos.y;
+                temp.pos.z=imagePos.z;
+                
+                Particle particle;
+                particle.setup(temp,j, hashMin, hashMax);
+                particle.goToPosition(imageKeyframes[imageKeyframe]);
+                particle.start.pos=particle.target.pos;
+                image.particles.push_back(particle);
+                
+                //create Bullet shapes for image visualization
+                image.shapes.push_back( new ofxBulletBox() );
+                
+                if(image.type!="gravity"){
+                    ((ofxBulletBox*)image.shapes[image.shapes.size()-1])->init(boxShape);
+                    ((ofxBulletBox*)image.shapes[image.shapes.size()-1])->create(world->world,particle.target.pos,0.);
+                    image.shapes[image.shapes.size()-1]->add();
+                    image.shapes[image.shapes.size()-1]->setProperties(.1,1);
+                    image.shapes[image.shapes.size()-1]->enableKinematic();
+                }
+                
+                else{
+                    world->setGravity(ofVec3f(imageKeyframes[imageKeyframe].gravity.x,imageKeyframes[imageKeyframe].gravity.y,imageKeyframes[imageKeyframe].gravity.z));
+                    ((ofxBulletBox*)image.shapes[image.shapes.size()-1])->init(boxShape);
+                    ((ofxBulletBox*)image.shapes[image.shapes.size()-1])->create(world->world,particle.target.pos,0.);
+                    image.shapes[image.shapes.size()-1]->add();
+                    image.shapes[image.shapes.size()-1]->setProperties(.1,1);
+                }
+                
+                //            //crop and allocate image boxes to tiles
+                
+                ofEnableNormalizedTexCoords();
+                ofTexture newFace;
+                ofImage tileImage;
+                tileImage.allocate(imageScale.x,imageScale.y, OF_IMAGE_COLOR);
+        tileImage.loadImage(multis[j].media_url);
+                tileImage.mirror(true,true);
+                newFace.allocate(imageScale.x,imageScale.y, GL_RGB,true);
+                newFace=tileImage.getTextureReference();
+                image.face.push_back(newFace);
+                
+                //create particles for controlling static shape position/rotation
+                
+            }
+        }
+    }
+
+void Tweet::drawMultiImg(){
+//    user.profile.bind();
+//    user.shape->draw();
+//    user.profile.unbind();
+    
+    if(bImage==true){
+        //        ofRotate(180,0,1,0);
+
+        for (int i=0;i<image.shapes.size();i++){
+            image.face[i].bind();
+            image.shapes[i]->draw();
+            image.face[i].unbind();
+            
+            ofSetColor(255,255,255);
+        }
     }
     
 }

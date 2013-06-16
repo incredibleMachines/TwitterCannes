@@ -120,7 +120,10 @@ public:
     vector <string> urls;
     int urlCounter;
     
-bool bBegin;
+    bool bBegin;
+    
+    int multiTrigger;
+    bool bMulti;
 
 };
 

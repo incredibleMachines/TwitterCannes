@@ -30,6 +30,7 @@ public:
     
     void setup(ofPoint _hashMin, ofPoint _hashMax, ofxBulletWorldRigid* _world, Alphabet* _gotham);
     void update();
+    void updateMulti();
     void draw();
     void drawImg();
     void drawLetters();
@@ -74,6 +75,7 @@ public:
         
     };
     
+    void loadMulti(vector<db> items);
     void loadTweet(db item);
     void loadImage(string _image);
     void loadUser(string _username, string _handle, string _profileimage);
@@ -124,6 +126,10 @@ public:
     int animationCount;
     
     int masterDelay;
+    
+    vector<db> multis;
+    
+    void drawMultiImg();
     
 };
 
