@@ -80,7 +80,7 @@ void Tweet::loadTweet(db item){
         image.bFinished=true;
     }
     
-    bool success=json.open("keyframes/contentBlockKeyframes/test.json");
+    bool success=json.open("keyframes/contentBlockKeyframes/good.json");
     int i=animationCount;
     
     string speed;
@@ -998,6 +998,7 @@ void Tweet::userToPhysics(){
 }
 
 void Tweet::updateTweet(){
+    
     if(tweetKeyframes[tweetKeyframe].path!="gravity"){
         int moving=0;
         for (int i=0;i<letters.size();i++){
@@ -1032,6 +1033,7 @@ void Tweet::updateTweet(){
                 bFinished=true;
             }
         }
+
     }
     
     //if in physics state - do nothing other than keep track of duration
@@ -1090,7 +1092,6 @@ void Tweet::updateImg(){
                 image.bFinished=true;
             }
         }
-        
     }
     
     //if in physics state - do nothing other than keep track of duration

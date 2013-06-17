@@ -14,7 +14,7 @@ void testApp::setup(){
     ofSetWindowShape(2048,1080);
     cout<<ofGetWindowSize()<<endl;
     
-    multiTrigger=1;
+    multiTrigger=0;
     
     gotham.setup();
 
@@ -23,9 +23,8 @@ void testApp::setup(){
     // limit: how many tweets to return
     // category: Celebrities, Executive+Tweets, Speaker+Quotes
     // starred: true/false
-
-    urls.push_back("limit=5&&media_url=1");
     urls.push_back("limit=18&media_url=1");
+    urls.push_back("limit=5&media_url=1");
     urls.push_back("limit=5&starred=true");
 //    
     urls.push_back("limit=3&category=Executive+Tweets");
@@ -229,7 +228,7 @@ void testApp::update(){
 //updates bullet objects
     world.update();
     
-    cout<<"i "<<tweet.image.bFinished<<" u "<<tweet.user.bFinished<<endl;
+//    cout<<"i "<<tweet.image.bFinished<<" u "<<tweet.user.bFinished<<endl;
     
     if(tweet.bFinished==true&&tweet.image.bFinished==true&&tweet.user.bFinished==true){
         tweet.destroy();
