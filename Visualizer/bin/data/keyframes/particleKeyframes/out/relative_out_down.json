@@ -1,43 +1,6 @@
 {
     "particles": [
         {
-            "path": "gravity",
-            "type": {
-                "x": "absolute",
-                "y": "absolute",
-                "z": "hashtag"
-            },
-            "pos": {
-                "set": {
-                    "x": "",
-                    "y": "",
-                    "z": ""
-                },
-                "min": {
-                    "x": "-180",
-                    "y": "60",
-                    "z": ""
-                },
-                "max": {
-                    "x": "-80",
-                    "y": "80",
-                    "z": ""
-                }
-            },
-            "gravity": {
-                "x": "300",
-                "y": "-200",
-                "z": ""
-            },
-            "duration": {
-                "min": "",
-                "max": "",
-                "actual": "3000"
-            },
-                    "interpolation": "linear"
-
-        },
-        {
             "path": "line",
             "type": {
                 "x": "pixel",
@@ -62,54 +25,52 @@
                 }
             },
             "gravity": {
-                "x": "0",
-                "y": "0",
-                "z": "0"
+                "x": "",
+                "y": "",
+                "z": ""
+            },
+            "duration": {
+                "min": "",
+                "max": "",
+                "actual": "1"
+            },
+            "interpolation": "cubic_out"
+        },
+        {
+            "path": "line",
+            "type": {
+                "x": "pixel",
+                "y": "pixel_relative",
+                "z": "pixel"
+            },
+            "pos": {
+                "set": {
+                    "x": "",
+                    "y": "-350",
+                    "z": ""
+                },
+                "min": {
+                    "x": "",
+                    "y": "",
+                    "z": ""
+                },
+                "max": {
+                    "x": "",
+                    "y": "",
+                    "z": ""
+                }
+            },
+            "gravity": {
+                "x": "",
+                "y": "",
+                "z": ""
             },
             "duration": {
                 "min": "",
                 "max": "",
                 "actual": "5000"
             },
-
-                    "interpolation": "linear"
-        },
-        {
-            "path": "line",
-            "type": {
-                "x": "pixel",
-                "y": "pixel",
-                "z": "pixel"
-            },
-            "pos": {
-                "set": {
-                    "x": "",
-                    "y": "",
-                    "z": ""
-                },
-                "min": {
-                    "x": "",
-                    "y": "",
-                    "z": ""
-                },
-                "max": {
-                    "x": "",
-                    "y": "",
-                    "z": ""
-                }
-            },
-            "gravity": {
-                "x": "0",
-                "y": "0",
-                "z": "0"
-            },
-            "duration": {
-                "min": "",
-                "max": "",
-                "actual": "1000"
-            },
-
-                    "interpolation": "linear"
+            "interpolation": "cubic_in"
         }
     ]
 }

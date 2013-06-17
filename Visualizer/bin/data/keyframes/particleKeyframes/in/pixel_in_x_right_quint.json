@@ -3,9 +3,9 @@
         {
             "path": "line",
             "type": {
-                "x": "off_screen",
-                "y": "off_screen",
-                "z": "pixel_relative"
+                "x": "absolute",
+                "y": "pixel",
+                "z": "pixel"
             },
             "pos": {
                 "set": {
@@ -14,14 +14,14 @@
                     "z": ""
                 },
                 "min": {
-                    "x": "",
+                    "x": "350",
                     "y": "",
-                    "z": "0"
+                    "z": ""
                 },
                 "max": {
-                    "x": "",
+                    "x": "400",
                     "y": "",
-                    "z": "4"
+                    "z": ""
                 }
             },
             "gravity": {
@@ -34,7 +34,7 @@
                 "max": "",
                 "actual": ""
             },
-            "interpolation": "linear"
+            "interpolation": ""
         },
         {
             "path": "line",
@@ -66,11 +66,11 @@
                 "z": ""
             },
             "duration": {
-                "min": "1000",
-                "max": "3000",
+                "min": "2000",
+                "max": "4000",
                 "actual": ""
             },
-            "interpolation": "cubic_in"
+            "interpolation": "quint_out"
         }
     ]
 }

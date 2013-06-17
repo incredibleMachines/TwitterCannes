@@ -1,13 +1,48 @@
 {
     "particles": [
-        
         {
-            "path": "gravity",
+            "path": "line",
             "type": {
+                "x": "pixel_relative",
+                "y": "pixel_relative",
+                "z": "pixel"
+            },
+            "pos": {
+                "set": {
+                    "x": "-350",
+                    "y": "",
+                    "z": ""
+                },
+                "min": {
+                    "x": "",
+                    "y": "",
+                    "z": ""
+                },
+                "max": {
+                    "x": "",
+                    "y": "",
+                    "z": ""
+                }
+            },
+            "gravity": {
                 "x": "",
                 "y": "",
                 "z": ""
             },
+            "duration": {
+                "min": "",
+                "max": "",
+                "actual": "1"
+            },
+            "interpolation": "linear"
+        },
+        {
+            "path": "line",
+            "type": {
+                "x": "pixel",
+                "y": "pixel",
+                "z": "pixel"
+            },
             "pos": {
                 "set": {
                     "x": "",
@@ -16,18 +51,18 @@
                 },
                 "min": {
                     "x": "",
-                    "y": "60",
+                    "y": "",
                     "z": ""
                 },
                 "max": {
                     "x": "",
-                    "y": "100",
+                    "y": "",
                     "z": ""
                 }
             },
             "gravity": {
                 "x": "",
-                "y": "-200",
+                "y": "",
                 "z": ""
             },
             "duration": {
@@ -35,82 +70,7 @@
                 "max": "",
                 "actual": "5000"
             },
-                    "interpolation": "cubic_in_out"
-
-        },
-        {
-            "path": "line",
-            "type": {
-                "x": "pixel",
-                "y": "pixel",
-                "z": "pixel"
-            },
-            "pos": {
-                "set": {
-                    "x": "",
-                    "y": "",
-                    "z": ""
-                },
-                "min": {
-                    "x": "",
-                    "y": "",
-                    "z": ""
-                },
-                "max": {
-                    "x": "",
-                    "y": "",
-                    "z": ""
-                }
-            },
-            "gravity": {
-                "x": "0",
-                "y": "0",
-                "z": "0"
-            },
-            "duration": {
-                "min": "",
-                "max": "",
-                "actual": "5000"
-            },
-
-                    "interpolation": "linear"
-        },
-        {
-            "path": "line",
-            "type": {
-                "x": "pixel",
-                "y": "pixel",
-                "z": "pixel"
-            },
-            "pos": {
-                "set": {
-                    "x": "",
-                    "y": "",
-                    "z": ""
-                },
-                "min": {
-                    "x": "",
-                    "y": "",
-                    "z": ""
-                },
-                "max": {
-                    "x": "",
-                    "y": "",
-                    "z": ""
-                }
-            },
-            "gravity": {
-                "x": "0",
-                "y": "0",
-                "z": "0"
-            },
-            "duration": {
-                "min": "",
-                "max": "",
-                "actual": "1000"
-            },
-
-                    "interpolation": "linear"
+            "interpolation": "cubic_out"
         }
     ]
 }

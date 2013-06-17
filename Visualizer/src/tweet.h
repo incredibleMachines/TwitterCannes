@@ -136,8 +136,15 @@ public:
     bool bMulti;
     
     int tweetTimer, imgTimer, userTimer;
-    void goTweets(string _text);
+    void goTweets();
+    void goUser();
+    void goImg();
     bool tweetStart, imgStart, userStart;
+    
+    
+    ofxBulletBox* tweetBlock;
+    btBoxShape* tweetBox;
+    ofPoint tweetBoxPos;
 
 };
 

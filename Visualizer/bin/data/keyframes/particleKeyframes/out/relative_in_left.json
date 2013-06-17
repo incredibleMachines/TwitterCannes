@@ -1,6 +1,42 @@
 {
     "particles": [
-    {
+        {
+            "path": "line",
+            "type": {
+                "x": "pixel_relative",
+                "y": "pixel_relative",
+                "z": "pixel"
+            },
+            "pos": {
+                "set": {
+                    "x": "-350",
+                    "y": "",
+                    "z": ""
+                },
+                "min": {
+                    "x": "",
+                    "y": "",
+                    "z": ""
+                },
+                "max": {
+                    "x": "",
+                    "y": "",
+                    "z": ""
+                }
+            },
+            "gravity": {
+                "x": "",
+                "y": "",
+                "z": ""
+            },
+            "duration": {
+                "min": "",
+                "max": "",
+                "actual": "1"
+            },
+            "interpolation": "linear"
+        },
+        {
             "path": "line",
             "type": {
                 "x": "pixel",
@@ -32,48 +68,9 @@
             "duration": {
                 "min": "",
                 "max": "",
-                "actual": "1"
+                "actual": "5000"
             },
-                    "interpolation": "cubic_in"
-        },
-        {
-            "path": "line",
-            "type": {
-                "x": "pixel",
-                "y": "pixel",
-                "z": "off_screen"
-            },
-            "pos": {
-                "set": {
-                    "x": "",
-                    "y": "",
-                    "z": ""
-                },
-                "min": {
-                    "x": "",
-                    "y": "",
-                    "z": ""
-                },
-                "max": {
-                    "x": "",
-                    "y": "",
-                    "z": ""
-                }
-            },
-            "gravity": {
-                "x": "",
-                "y": "",
-                "z": ""
-            },
-            "duration": {
-                "min": "1000",
-                "max": "3000",
-                "actual": ""
-            },
-                    "interpolation": "linear"
-        }
-        
-                    ]
+            "interpolation": "cubic_out"
         }
     ]
 }

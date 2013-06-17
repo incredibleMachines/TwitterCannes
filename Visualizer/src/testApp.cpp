@@ -14,7 +14,7 @@ void testApp::setup(){
     ofSetWindowShape(2048,1080);
     cout<<ofGetWindowSize()<<endl;
     
-    multiTrigger=2;
+    multiTrigger=0;
     
     gotham.setup();
 
@@ -24,12 +24,16 @@ void testApp::setup(){
     // category: Celebrities, Executive+Tweets, Speaker+Quotes
     // starred: true/false
 
-
-    urls.push_back("limit=5&media_url=1");
-    urls.push_back("limit=3&starred=true");
     urls.push_back("limit=18&media_url=1");
-    urls.push_back("limit=3&category=Speaker+Quotes");
+    
+    urls.push_back("limit=1&&media_url=1");
+
+
+    urls.push_back("limit=3&starred=true");
+//    
+//    urls.push_back("limit=3&category=Executives");
     urls.push_back("limit=3&category=Celebrities");
+    
     
     // to cycle through different URLs
     urlCounter = 0;
@@ -406,9 +410,9 @@ void testApp::setupGL(){
     material.setShininess(.8);
     
     //Create static collision objects
-    background.create(world.world,ofVec3f(0,100,-1),0.,500,500,0.);
+    background.create(world.world,ofVec3f(0,100,-1),0.,500,500,2);
     background.add();
-    background.setProperties(.1,1);
+    background.setProperties(.1,.5);
     
     whiteImg.loadImage("textures/white.jpg");
     white=whiteImg.getTextureReference();
@@ -513,7 +517,7 @@ void testApp::loadHashtag()
     ofColor blue=ofColor(0.1,.1,.1);
     //    ofEnableArbTex();
                             settings.popTag();
-    hashMin=ofPoint(hashletters[0].pos.x,hashletters[0].pos.y, hashletters[0].pos.z-hashletters[11].scale.z*hashletters[11].size.z*.5);
+    hashMin=ofPoint(hashletters[0].pos.x,hashletters[0].pos.y, hashletters[0].pos.z+hashletters[11].scale.z*hashletters[11].size.z*.5);
     hashMax=ofPoint(hashletters[11].pos.x, hashletters[11].pos.y,hashletters[11].pos.z+2);
 
 }

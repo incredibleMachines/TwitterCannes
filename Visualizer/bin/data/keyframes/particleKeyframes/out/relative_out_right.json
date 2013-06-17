@@ -34,7 +34,7 @@
                 "max": "",
                 "actual": "1"
             },
-                    "interpolation": "linear"
+            "interpolation": "linear"
         },
         {
             "path": "line",
@@ -70,9 +70,7 @@
                 "max": "",
                 "actual": "3000"
             },
-                    "interpolation": "cubic_in"
-        }
-                    ]
+            "interpolation": "cubic_in"
         }
     ]
 }
