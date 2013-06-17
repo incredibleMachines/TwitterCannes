@@ -1,81 +1,6 @@
 {
     "animations": [
-        {
-            "tweet": {
-                "in": {
-                    "speed": "1",
-                    "delay": "0",
-                    "animation": "pixel_in_z_cubic.json"
-                },
-                "out": {
-                    "speed": "1",
-                    "delay": "2000",
-                    "animation": "random_x_y_out_cubic.json"
-                }
-            },
-            "user": {
-                "in": {
-                    "speed": "1",
-                    "delay": "0",
-                    "animation": "pixel_in_z_cubic.json"
-                },
-                "out": {
-                    "speed": "1",
-                    "delay": "2000",
-                    "animation": "random_x_y_out_cubic.json"
-                }
-            },
-            "image": {
-                "in": {
-                    "speed": "1",
-                    "delay": "0",
-                    "animation": "random_x_y_in_cubic.json"
-                },
-                "out": {
-                    "speed": "1",
-                    "delay": "5000",
-                    "animation": "pixel_out_z_cubic.json"
-                }
-            }
-        },
-        {
-            "tweet": {
-                "in": {
-                    "speed": "1",
-                    "delay": "0",
-                    "animation": "relative_in_left.json"
-                },
-                "out": {
-                    "speed": "1",
-                    "delay": "2000",
-                    "animation": "relative_out_right.json"
-                }
-            },
-            "user": {
-                "in": {
-                    "speed": "1",
-                    "delay": "0",
-                    "animation": "relative_in_left.json"
-                },
-                "out": {
-                    "speed": "1",
-                    "delay": "2000",
-                    "animation": "elastic_out_right.json"
-                }
-            },
-            "image": {
-                "in": {
-                    "speed": "1",
-                    "delay": "0",
-                    "animation": "relative_in_right.json"
-                },
-                "out": {
-                    "speed": "1",
-                    "delay": "2000",
-                    "animation": "relative_out_left.json"
-                }
-            }
-        },
+
         {
             "tweet": {
                 "in": {
@@ -187,6 +112,44 @@
                     "speed": "1",
                     "delay": "2000",
                     "animation": "relative_out_down.json"
+                }
+            }
+        },
+                {
+            "tweet": {
+                "in": {
+                    "speed": "1",
+                    "delay": "0",
+                    "animation": "pixel_in_z_cubic.json"
+                },
+                "out": {
+                    "speed": "1",
+                    "delay": "2000",
+                    "animation": "random_x_y_out_cubic.json"
+                }
+            },
+            "user": {
+                "in": {
+                    "speed": "1",
+                    "delay": "0",
+                    "animation": "pixel_in_z_cubic.json"
+                },
+                "out": {
+                    "speed": "1",
+                    "delay": "2000",
+                    "animation": "random_x_y_out_cubic.json"
+                }
+            },
+            "image": {
+                "in": {
+                    "speed": "1",
+                    "delay": "0",
+                    "animation": "random_x_y_in_cubic.json"
+                },
+                "out": {
+                    "speed": "1",
+                    "delay": "5000",
+                    "animation": "pixel_out_z_cubic.json"
                 }
             }
         },
