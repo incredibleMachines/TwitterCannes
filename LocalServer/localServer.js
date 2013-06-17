@@ -39,8 +39,8 @@ app.get('/',function(req, res){
 	if (req.query.starred)
 		find.starred = req.query.starred == "true" ? true : false;
 
- if(req.query.media_url)
-               find.media_url = {$ne: ""};
+	if(req.query.media_url)
+		find.media_url = {$ne: ""};
 
 	// Set up options
 	var options = {}
@@ -65,8 +65,14 @@ app.get('/',function(req, res){
 	tweets.find(find, options).toArray(function(err, docs) {
 		res.send(docs);
 
-		for (var i = 0; i < docs.length; i++) {
-			tweets.update(docs[i], { $inc: { shown_count: 1 } }, function(){});
+		if (req.query.increase_shown_count) {
+			if (req.query.increase_shown_count != 'false') {
+				for (var i = 0; i < docs.length; i++) {
+					tweets.update(docs[i], { $inc: { shown_count: 1 } }, function(){});
+				}
+			} else {
+				console.log('['+current_time+'] Not increasing shown count for this request!')
+			}
 		}
 	});
 
