@@ -38,7 +38,7 @@ function checkRemote(){
 		}
 		var options = {
 
-			host: 'ec2-23-23-188-178.compute-1.amazonaws.com',
+			host: 'cannes.incrediblemachin.es',
 			port: 9000,
 			path: '/?since='+timestamp+'&limit=0'
 
