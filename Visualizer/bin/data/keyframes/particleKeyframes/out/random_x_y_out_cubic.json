@@ -41,7 +41,7 @@
             "type": {
                 "x": "off_screen",
                 "y": "off_screen",
-                "z": "pixel"
+                "z": "pixel_relative"
             },
             "pos": {
                 "set": {
@@ -52,12 +52,12 @@
                 "min": {
                     "x": "",
                     "y": "",
-                    "z": ""
+                    "z": "0"
                 },
                 "max": {
                     "x": "",
                     "y": "",
-                    "z": ""
+                    "z": "4"
                 }
             },
             "gravity": {

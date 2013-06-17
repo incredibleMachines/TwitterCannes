@@ -52,7 +52,6 @@ public:
         vector<ofTexture> face;
         bool bNewKey;
         bool bFinished;
-        string type;
         int width, height;
     };
     
@@ -63,7 +62,6 @@ public:
         vector<Particle> particles;
         bool bNewKey;
         bool bFinished;
-        string type;
         ofxBulletBox* shape;
     };
     
@@ -121,7 +119,7 @@ public:
     
     ofPoint hashMin, hashMax;
     
-    string tweetType;
+    string tweetType, userType, imageType;
     
     int animationCount;
     
@@ -130,6 +128,9 @@ public:
     vector<db> multis;
     
     void drawMultiImg();
+    
+    ofPoint mUserPos;
+    bool bMulti;
     
 };
 

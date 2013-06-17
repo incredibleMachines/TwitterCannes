@@ -14,7 +14,7 @@ void testApp::setup(){
     ofSetWindowShape(2048,1080);
     cout<<ofGetWindowSize()<<endl;
     
-    multiTrigger=1;
+    multiTrigger=2;
     
     gotham.setup();
 
@@ -23,9 +23,11 @@ void testApp::setup(){
     // limit: how many tweets to return
     // category: Celebrities, Executive+Tweets, Speaker+Quotes
     // starred: true/false
-    urls.push_back("limit=5");
-    urls.push_back("limit=9&media_url=1");
+
+
+    urls.push_back("limit=5&media_url=1");
     urls.push_back("limit=3&starred=true");
+    urls.push_back("limit=18&media_url=1");
     urls.push_back("limit=3&category=Speaker+Quotes");
     urls.push_back("limit=3&category=Celebrities");
     
@@ -37,7 +39,7 @@ void testApp::setup(){
     bDebug=false;
     bGUI=false;
     bShadowsOn=true;
-    bDrawBirdColor=true;
+    bDrawBirdColor=false;
     bBegin=true;
     
     camState=0;
@@ -75,10 +77,11 @@ void testApp::setup(){
         tweet.loadTweet(list[listCount]);
     }
     
-    image.loadImage("media_images/344805828068524035.jpg");
 }
 
 void testApp::fetchTweets(){
+    
+    cout<<"go"<<endl;
     
     ofxJSONElement json;
     db newList;
@@ -116,10 +119,13 @@ void testApp::fetchTweets(){
     
     if (urlCounter==multiTrigger){
         bMulti=true;
+        listCount=list.size();
     }
     else{
         bMulti=false;
     }
+    
+
     
     // magic
     // (increase counter and wrap around to 0 once we hit the end)
@@ -222,11 +228,17 @@ void testApp::update(){
 //updates bullet objects
     world.update();
     
-//    cout<<list.size()<<endl;
+cout<<listCount<<endl;
+    
     
     if(tweet.bFinished==true&&tweet.image.bFinished==true&&tweet.user.bFinished==true){
         tweet.destroy();
         listCount++;
+        
+        if(bMulti==true&&listCount!=0){
+            listCount=list.size();
+        }
+        
         if(listCount>list.size()-1){
             cout << "got to last tweet in queue, moving to new set of tweets!" << endl;
             fetchTweets();
@@ -237,12 +249,10 @@ void testApp::update(){
         
         if(bMulti==true){
             tweet.loadMulti(list);
-            listCount=list.size()-1;
         }
         else{
             tweet.loadTweet(list[listCount]);
         }
-        
 
     }
     else{
@@ -281,6 +291,7 @@ void testApp::draw(){
     if(bShadowsOn){
         if(bMulti==true){
             tweet.drawMultiImg();
+            tweet.drawLetters();
         }
         else{
         tweet.drawLetters();
@@ -311,6 +322,7 @@ void testApp::draw(){
     ofScale(6,6,6);
     ofRotate(90, 0, 1, 0);
     ofRotate(330,1,0,0);
+    ofTranslate(0,0,-.1);
     ofRect(-15, -15, 30, 30);
     ofPopMatrix();
     
@@ -326,9 +338,9 @@ void testApp::draw(){
     //bind image textures and draw bullet shapes
 
     material.begin();
-    if(bMulti==false){
+
         tweet.drawLetters();
-    }
+
     material.end();
     
     shadowLightLeft.disable();
@@ -395,7 +407,7 @@ void testApp::setupGL(){
     material.setShininess(.8);
     
     //Create static collision objects
-    background.create(world.world,ofVec3f(0,0,-90.),0.,175,200,10.);
+    background.create(world.world,ofVec3f(0,100,-1),0.,500,500,0.);
     background.add();
     background.setProperties(.1,1);
     
