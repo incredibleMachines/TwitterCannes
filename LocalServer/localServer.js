@@ -65,15 +65,15 @@ app.get('/',function(req, res){
 	tweets.find(find, options).toArray(function(err, docs) {
 		res.send(docs);
 
-		if (req.query.increase_shown_count) {
-			if (req.query.increase_shown_count != 'false') {
-				for (var i = 0; i < docs.length; i++) {
-					tweets.update(docs[i], { $inc: { shown_count: 1 } }, function(){});
-				}
-			} else {
-				console.log('['+current_time+'] Not increasing shown count for this request!')
+		
+		if (req.query.increase_shown_count != 'false') {
+			for (var i = 0; i < docs.length; i++) {
+				tweets.update(docs[i], { $inc: { shown_count: 1 } }, function(){});
 			}
+		} else {
+			console.log('['+current_time+'] Not increasing shown count for this request!')
 		}
+		
 	});
 
 });
