@@ -68,7 +68,7 @@
             "duration": {
                 "min": "",
                 "max": "",
-                "actual": "3000"
+                "actual": "5000"
             },
                     "interpolation": "cubic_out"
         }

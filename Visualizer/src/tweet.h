@@ -63,6 +63,9 @@ public:
         bool bNewKey;
         bool bFinished;
         ofxBulletBox* shape;
+        string username;
+        string handle;
+        string profileImg;
     };
     
     class Animation{
@@ -107,7 +110,7 @@ public:
     ofPoint userScale;
     ofPoint handleScale;
     ofPoint profileScale;
-    void loadParticleKeyframes(Animation anim, int which);
+    void loadParticleKeyframes(Animation anim, int which,bool In);
     ofTexture white;
     ofImage pic;
     
@@ -132,6 +135,10 @@ public:
     ofPoint mUserPos;
     bool bMulti;
     
+    int tweetTimer, imgTimer, userTimer;
+    void goTweets(string _text);
+    bool tweetStart, imgStart, userStart;
+
 };
 
 

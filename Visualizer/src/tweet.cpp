@@ -157,20 +157,44 @@ void Tweet::loadTweet(db item){
         animationCount=0;
     }
     
-    loadParticleKeyframes(tweetIn, KEYFRAME_TWEET);
-    loadParticleKeyframes(tweetOut,KEYFRAME_TWEET);
+    loadParticleKeyframes(tweetIn, KEYFRAME_TWEET, true);
+    loadParticleKeyframes(tweetOut,KEYFRAME_TWEET, false);
     
     if(bImage==true){
-        loadParticleKeyframes(imgIn, KEYFRAME_IMAGE);
-        loadParticleKeyframes(imgOut,KEYFRAME_IMAGE);
+        loadParticleKeyframes(imgIn, KEYFRAME_IMAGE, true);
+        loadParticleKeyframes(imgOut,KEYFRAME_IMAGE, false);
     }
     
-    loadParticleKeyframes(userIn, KEYFRAME_USER);
-    loadParticleKeyframes(userOut,KEYFRAME_USER);
+    loadParticleKeyframes(userIn, KEYFRAME_USER, true);
+    loadParticleKeyframes(userOut,KEYFRAME_USER, false);
     
+    tweetTimer=ofGetElapsedTimeMillis();
+    tweetStart=false;
+    text=item.text;
     
-    ofUniString tweetText= ofTextConverter::toUTF32(item.text);
+    if(bImage==true){
+        imgTimer=ofGetElapsedTimeMillis();
+        imgStart=false;
+        image.location=item.media_url;
+    }
     
+    userTimer=ofGetElapsedTimeMillis();
+    userStart=false;
+    user.username=item.user_name;
+    user.handle=item.user_screen_name;
+    user.profileImg=item.user_image;
+    
+//    if(bImage==true){
+//        loadImage(item.media_url);
+//    }
+//    loadUser(item.user_name,item.user_screen_name, item.user_image);
+    
+}
+
+
+void Tweet::goTweets(string _text){
+    
+    ofUniString tweetText= ofTextConverter::toUTF32(_text);
     ofPoint pos=tweetPos;
     pos.x=tweetPos.x+(10*profileScale.x)/2+2;
     
@@ -180,10 +204,6 @@ void Tweet::loadTweet(db item){
         pos.x=tweetPos.x+(10*profileScale.x)/2+1;
         //        tweetScale=ofPoint(tweetScale.x,tweetScale.y,tweetScale.z*.5);
     }
-    
-    
-    
-    
     for (int i=0;i<tweetText.length();i++){
         
         if (tweetText[i]==32){
@@ -238,66 +258,83 @@ void Tweet::loadTweet(db item){
             
             pos.x+=.5*boxDim.x+.5;
             
-            
         }
     }
-    
-    if(bImage==true){
-        loadImage(item.media_url);
-    }
-    loadUser(item.user_name, item.user_screen_name, item.user_image);
-    
 }
+
 
 void Tweet::update(){
     
-    //set new particle destinations
     
-    if(bNewKey==true){
-        if(bFinished==false){
-            switchKey(tweetKeyframes[tweetKeyframe],KEYFRAME_TWEET);
+    if(tweetStart==false){
+        if(ofGetElapsedTimeMillis()-tweetTimer>tweetIn.delay){
+            tweetStart=true;
+            goTweets(text);
         }
-        bNewKey=false;
     }
-    
-    //if not new keyframe
-    
     else{
-        if(bFinished==false){
-            updateTweet();
+        if(bNewKey==true){
+            if(bFinished==false){
+                switchKey(tweetKeyframes[tweetKeyframe],KEYFRAME_TWEET);
+            }
+            bNewKey=false;
+        }
+        
+        //if not new keyframe
+        
+        else{
+            if(bFinished==false){
+                updateTweet();
+            }
         }
     }
     
     if(bImage==true){
-        if(image.bNewKey==true){
-            if(image.bFinished==false){
-                switchKey(imageKeyframes[imageKeyframe],KEYFRAME_IMAGE);
+        if(imgStart==false){
+            if(ofGetElapsedTimeMillis()-imgTimer>imgIn.delay){
+                imgStart=true;
+                loadImage(image.location);
             }
-            image.bNewKey=false;
         }
-        
         else{
-            if(image.bFinished==false){
-                updateImg();
+            
+            if(image.bNewKey==true){
+                if(image.bFinished==false){
+                    switchKey(imageKeyframes[imageKeyframe],KEYFRAME_IMAGE);
+                }
+                image.bNewKey=false;
             }
+            
+            else{
+                if(image.bFinished==false){
+                    updateImg();
+                }
+            }
+            
         }
         
-    }
-    
-    
-    if (user.bNewKey==true){
-        if(user.bFinished==false){
-            switchKey(userKeyframes[userKeyframe],KEYFRAME_USER);
+        if(userStart==false){
+            if(ofGetElapsedTimeMillis()-userTimer>userIn.delay){
+                userStart=true;
+                loadUser(user.username, user.handle, user.profileImg);
+            }
         }
-        user.bNewKey=false;
-    }
-    
-    else{
-        if(user.bFinished==false){
-            updateUser();
+        else{
+            if (user.bNewKey==true){
+                if(user.bFinished==false){
+                    switchKey(userKeyframes[userKeyframe],KEYFRAME_USER);
+                }
+                user.bNewKey=false;
+            }
+            
+            else{
+                if(user.bFinished==false){
+                    updateUser();
+                }
+            }
+            
         }
     }
-    
 }
 
 
@@ -309,68 +346,76 @@ void Tweet::draw(){
 }
 
 void Tweet::drawImg(){
-    user.profile.bind();
-    user.shape->draw();
-    user.profile.unbind();
+    if(userStart==true){
+        user.profile.bind();
+        user.shape->draw();
+        user.profile.unbind();
+    }
     
     if(bImage==true){
-        //        ofRotate(180,0,1,0);
-        bool bBlack=false;
-        for (int i=0;i<image.shapes.size();i++){
-            if(i<.45*(image.height*image.width)){
-                bBlack=true;
+        if(imgStart==true){
+            //        ofRotate(180,0,1,0);
+            bool bBlack=false;
+            for (int i=0;i<image.shapes.size();i++){
+                if(i<.45*(image.height*image.width)){
+                    bBlack=true;
+                }
+                else if(i>.45*(image.height*image.width)&&i%image.width==0) bBlack=false;
+                if(bBlack==true){
+                    ofSetColor(150,150,150);
+                }
+                image.face[i].bind();
+                image.shapes[i]->draw();
+                image.face[i].unbind();
+                
+                ofSetColor(255,255,255);
             }
-            else if(i>.45*(image.height*image.width)&&i%image.width==0) bBlack=false;
-            if(bBlack==true){
-                ofSetColor(150,150,150);
-            }
-            image.face[i].bind();
-            image.shapes[i]->draw();
-            image.face[i].unbind();
-            
-            ofSetColor(255,255,255);
         }
     }
     
 }
 
 void Tweet::drawLetters(){
-    for (int i=0;i<letters.size();i++){
-        //        letters[i]->draw();
-        glPushAttrib(GL_ALL_ATTRIB_BITS);
-        glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS);
-        glEnable(GL_NORMALIZE);
-        glDisable(GL_CULL_FACE);
-        btScalar	m[16];
-        ofGetOpenGLMatrixFromRigidBody( letters[i]->getRigidBody(), m );
-        glPushMatrix();
-        glMultMatrixf( m );
-        glTranslatef((-particles[i].size.x)/2, (-particles[i].size.y)/2, (-particles[i].size.z)/2);
-        gotham->draw(particles[i].letter,tweetScale);
-        glPopMatrix();
-        glPopAttrib();
+    if(tweetStart==true){
+        for (int i=0;i<letters.size();i++){
+            //        letters[i]->draw();
+            glPushAttrib(GL_ALL_ATTRIB_BITS);
+            glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS);
+            glEnable(GL_NORMALIZE);
+            glDisable(GL_CULL_FACE);
+            btScalar	m[16];
+            ofGetOpenGLMatrixFromRigidBody( letters[i]->getRigidBody(), m );
+            glPushMatrix();
+            glMultMatrixf( m );
+            glTranslatef((-particles[i].size.x)/2, (-particles[i].size.y)/2, (-particles[i].size.z)/2);
+            gotham->draw(particles[i].letter,tweetScale);
+            glPopMatrix();
+            glPopAttrib();
+        }
     }
     
-    for (int i=1;i<user.letters.size();i++){
-        //        letters[i]->draw();
-        glPushAttrib(GL_ALL_ATTRIB_BITS);
-        glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS);
-        glEnable(GL_NORMALIZE);
-        glDisable(GL_CULL_FACE);
-        btScalar	m[16];
-        ofGetOpenGLMatrixFromRigidBody(user.letters[i]->getRigidBody(), m );
-        glPushMatrix();
-        glMultMatrixf( m );
-        glTranslatef(-user.particles[i].size.x/2, -user.particles[i].size.y/2, -user.particles[i].size.z/2);
-        if(user.particles[i].handle==true){
-            gotham->draw(user.particles[i].letter,handleScale);
+    if(userStart==true){
+        for (int i=1;i<user.letters.size();i++){
+            //        letters[i]->draw();
+            glPushAttrib(GL_ALL_ATTRIB_BITS);
+            glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS);
+            glEnable(GL_NORMALIZE);
+            glDisable(GL_CULL_FACE);
+            btScalar	m[16];
+            ofGetOpenGLMatrixFromRigidBody(user.letters[i]->getRigidBody(), m );
+            glPushMatrix();
+            glMultMatrixf( m );
+            glTranslatef(-user.particles[i].size.x/2, -user.particles[i].size.y/2, -user.particles[i].size.z/2);
+            if(user.particles[i].handle==true){
+                gotham->draw(user.particles[i].letter,handleScale);
+            }
+            else{
+                gotham->draw(user.particles[i].letter,userScale);
+            }
+            glPopMatrix();
+            glPopClientAttrib();
+            glPopAttrib();
         }
-        else{
-            gotham->draw(user.particles[i].letter,userScale);
-        }
-        glPopMatrix();
-        glPopClientAttrib();
-        glPopAttrib();
     }
     
     
@@ -493,7 +538,7 @@ void Tweet::loadUser(string _username, string _handle, string _profileimage){
     
     else{
         if(tweetType!="gravity"){
-        world->setGravity(ofVec3f(userKeyframes[userKeyframe].gravity.x,imageKeyframes[imageKeyframe].gravity.y,imageKeyframes[imageKeyframe].gravity.z));
+            world->setGravity(ofVec3f(userKeyframes[userKeyframe].gravity.x,imageKeyframes[imageKeyframe].gravity.y,imageKeyframes[imageKeyframe].gravity.z));
         }
         user.shape=new ofxBulletBox();
         user.shape->init(profileBox);
@@ -599,7 +644,7 @@ void Tweet::loadUser(string _username, string _handle, string _profileimage){
     }
 }
 
-void Tweet::loadParticleKeyframes(Animation anim, int which){
+void Tweet::loadParticleKeyframes(Animation anim, int which, bool in){
     ofxJSONElement json;
     bool success=json.open(anim.path);
     for(int i = 0; i < json["particles"].size(); i++){
@@ -659,16 +704,16 @@ void Tweet::loadParticleKeyframes(Animation anim, int which){
         stringNum= json["particles"][i]["duration"]["actual"].asString();
         if(stringNum!=""){
             temp.duration=anim.speed*ofToInt(stringNum);
-            if(i==0){
-                temp.delay=anim.delay;
+            if(i==0&&in==false){
+                temp.duration+=anim.delay;
             }
         }
         else temp.duration=NULL;
         stringNum= json["particles"][i]["duration"]["max"].asString();
         if(stringNum!=""){
             temp.durationMax=anim.speed*ofToInt(stringNum);
-            if(i==0){
-                temp.delay=anim.delay;
+            if(i==0&&in==false){
+                temp.duration+=anim.delay;
             }
         }
         else temp.durationMax=NULL;
@@ -678,7 +723,7 @@ void Tweet::loadParticleKeyframes(Animation anim, int which){
         
         if(stringNum!=""){
             temp.durationMin=anim.speed*ofToInt(stringNum);
-            if(i==0){
+            if(i==0&&in==false){
                 temp.durationMin+=anim.delay;
             }
         }
@@ -794,7 +839,7 @@ void Tweet::userToKinematic(){
         //set vector position/rotation to bullet object position/rotation and start rotation transition
         btTransform trans;
         ofPoint temp;
-
+        
         if(i==0&&bMulti==false){
             temp=user.shape->getPosition();
         }
@@ -1065,7 +1110,7 @@ void Tweet::updateUser(){
                 
                 else{
                     rotQuat   = user.letters[i]->getRotationQuat();
-
+                    
                 }
                 float newRot = rotQuat.w();
                 if(user.particles[i].bRotate==true){
@@ -1077,7 +1122,7 @@ void Tweet::updateUser(){
                     }
                     trans.setRotation( btQuaternion(btVector3(rotQuat.x(), rotQuat.y(), rotQuat.z()), newRot) );
                 }
-                    if(bMulti==false) {
+                if(bMulti==false) {
                     if(i==0){
                         user.shape->getRigidBody()->getMotionState()->setWorldTransform( trans );
                         user.shape->activate();
@@ -1087,14 +1132,14 @@ void Tweet::updateUser(){
                         user.letters[i]->activate();
                     }
                 }
-                    else{
-
-                            user.letters[i]->getRigidBody()->getMotionState()->setWorldTransform( trans );
-                            user.letters[i]->activate();
-                    }
-
-                
+                else{
                     
+                    user.letters[i]->getRigidBody()->getMotionState()->setWorldTransform( trans );
+                    user.letters[i]->activate();
+                }
+                
+                
+                
                 
                 if(!user.particles[i].targetReached){
                     moving++;
@@ -1217,7 +1262,7 @@ void Tweet::loadMulti(vector<db> items){
     user.bFinished=false;
     
     user.bNewKey=true;
-
+    
     ofxJSONElement json;
     
     bool success=json.open("keyframes/contentBlockKeyframes/multi.json");
@@ -1227,28 +1272,28 @@ void Tweet::loadMulti(vector<db> items){
     string delay;
     
     
-     for(int j=0;j<multis.size();j++){   
-    if(multis[j].media_url!=""){
-        bool success=pic.loadImage(multis[j].media_url);
-        if(success){
-            bImage=true;
-            cout<<multis[j].media_url<<endl;
+    for(int j=0;j<multis.size();j++){
+        if(multis[j].media_url!=""){
+            bool success=pic.loadImage(multis[j].media_url);
+            if(success){
+                bImage=true;
+                cout<<multis[j].media_url<<endl;
+            }
+            else{
+                image.bFinished=true;
+                user.bFinished=true;
+            }
+            pic.clear();
         }
+        
         else{
             image.bFinished=true;
-            user.bFinished=true;
         }
-        pic.clear();
+        
+        if(bImage==true){
+            image.bNewKey=true;
+        }
     }
-    
-    else{
-        image.bFinished=true;
-    }
-    
-    if(bImage==true){
-        image.bNewKey=true;
-    }
-     }
     
     ofxJSONElement animations=json["animations"];
     
@@ -1315,17 +1360,19 @@ void Tweet::loadMulti(vector<db> items){
     if(delay!="") userOut.delay=ofToInt(delay)+masterDelay;
     else userOut.delay=masterDelay;
     
-    loadParticleKeyframes(tweetIn, KEYFRAME_TWEET);
-    loadParticleKeyframes(tweetOut,KEYFRAME_TWEET);
+    loadParticleKeyframes(tweetIn, KEYFRAME_TWEET, true);
+    loadParticleKeyframes(tweetOut,KEYFRAME_TWEET,false);
     
     if(bImage==true){
-        loadParticleKeyframes(imgIn, KEYFRAME_IMAGE);
-        loadParticleKeyframes(imgOut,KEYFRAME_IMAGE);
+        loadParticleKeyframes(imgIn, KEYFRAME_IMAGE, true);
+        loadParticleKeyframes(imgOut,KEYFRAME_IMAGE, false);
     }
     
-    loadParticleKeyframes(userIn, KEYFRAME_USER);
-    loadParticleKeyframes(userOut,KEYFRAME_USER);
-
+    loadParticleKeyframes(userIn, KEYFRAME_USER, true);
+    loadParticleKeyframes(userOut,KEYFRAME_USER, false);
+    
+    
+    
     
     
     
@@ -1334,7 +1381,7 @@ void Tweet::loadMulti(vector<db> items){
         multis[j].user_screen_name="@"+multis[j].user_screen_name;
         
         
-
+        
         
         if(bImage==true){
             
@@ -1432,7 +1479,7 @@ void Tweet::loadMulti(vector<db> items){
                     user.letters[user.letters.size()-1]->create(world->world,particle.target.pos,10.);
                     user.letters[user.letters.size()-1]->add();
                     user.letters[user.letters.size()-1]->setProperties(.1,1);
-
+                    
                 }
                 mUserPos.x+=.5*boxDim.x+.5;
             }
@@ -1442,7 +1489,7 @@ void Tweet::loadMulti(vector<db> items){
             pos.x=imagePos.x;
             pos.y-=imageScale.y;
         }
-
+        
     }
 }
 

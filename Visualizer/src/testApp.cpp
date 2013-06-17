@@ -228,7 +228,6 @@ void testApp::update(){
 //updates bullet objects
     world.update();
     
-cout<<listCount<<endl;
     
     
     if(tweet.bFinished==true&&tweet.image.bFinished==true&&tweet.user.bFinished==true){
