@@ -11,7 +11,7 @@ Instructions:
 		npm install
 
 	4. Run Stream Server
-		sudo forever start -o log/output.log -e log/error.log -a log/logfile.log stream.js
+		sudo forever start -o log/output.log -e log/error.log -l log/logfile.log -a stream.js
 
 	5. Run Remote Server
-		sudo forever start -o log/expressRemoteOutput.log -e log/expressRemoteError.log remoteServer.js
+		sudo forever start -o log/expressRemoteOutput.log -e log/expressRemoteError.log -l log/expressRemoteLogfile.log -a remoteServer.js
