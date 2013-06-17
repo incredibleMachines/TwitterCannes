@@ -1,16 +1,17 @@
 Instructions:
+-------------
 
-	#SSH into Server
-		ssh im@cannes.incrediblemachin.es -p 30000
+1. SSH into Server
+	*ssh im@cannes.incrediblemachin.es -p 30000
 
-	#Go into RemoteServer root folder
-		cd /home/im/node
+2. Go into RemoteServer root folder
+	*cd /home/im/node
 	
-	#Install Node Dependencies
-		npm install
+3. Install Node Dependencies
+	*npm install
 
-	#Run Stream Server
-		sudo forever start -o log/output.log -e log/error.log -a log/logfile.log stream.js
+4. Run Stream Server
+	*sudo forever start -o log/output.log -e log/error.log -a log/logfile.log stream.js
 
-	#Run Remote Server
-		sudo forever start -o log/expressRemoteOutput.log -e log/expressRemoteError.log remoteServer.js
+5. Run Remote Server
+	*sudo forever start -o log/expressRemoteOutput.log -e log/expressRemoteError.log remoteServer.js
