@@ -71,7 +71,7 @@ app.get('/',function(req, res){
 					tweets.update(docs[i], { $inc: { shown_count: 1 } }, function(){});
 				}
 			} else {
-				console.log('Not increasing shown count for this request!')
+				console.log('['+current_time+'] Not increasing shown count for this request!')
 			}
 		}
 	});
