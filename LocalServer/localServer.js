@@ -70,6 +70,8 @@ app.get('/',function(req, res){
 				for (var i = 0; i < docs.length; i++) {
 					tweets.update(docs[i], { $inc: { shown_count: 1 } }, function(){});
 				}
+			} else {
+				console.log('Not increasing shown count for this request!')
 			}
 		}
 	});
