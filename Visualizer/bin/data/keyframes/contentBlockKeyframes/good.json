@@ -190,44 +190,7 @@
                     "animation": "relative_out_down.json"
                 }
             }
-        },
-        {
-            "tweet": {
-                "in": {
-                    "speed": "1",
-                    "delay": "0",
-                    "animation": "random_x_y_in_cubic.json"
-                },
-                "out": {
-                    "speed": "1",
-                    "delay": "4000",
-                    "animation": "random_x_y_out_cubic.json"
-                }
-            },
-            "user": {
-                "in": {
-                    "speed": "1",
-                    "delay": "0",
-                    "animation": "random_x_y_in_cubic.json"
-                },
-                "out": {
-                    "speed": "1",
-                    "delay": "4000",
-                    "animation": "random_x_y_out_cubic.json"
-                }
-            },
-            "image": {
-                "in": {
-                    "speed": "1",
-                    "delay": "0",
-                    "animation": "pixel_in_y_down.json"
-                },
-                "out": {
-                    "speed": "1",
-                    "delay": "3000",
-                    "animation": "pixel_out_y_down.json"
-                }
-            }
         }
+                }
     ]
 }

@@ -14,7 +14,7 @@ void testApp::setup(){
     ofSetWindowShape(2048,1080);
     cout<<ofGetWindowSize()<<endl;
     
-    multiTrigger=0;
+    multiTrigger=1;
     
     gotham.setup();
 
@@ -24,14 +24,11 @@ void testApp::setup(){
     // category: Celebrities, Executive+Tweets, Speaker+Quotes
     // starred: true/false
 
+    urls.push_back("limit=5&&media_url=1");
     urls.push_back("limit=18&media_url=1");
-    
-    urls.push_back("limit=1&&media_url=1");
-
-
-    urls.push_back("limit=3&starred=true");
+    urls.push_back("limit=5&starred=true");
 //    
-//    urls.push_back("limit=3&category=Executives");
+    urls.push_back("limit=3&category=Executive+Tweets");
     urls.push_back("limit=3&category=Celebrities");
     
     
@@ -232,23 +229,24 @@ void testApp::update(){
 //updates bullet objects
     world.update();
     
-    
+    cout<<"i "<<tweet.image.bFinished<<" u "<<tweet.user.bFinished<<endl;
     
     if(tweet.bFinished==true&&tweet.image.bFinished==true&&tweet.user.bFinished==true){
         tweet.destroy();
+                cout<<"destroy"<<endl;
         listCount++;
         
         if(bMulti==true&&listCount!=0){
-            listCount=list.size();
+            cout<<"trigger"<<endl;
+            fetchTweets();
+            listCount=0;
         }
         
-        if(listCount>list.size()-1){
+        if(bMulti==false&&listCount>list.size()-1){
             cout << "got to last tweet in queue, moving to new set of tweets!" << endl;
             fetchTweets();
             listCount=0;
         }
-
-        cout<<"destroy"<<endl;
         
         if(bMulti==true){
             tweet.loadMulti(list);

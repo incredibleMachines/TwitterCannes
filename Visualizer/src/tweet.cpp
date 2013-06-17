@@ -80,7 +80,7 @@ void Tweet::loadTweet(db item){
         image.bFinished=true;
     }
     
-    bool success=json.open("keyframes/contentBlockKeyframes/good.json");
+    bool success=json.open("keyframes/contentBlockKeyframes/test.json");
     int i=animationCount;
     
     string speed;
@@ -1163,7 +1163,7 @@ void Tweet::updateUser(){
                     else{
 
                             user.letters[i]->getRigidBody()->getMotionState()->setWorldTransform( trans );
-                            user.letters[i]->activate();
+//                            user.letters[i]->activate();
                     }
 
                 
@@ -1287,7 +1287,6 @@ void Tweet::loadMulti(vector<db> items){
     
     userScale=ofPoint(.1,.1,.1);
     handleScale=ofPoint(.04,.04,.04);
-    profileScale=ofPoint(2,2,.1);
     
     imageScale=ofPoint(40,40,.02);
     imagePos=ofPoint(-100, 42,0);
@@ -1414,8 +1413,8 @@ void Tweet::loadMulti(vector<db> items){
 
 
     
-    
-    
+
+    multis[0].user_screen_name="@"+multis[0].user_screen_name;
     
     for(int j=0;j<multis.size();j++){
         multis[j].user_screen_name="@"+multis[j].user_screen_name;
@@ -1466,6 +1465,8 @@ void Tweet::loadMulti(vector<db> items){
             newFace.allocate(imageScale.x,imageScale.y, GL_RGB,true);
             newFace=tileImage.getTextureReference();
             image.face.push_back(newFace);
+            tileImage.clear();
+            newFace.clear();
             
             
             //create particles for controlling static shape position/rotation

@@ -12,7 +12,7 @@
                 "out": {
                     "speed": "1",
                     "delay": "0",
-                    "animation": "pixel_out_x_right_quint.json"
+                    "animation": "elastic_out_right.json"
                 }
             },
             "user": {
@@ -24,7 +24,7 @@
                 "out": {
                     "speed": "1",
                     "delay": "0",
-                    "animation": "pixel_out_x_right_quint.json"
+                    "animation": "elastic_out_right.json"
                 }
             },
             "image": {
@@ -35,8 +35,8 @@
                 },
                 "out": {
                     "speed": "1",
-                    "delay": "2000",
-                    "animation": "pixel_out_x_left_quint.json"
+                    "delay": "0",
+                    "animation": "elastic_out_left.json"
                 }
             }
         }
