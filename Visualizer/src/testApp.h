@@ -70,6 +70,7 @@ public:
     Alphabet gotham;
     
     vector<Hashletter> hashletters;
+        vector<Hashletter> hashoriginals;
     vector<ofMesh> hashMeshes;
     ofxAssimpModelLoader hashModel;
     vector<ofxBulletCustomShape*> hashCollision;
@@ -124,6 +125,13 @@ public:
     
     int multiTrigger;
     bool bMulti;
+    
+    bool bStarting;
+    bool bShadow;
+    
+    vector <float> hashZ;
+    
+    vector<float> hashPosZ;
 
 };
 

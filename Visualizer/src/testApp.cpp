@@ -2,19 +2,21 @@
 
 #define USE_DOF true
 #define CAM_MOVE false
-#define CAM_MOUSE true 
+#define CAM_MOUSE false 
 #define FACES false
 
 
 //--------------------------------------------------------------
 void testApp::setup(){
     
+    bStarting=true;
+    
     ofSetVerticalSync(true);
 	ofSetFrameRate(30);
     ofSetWindowShape(2048,1080);
     cout<<ofGetWindowSize()<<endl;
     
-    multiTrigger=0;
+    multiTrigger=1;
     
     gotham.setup();
 
@@ -23,8 +25,8 @@ void testApp::setup(){
     // limit: how many tweets to return
     // category: Celebrities, Executive+Tweets, Speaker+Quotes
     // starred: true/false
-    urls.push_back("limit=18&media_url=1");
     urls.push_back("limit=5&media_url=1");
+    urls.push_back("limit=18&media_url=1&increase_shown_count=false");
     urls.push_back("limit=5&starred=true");
 //    
     urls.push_back("limit=3&category=Executive+Tweets");
@@ -34,7 +36,7 @@ void testApp::setup(){
     // to cycle through different URLs
     urlCounter = 0;
     
-    fetchTweets();
+
     
     bDebug=false;
     bGUI=false;
@@ -68,15 +70,7 @@ void testApp::setup(){
     
     listCount=0;
 //    list[0].text="!#$%&()*+,-./0123456789:;<=>?@ AÀÁÂÃÄÅÆaàáâãäåæ CÇç DÐÐ EÈÉÊËeèéêëIÌÍÎÏiìíîï MmNÑÑnñ OÒÓÔÕÖØoðòóôõöø UÙÚÛÜuùúûü YŸÝyýÿ {|}~ € ‚ƒ„…†‡ˆ‰Š‹Œ Ž‘’“”•–—˜™š›œž¡¢£¤¥¦§¨©ª«¬®¯°±²³´µ¶·¸¹º»¼½¾¿ × Þß ÷þ";
-    
-    tweet.setup(hashMin,hashMax,&world, &gotham);
-    if(bMulti==true){
-        tweet.loadMulti(list);
-    }
-    else{
-        tweet.loadTweet(list[listCount]);
-    }
-    
+                tweet.setup(hashMin,hashMax,&world, &gotham);
 }
 
 void testApp::fetchTweets(){
@@ -225,8 +219,11 @@ void testApp::update(){
     
     ofSetWindowTitle( ofToString( ofGetFrameRate() ) );
     
+    
 //updates bullet objects
     world.update();
+    
+            if(bStarting==false){
     
 //    cout<<"i "<<tweet.image.bFinished<<" u "<<tweet.user.bFinished<<endl;
     
@@ -259,11 +256,12 @@ void testApp::update(){
         tweet.update();
     }
 
-    
+    }
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
+    
 
     glEnable(GL_DEPTH_TEST);
 
@@ -282,10 +280,12 @@ void testApp::draw(){
     // lat, long, rad, center
     
     // render linear depth buffer from light view
+
     shadowLightLeft.beginShadowMap();
     ofPushMatrix();
     ofScale(0.3, 0.3, 0.3);
     
+    if(bShadow==true){
     drawObjects(); // render to shader map
     
     if(bShadowsOn){
@@ -296,15 +296,20 @@ void testApp::draw(){
         else{
         tweet.drawLetters();
         tweet.drawImg();
+            }
         }
     }
+
+
     
     ofPopMatrix();
     
     shadowLightLeft.endShadowMap();
+
     
     // render final scene
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    
     
     shader.begin();
     
@@ -335,6 +340,7 @@ void testApp::draw(){
     
     material.end();
     
+    if(bStarting==false){
     //bind image textures and draw bullet shapes
 
     material.begin();
@@ -346,12 +352,13 @@ void testApp::draw(){
     shadowLightLeft.disable();
     
     //enable to see physics collision wireframes
-    if(bDebug==true){
-        glPushMatrix();
-        world.drawDebug();
-        glPopMatrix();
-    }
+//    if(bDebug==true){
+//        glPushMatrix();
+//        world.drawDebug();
+//        glPopMatrix();
+//    }
     ofPopMatrix();
+    }
     
     camera.end();
     
@@ -373,6 +380,8 @@ void testApp::draw(){
     ofRotate(90, 0, 1, 0);
     ofRotate(330,1,0,0);
     
+    if(bStarting==false){
+    
     material.begin();
     if(bMulti==true){
         tweet.drawMultiImg();
@@ -381,6 +390,7 @@ void testApp::draw(){
         tweet.drawImg();
     }
     material.end();
+    }
     
     drawFrontFaces();
     
@@ -478,12 +488,14 @@ void testApp::loadHashtag()
         settings.popTag();
         
         settings.popTag();
-        
-        
         string file=settings.getValue("OBJ"," ");
         settings.popTag();
+                hashModel.loadModel(file,true );
         
-        hashModel.loadModel(file,true );
+        
+
+        
+
         
 //        hashModel[i].loadModel("models/cannes_placementCorrected.obj", true);
         
@@ -857,6 +869,25 @@ void testApp::keyPressed(int key){
                         }
             }
     
+            return;
+            
+            case 'q':
+            bStarting=false;
+            for(int i=0; i<hashletters.size();i++){
+                updateCollision(i);
+            }
+                fetchTweets();
+            if(bMulti==true){
+                tweet.loadMulti(list);
+            }
+            else{
+                tweet.loadTweet(list[listCount]);
+            }
+                        bShadow=true;
+            return;
+            
+            case 'p':
+
             return;
     }
     

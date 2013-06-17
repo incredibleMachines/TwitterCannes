@@ -26,6 +26,7 @@ void Tweet::setup(ofPoint _hashMin, ofPoint _hashMax, ofxBulletWorldRigid *_worl
     gotham=_gotham;
     
     masterDelay=4000;
+    
 }
 
 void Tweet::loadTweet(db item){
