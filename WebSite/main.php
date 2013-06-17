@@ -1,5 +1,6 @@
 <?php
-
+require('session.php');
+header("Refresh: ");
 $m = new MongoClient("mongodb://127.0.0.1/twitterCannesLions");
 $db = $m->selectDB('twitterCannesLions');
 $collection = new MongoCollection($db, 'tweets');
@@ -34,8 +35,6 @@ $find = array(
 );
 
 
-// $find = array('user_screen_name'=> array('$regex' => 'matt'));
-
 $total = $collection->count();
 $cursor = $collection->find($find)->skip($skip)->limit($limit)->sort($sort);
 
@@ -50,6 +49,7 @@ $cursor = $collection->find($find)->skip($skip)->limit($limit)->sort($sort);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
+    <meta http-equiv="refresh" content="300">
     <!-- Le styles -->
     <link href="assets/css/bootstrap.css" rel="stylesheet">
     <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
@@ -211,7 +211,6 @@ $cursor = $collection->find($find)->skip($skip)->limit($limit)->sort($sort);
                                 <li class="divider"></li>
                                 <li data-category="Celebrities"><a>Celebrities</a></li>
     							<li data-category="Executive Tweets"><a>Executive Tweets</a></li>
-                                <li data-category="Speaker Quotes"><a>Speaker Quotes</a></li>
     						</ul>
     					</div>
     				</td>
