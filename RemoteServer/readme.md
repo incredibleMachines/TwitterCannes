@@ -1,13 +1,13 @@
 Instructions:
 
 	Go into RemoteServer root folder
-		cd /path/to/RemoteServer
+		cd /home/im/node
 	
 	Install Node Dependencies
 		npm install
 
 	Run Stream Server
-		node stream.js
+		sudo forever start -o log/output.log -e log/error.log -a log/logfile.log stream.js
 
 	Run Remote Server
-		node remoteServer.js
+		sudo forever start -o log/expressRemoteOutput.log -e log/expressRemoteError.log remoteServer.js
