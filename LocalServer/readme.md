@@ -27,7 +27,8 @@ Instructions:
 		npm install
 
 	Run Polling Server
-		node pollRemoteServer.js
+		sudo forever start -o pollRemoteOutput.log -e pollRemoteError.log -l pollRemoteLogfile.log -a pollRemoteServer.js 
+		tail -f -n 20 ~/.forever/pollRemoteLogfile.log
 
 	Run Local Server
 		node localServer.js
