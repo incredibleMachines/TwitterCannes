@@ -269,6 +269,11 @@ function TwitterService() {
 				var approved_at = '';
 			}
 
+			// Look for the &amp; html entity and replace it with just an &
+			if (tweet_text.indexOf('&amp;') > -1) {
+				tweet_text = tweet_text.replace(/&amp;/g, '&');
+			}
+
 			// Loop through text and look for URLs. Remove them!
 			split = tweet_text.split(' ');
 			for (i = 0; i < split.length; i++) {
