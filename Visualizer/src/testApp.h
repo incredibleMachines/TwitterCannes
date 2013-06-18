@@ -132,6 +132,8 @@ public:
     vector <float> hashZ;
     
     vector<float> hashPosZ;
+    
+        void nextTweet();
 
 };
 

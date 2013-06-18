@@ -1,6 +1,42 @@
 {
     "particles": [
-    {
+        {
+            "path": "line",
+            "type": {
+                "x": "absolute",
+                "y": "absolute",
+                "z": "pixel"
+            },
+            "pos": {
+                "set": {
+                    "x": "",
+                    "y": "",
+                    "z": ""
+                },
+                "min": {
+                    "x": "-350",
+                    "y": "-120",
+                    "z": ""
+                },
+                "max": {
+                    "x": "-400",
+                    "y": "-160",
+                    "z": ""
+                }
+            },
+            "gravity": {
+                "x": "",
+                "y": "",
+                "z": ""
+            },
+            "duration": {
+                "min": "",
+                "max": "",
+                "actual": ""
+            },
+            "interpolation": ""
+        },
+        {
             "path": "line",
             "type": {
                 "x": "pixel",
@@ -30,48 +66,11 @@
                 "z": ""
             },
             "duration": {
-                "min": "",
-                "max": "",
-                "actual": "1"
-            },
-                    "interpolation": ""
-        
-        },
-        {
-            "path": "line",
-            "type": {
-                "x": "pixel",
-                "y": "absolute",
-                "z": "pixel_relative"
-            },
-            "pos": {
-                "set": {
-                    "x": "",
-                    "y": "",
-                    "z": ""
-                },
-                "min": {
-                    "x": "",
-                    "y": "-100",
-                    "z": "-2"
-                },
-                "max": {
-                    "x": "",
-                    "y": "-160",
-                    "z": "5"
-                }
-            },
-            "gravity": {
-                "x": "",
-                "y": "",
-                "z": ""
-            },
-            "duration": {
                 "min": "2000",
                 "max": "4000",
                 "actual": ""
             },
-                    "interpolation": "cubic_in"
+            "interpolation": "expo_out"
         }
     ]
 }

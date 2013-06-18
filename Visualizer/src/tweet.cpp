@@ -25,7 +25,7 @@ void Tweet::setup(ofPoint _hashMin, ofPoint _hashMax, ofxBulletWorldRigid *_worl
     world=_world;
     gotham=_gotham;
     
-    masterDelay=4000;
+    masterDelay=6000;
     
 }
 
@@ -43,9 +43,9 @@ void Tweet::loadTweet(db item){
     imageScale=ofPoint(.15,.15,.02);
     profileScale=ofPoint(2,2,.1);
     
-    tweetPos=ofPoint(hashMin.x,43,hashMax.z);
+    tweetPos=ofPoint(hashMin.x,43,1);
     imagePos=ofPoint(-10,-10,2);
-    userPos=ofPoint(hashMin.x,50,hashMax.z);
+    userPos=ofPoint(hashMin.x,50,1);
     //    userPos=ofPoint(hashMin.x,-30,hashMax.z);
     
     boxShape = ofBtGetBoxCollisionShape(imageScale.x*tileW, imageScale.y*tileH, imageScale.z*tileD);

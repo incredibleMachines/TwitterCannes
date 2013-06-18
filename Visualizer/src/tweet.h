@@ -145,6 +145,8 @@ public:
     ofxBulletBox* tweetBlock;
     btBoxShape* tweetBox;
     ofPoint tweetBoxPos;
+    
+
 
 };
 
