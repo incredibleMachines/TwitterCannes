@@ -1,7 +1,6 @@
 {
     "animations": [
-
-        {
+     {
             "tweet": {
                 "in": {
                     "speed": "1",
@@ -10,8 +9,8 @@
                 },
                 "out": {
                     "speed": "1",
-                    "delay": "2500",
-                    "animation": "relative_out_right.json"
+                    "delay": "0",
+                    "animation": "pixel_out_y_down.json"
                 }
             },
             "user": {
@@ -22,23 +21,25 @@
                 },
                 "out": {
                     "speed": "1",
-                    "delay": "2500",
-                    "animation": "relative_out_right.json"
+                    "delay": "0",
+                    "animation": "pixel_out_y_down.json"
                 }
             },
             "image": {
                 "in": {
                     "speed": "1",
-                    "delay": "3000",
-                    "animation": "relative_in_left.json"
+                    "delay": "4000",
+                    "animation": "pixel_in_y_bounce.json"
                 },
                 "out": {
                     "speed": "1",
-                    "delay": "0",
-                    "animation": "relative_out_right.json"
+                    "delay": "",
+                    "animation": "pixel_out_y_down.json"
                 }
             }
         },
+
+       
         {
             "tweet": {
                 "in": {
@@ -264,6 +265,44 @@
                     "speed": "1",
                     "delay": "0",
                     "animation": "elastic_out_left.json"
+                }
+            }
+        },
+         {
+            "tweet": {
+                "in": {
+                    "speed": "1",
+                    "delay": "0",
+                    "animation": "gravity_in_down.json"
+                },
+                "out": {
+                    "speed": "1",
+                    "delay": "2500",
+                    "animation": "relative_out_right.json"
+                }
+            },
+            "user": {
+                "in": {
+                    "speed": "1",
+                    "delay": "0",
+                    "animation": "gravity_in_down.json"
+                },
+                "out": {
+                    "speed": "1",
+                    "delay": "2500",
+                    "animation": "relative_out_right.json"
+                }
+            },
+            "image": {
+                "in": {
+                    "speed": "1",
+                    "delay": "3000",
+                    "animation": "relative_in_left.json"
+                },
+                "out": {
+                    "speed": "1",
+                    "delay": "0",
+                    "animation": "relative_out_right.json"
                 }
             }
         }

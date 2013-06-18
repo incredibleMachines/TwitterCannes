@@ -6,37 +6,37 @@
             "tweet": {
                 "in": {
                     "speed": "1",
-                    "delay": "0",
-                    "animation": "pixel_in_x_left_quint.json"
+                    "delay": "1000",
+                    "animation": "pixel_in_left_corner.json"
                 },
                 "out": {
                     "speed": "1",
                     "delay": "0",
-                    "animation": "elastic_out_right.json"
+                    "animation": "pixel_out_y_down.json"
                 }
             },
             "user": {
                 "in": {
                     "speed": "1",
-                    "delay": "0",
-                    "animation": "pixel_in_x_left_quint.json"
+                    "delay": "2000",
+                    "animation": "pixel_in_left_corner.json"
                 },
                 "out": {
                     "speed": "1",
                     "delay": "0",
-                    "animation": "elastic_out_right.json"
+                    "animation": "pixel_out_y_down.json"
                 }
             },
             "image": {
                 "in": {
                     "speed": "1",
-                    "delay": "0",
-                    "animation": "pixel_in_x_right_quint.json"
+                    "delay": "2000",
+                    "animation": "pixel_in_y_bounce.json"
                 },
                 "out": {
                     "speed": "1",
-                    "delay": "0",
-                    "animation": "elastic_out_left.json"
+                    "delay": "",
+                    "animation": "pixel_out_y_down.json"
                 }
             }
         }

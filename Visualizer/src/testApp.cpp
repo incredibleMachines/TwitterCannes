@@ -2,41 +2,44 @@
 
 #define USE_DOF true
 #define CAM_MOVE false
-#define CAM_MOUSE false 
+#define CAM_MOUSE false
 #define FACES false
 
 
 //--------------------------------------------------------------
 void testApp::setup(){
     
-    bStarting=true;
+    bStarting=false;
     
     ofSetVerticalSync(true);
 	ofSetFrameRate(30);
     ofSetWindowShape(2048,1080);
     cout<<ofGetWindowSize()<<endl;
     
-    multiTrigger=1;
+    multiTrigger=2;
     
     gotham.setup();
-
+    
     // setup our get queries
     // these are the options for query
     // limit: how many tweets to return
     // category: Celebrities, Executive+Tweets, Speaker+Quotes
     // starred: true/false
-    urls.push_back("limit=5&media_url=1");
+        urls.push_back("limit=3&category=Celebrities");
+    urls.push_back("limit=5&media_url");
     urls.push_back("limit=18&media_url=1&increase_shown_count=false");
-    urls.push_back("limit=5&starred=true");
-//    
     urls.push_back("limit=3&category=Executive+Tweets");
-    urls.push_back("limit=3&category=Celebrities");
+    urls.push_back("limit=5&starred=true");
+
+
+    //
+    
     
     
     // to cycle through different URLs
     urlCounter = 0;
     
-
+    
     
     bDebug=false;
     bGUI=false;
@@ -49,7 +52,7 @@ void testApp::setup(){
     camera.setDistance(40.0f);
     camera.setGlobalPosition( 30.0f, 15.0f, 0.0f );
     camera.lookAt( ofVec3f( 0.0f, 0.0f, 0.0f ) );
-
+    
     world.setup();
     world.enableCollisionEvents();
     world.setCamera(&camera);
@@ -60,7 +63,7 @@ void testApp::setup(){
     if(!CAM_MOUSE){
         camera.disableMouseInput();
     }
-     
+    
     shader.load( "shaders/mainScene.vert", "shaders/mainScene.frag" );
     
     setupLights();
@@ -69,8 +72,21 @@ void testApp::setup(){
     loadHashtag();
     
     listCount=0;
-//    list[0].text="!#$%&()*+,-./0123456789:;<=>?@ AÀÁÂÃÄÅÆaàáâãäåæ CÇç DÐÐ EÈÉÊËeèéêëIÌÍÎÏiìíîï MmNÑÑnñ OÒÓÔÕÖØoðòóôõöø UÙÚÛÜuùúûü YŸÝyýÿ {|}~ € ‚ƒ„…†‡ˆ‰Š‹Œ Ž‘’“”•–—˜™š›œž¡¢£¤¥¦§¨©ª«¬®¯°±²³´µ¶·¸¹º»¼½¾¿ × Þß ÷þ";
-                tweet.setup(hashMin,hashMax,&world, &gotham);
+    /*  list[0].text="!#$%&()*+,-./0123456789:;<=>?@ AÀÁÂÃÄÅÆaàáâãäåæ CÇç DÐÐ EÈÉÊËeèéêëIÌÍÎÏiìíîï MmNÑÑnñ OÒÓÔÕÖØoðòóôõöø UÙÚÛÜuùúûü YŸÝyýÿ {|}~ € ‚ƒ„…†‡ˆ‰Š‹Œ Ž‘’“”•–—˜™š›œž¡¢£¤¥¦§¨©ª«¬®¯°±²³´µ¶·¸¹º»¼½¾¿ × Þß ÷þ";   */
+    tweet.setup(hashMin,hashMax,&world, &gotham);
+    
+    if(bStarting==false){
+        fetchTweets();
+        
+        if (list.size()>0){
+            nextTweet();
+        }
+        else{
+            fetchTweets();
+            nextTweet();
+        }
+                    bShadow=true;
+    }
 }
 
 void testApp::fetchTweets(){
@@ -119,11 +135,21 @@ void testApp::fetchTweets(){
         bMulti=false;
     }
     
-
+    
     
     // magic
     // (increase counter and wrap around to 0 once we hit the end)
     urlCounter = ++urlCounter % urls.size();
+    
+}
+
+void testApp::nextTweet(){
+    if(bMulti==true){
+        tweet.loadMulti(list);
+    }
+    else{
+        tweet.loadTweet(list[listCount]);
+    }
     
 }
 
@@ -135,7 +161,7 @@ void testApp::drawObjects(){
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
     
-//    ofScale(6,6,6);
+    //    ofScale(6,6,6);
     ofRotate(90, 0, 1, 0);
     ofRotate(330,1,0,0);
     
@@ -148,7 +174,7 @@ void testApp::drawObjects(){
         btScalar	m[16];
         ofGetOpenGLMatrixFromRigidBody( hashCollision[i]->getRigidBody(), m );
         glPushMatrix();
-//        ofSetColor(255,255,255);
+        //        ofSetColor(255,255,255);
         glMultMatrixf( m );
         glTranslatef(-hashletters[i].size.x*scale.x/2, -hashletters[i].size.y*scale.y/2, -hashletters[i].size.z*scale.z/2);
         ofScale(scale.x,scale.y,scale.z);
@@ -156,10 +182,10 @@ void testApp::drawObjects(){
         ofRotate(hashletters[i].rot.x,0,1,0);
         ofRotate(hashletters[i].rot.z,0,0,1);
         
-        if(bGUI==true&&hashletters[i].active==true){
-            ofSetColor(0,255,0);
-            ofSphere(hashMeshes[i].getCentroid().x,hashMeshes[i].getCentroid().y+30,hashMeshes[i].getCentroid().z,10);
-        }
+        //        if(bGUI==true&&hashletters[i].active==true){
+        //            ofSetColor(0,255,0);
+        //            ofSphere(hashMeshes[i].getCentroid().x,hashMeshes[i].getCentroid().y+30,hashMeshes[i].getCentroid().z,10);
+        //        }
         hashMeshes[i].draw();
         ofSetColor(255,255,255);
         glPopMatrix();
@@ -207,7 +233,7 @@ void testApp::drawFrontFaces(){
         glPopMatrix();
         glPopClientAttrib();
         glPopAttrib();
-         
+        
     }
     
 }
@@ -220,51 +246,54 @@ void testApp::update(){
     ofSetWindowTitle( ofToString( ofGetFrameRate() ) );
     
     
-//updates bullet objects
+    //updates bullet objects
     world.update();
     
-            if(bStarting==false){
-    
-//    cout<<"i "<<tweet.image.bFinished<<" u "<<tweet.user.bFinished<<endl;
-    
-    if(tweet.bFinished==true&&tweet.image.bFinished==true&&tweet.user.bFinished==true){
-        tweet.destroy();
-                cout<<"destroy"<<endl;
-        listCount++;
+    if(bStarting==false){
         
-        if(bMulti==true&&listCount!=0){
-            cout<<"trigger"<<endl;
-            fetchTweets();
-            listCount=0;
-        }
+        //    cout<<"i "<<tweet.image.bFinished<<" u "<<tweet.user.bFinished<<endl;
         
-        if(bMulti==false&&listCount>list.size()-1){
-            cout << "got to last tweet in queue, moving to new set of tweets!" << endl;
-            fetchTweets();
-            listCount=0;
-        }
-        
-        if(bMulti==true){
-            tweet.loadMulti(list);
+        if(tweet.bFinished==true&&tweet.image.bFinished==true&&tweet.user.bFinished==true){
+            tweet.destroy();
+            cout<<"destroy"<<endl;
+            listCount++;
+            
+            if(bMulti==true&&listCount!=0){
+                cout<<"trigger"<<endl;
+                listCount=0;
+                fetchTweets();
+
+            }
+            
+            if(bMulti==false&&listCount>list.size()-1){
+                cout << "got to last tweet in queue, moving to new set of tweets!" << endl;
+                listCount=0;
+                fetchTweets();
+            }
+            
+            if (list.size()>0){
+                nextTweet();
+                bShadow=true;
+            }
+            else{
+                fetchTweets();
+                nextTweet();
+            }
+            
         }
         else{
-            tweet.loadTweet(list[listCount]);
+            tweet.update();
         }
-
-    }
-    else{
-        tweet.update();
-    }
-
+        
     }
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
     
-
+    
     glEnable(GL_DEPTH_TEST);
-
+    
     ofEnableLighting();
     
     ofPushMatrix();
@@ -280,32 +309,32 @@ void testApp::draw(){
     // lat, long, rad, center
     
     // render linear depth buffer from light view
-
+    
     shadowLightLeft.beginShadowMap();
     ofPushMatrix();
     ofScale(0.3, 0.3, 0.3);
     
     if(bShadow==true){
-    drawObjects(); // render to shader map
-    
-    if(bShadowsOn){
-        if(bMulti==true){
-            tweet.drawMultiImg();
-            tweet.drawLetters();
-        }
-        else{
-        tweet.drawLetters();
-        tweet.drawImg();
+        drawObjects(); // render to shader map
+        
+        if(bShadowsOn){
+            if(bMulti==true){
+                tweet.drawMultiImg();
+                tweet.drawLetters();
+            }
+            else{
+                tweet.drawLetters();
+                tweet.drawImg();
             }
         }
     }
-
-
+    
+    
     
     ofPopMatrix();
     
     shadowLightLeft.endShadowMap();
-
+    
     
     // render final scene
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
@@ -341,23 +370,23 @@ void testApp::draw(){
     material.end();
     
     if(bStarting==false){
-    //bind image textures and draw bullet shapes
-
-    material.begin();
-
+        //bind image textures and draw bullet shapes
+        
+        material.begin();
+        
         tweet.drawLetters();
-
-    material.end();
-    
-    shadowLightLeft.disable();
-    
-    //enable to see physics collision wireframes
-//    if(bDebug==true){
-//        glPushMatrix();
-//        world.drawDebug();
-//        glPopMatrix();
-//    }
-    ofPopMatrix();
+        
+        material.end();
+        
+        shadowLightLeft.disable();
+        
+     //   enable to see physics collision wireframes
+            if(bDebug==true){
+                glPushMatrix();
+                world.drawDebug();
+                glPopMatrix();
+            }
+        ofPopMatrix();
     }
     
     camera.end();
@@ -381,15 +410,15 @@ void testApp::draw(){
     ofRotate(330,1,0,0);
     
     if(bStarting==false){
-    
-    material.begin();
-    if(bMulti==true){
-        tweet.drawMultiImg();
-    }
-    else{
-        tweet.drawImg();
-    }
-    material.end();
+        
+        material.begin();
+        if(bMulti==true){
+            tweet.drawMultiImg();
+        }
+        else{
+            tweet.drawImg();
+        }
+        material.end();
     }
     
     drawFrontFaces();
@@ -399,9 +428,9 @@ void testApp::draw(){
     camera.end();
     
     glDisable(GL_DEPTH_TEST);
-
+    
     mainOutputSyphonServer.publishScreen();
-
+    
     if(bGUI==true){
         drawGUI();
     }
@@ -412,7 +441,7 @@ void testApp::draw(){
 
 
 //--------------------------------------------------------------
-void testApp::setupGL(){    
+void testApp::setupGL(){
     
     material.setShininess(.8);
     
@@ -466,7 +495,7 @@ void testApp::loadHashtag()
         string loadKey = settings.getValue("NAME","0");
         
         settings.pushTag("COLLISION");
-    
+        
         settings.pushTag("POS");
         Hashletter newHashCollision;
         newHashCollision.pos.x = settings.getValue("X", 0.);
@@ -490,17 +519,17 @@ void testApp::loadHashtag()
         settings.popTag();
         string file=settings.getValue("OBJ"," ");
         settings.popTag();
-                hashModel.loadModel(file,true );
+        hashModel.loadModel(file,true );
         
         
-
         
-
         
-//        hashModel[i].loadModel("models/cannes_placementCorrected.obj", true);
+        
+        
+        //        hashModel[i].loadModel("models/cannes_placementCorrected.obj", true);
         
         ofPoint scale=newHashCollision.scale;
-    
+        
         newHashCollision.active=false;
         newHashCollision.size=hashModel.getSceneMax()-hashModel.getSceneMin();
         newHashCollision.checkbox=ofRectangle(10,i*20,10,10);
@@ -525,10 +554,10 @@ void testApp::loadHashtag()
     
     ofColor blue=ofColor(0.1,.1,.1);
     //    ofEnableArbTex();
-                            settings.popTag();
+    settings.popTag();
     hashMin=ofPoint(hashletters[0].pos.x,hashletters[0].pos.y, hashletters[0].pos.z+hashletters[11].scale.z*hashletters[11].size.z*.5);
     hashMax=ofPoint(hashletters[11].pos.x, hashletters[11].pos.y,hashletters[11].pos.z+2);
-
+    
 }
 
 
@@ -604,226 +633,226 @@ void testApp::keyPressed(int key){
             return;
             
         case OF_KEY_DOWN:
-
+            
             for(int i=0;i<hashletters.size();i++){
-                    
-                    
-                    if(hashletters[i].active&&bScale==true){
-                            if(!bSingle){
-                                hashletters[i].scale.y+=.01;
-                            }
-                            else{
-                                hashletters[i].scale.y+=.001;
-                            }
-                            updateCollision(i);
-                        
+                
+                
+                if(hashletters[i].active&&bScale==true){
+                    if(!bSingle){
+                        hashletters[i].scale.y+=.01;
                     }
-                    
-                    else if(hashletters[i].active&&bRot==true){
-                        if(!bSingle){
-                            hashletters[i].rot.y-=10;
-                        }
-                        else{
-                            hashletters[i].rot.y--;
-                        }
+                    else{
+                        hashletters[i].scale.y+=.001;
                     }
+                    updateCollision(i);
                     
-                    else if(hashletters[i].active){
-
-                            if(!bSingle){
-                                hashletters[i].pos.y--;
-                            }
-                            else{
-                                hashletters[i].pos.y-=.1;
-                            }
-                            updateCollision(i);
-                        }
+                }
+                
+                else if(hashletters[i].active&&bRot==true){
+                    if(!bSingle){
+                        hashletters[i].rot.y-=10;
+                    }
+                    else{
+                        hashletters[i].rot.y--;
+                    }
+                }
+                
+                else if(hashletters[i].active){
+                    
+                    if(!bSingle){
+                        hashletters[i].pos.y--;
+                    }
+                    else{
+                        hashletters[i].pos.y-=.1;
+                    }
+                    updateCollision(i);
+                }
             }
             return;
             
         case OF_KEY_UP:
-
+            
             for(int i=0;i<hashletters.size();i++){
                 
-                    if(hashletters[i].active&&bScale==true){
-                            if(!bSingle){
-                                hashletters[i].scale.y-=.01;
-                            }
-                            else{
-                                hashletters[i].scale.y-=.001;
-                            }
-                            updateCollision(i);
+                if(hashletters[i].active&&bScale==true){
+                    if(!bSingle){
+                        hashletters[i].scale.y-=.01;
                     }
+                    else{
+                        hashletters[i].scale.y-=.001;
+                    }
+                    updateCollision(i);
+                }
+                
+                else if(hashletters[i].active&&bRot==true){
+                    if(!bSingle){
+                        hashletters[i].rot.y+=10;
+                    }
+                    else{
+                        hashletters[i].rot.y++;
+                    }
+                    updateCollision(i);
+                }
+                
+                else if(hashletters[i].active){
                     
-                    else if(hashletters[i].active&&bRot==true){
-                        if(!bSingle){
-                            hashletters[i].rot.y+=10;
-                        }
-                        else{
-                            hashletters[i].rot.y++;
-                        }
-                            updateCollision(i);
+                    if(!bSingle){
+                        hashletters[i].pos.y++;
                     }
-                    
-                    else if(hashletters[i].active){
-
-                            if(!bSingle){
-                                hashletters[i].pos.y++;
-                            }
-                            else{
-                                hashletters[i].pos.y+=.1;
-                            }
-                            updateCollision(i);
+                    else{
+                        hashletters[i].pos.y+=.1;
                     }
+                    updateCollision(i);
+                }
             }
             return;
             
         case OF_KEY_RIGHT:
-
-            for(int i=0;i<hashletters.size();i++){                    
-                    
-                    if(hashletters[i].active&&bScale==true){
-                            if(!bSingle){
-                                hashletters[i].scale.x+=.01;
-                            }
-                            else{
-                                hashletters[i].scale.x+=.001;
-                            }
-                        updateCollision(i);                        
+            
+            for(int i=0;i<hashletters.size();i++){
+                
+                if(hashletters[i].active&&bScale==true){
+                    if(!bSingle){
+                        hashletters[i].scale.x+=.01;
                     }
-                    
-                    else if(hashletters[i].active&&bRot==true){
-                        if(!bSingle){
-                            hashletters[i].rot.x+=10;
-                        }
-                        else{
-                            hashletters[i].rot.x++;
-                        }
-                            updateCollision(i);
+                    else{
+                        hashletters[i].scale.x+=.001;
                     }
-                    
-                    else if(hashletters[i].active){
-                            if(!bSingle){
-                                hashletters[i].pos.x++;
-                            }
-                            else{
-                                hashletters[i].pos.x+=.1;
-                            }
-                            updateCollision(i);
+                    updateCollision(i);
+                }
+                
+                else if(hashletters[i].active&&bRot==true){
+                    if(!bSingle){
+                        hashletters[i].rot.x+=10;
+                    }
+                    else{
+                        hashletters[i].rot.x++;
+                    }
+                    updateCollision(i);
+                }
+                
+                else if(hashletters[i].active){
+                    if(!bSingle){
+                        hashletters[i].pos.x++;
+                    }
+                    else{
+                        hashletters[i].pos.x+=.1;
+                    }
+                    updateCollision(i);
                 }
             }
             return;
             
         case OF_KEY_LEFT:
-
+            
             for(int i=0;i<hashletters.size();i++){
-                    
-                    
-                    if(hashletters[i].active&&bScale==true){
-                            if(!bSingle){
-                                hashletters[i].scale.x-=.01;
-                            }
-                            else{
-                                hashletters[i].scale.x-=.001;
-                            }
-                            updateCollision(i);                        
+                
+                
+                if(hashletters[i].active&&bScale==true){
+                    if(!bSingle){
+                        hashletters[i].scale.x-=.01;
                     }
-                    
-                    else if(hashletters[i].active&&bRot==true){
-                        if(!bSingle){
-                            hashletters[i].rot.x-=10;
-                        }
-                        else{
-                            hashletters[i].rot.x--;
-                        }
-                            updateCollision(i);
+                    else{
+                        hashletters[i].scale.x-=.001;
                     }
-                    
-                    else if(hashletters[i].active){
-
-                            if(!bSingle){
-                                hashletters[i].pos.x--;
-                            }
-                            else{
-                                hashletters[i].pos.x-=.1;
-                            }
-                            updateCollision(i);
+                    updateCollision(i);
+                }
+                
+                else if(hashletters[i].active&&bRot==true){
+                    if(!bSingle){
+                        hashletters[i].rot.x-=10;
                     }
+                    else{
+                        hashletters[i].rot.x--;
+                    }
+                    updateCollision(i);
+                }
+                
+                else if(hashletters[i].active){
+                    
+                    if(!bSingle){
+                        hashletters[i].pos.x--;
+                    }
+                    else{
+                        hashletters[i].pos.x-=.1;
+                    }
+                    updateCollision(i);
+                }
             }
             return;
             
         case '-':
         case '_':
-
+            
             for(int i=0;i<hashletters.size();i++){
-
-                    if(hashletters[i].active&&bScale==true){
-                            if(!bSingle){
-                                hashletters[i].scale.z-=.01;
-                            }
-                            else{
-                                hashletters[i].scale.z-=.001;
-                            }
-                            updateCollision(i);                        
+                
+                if(hashletters[i].active&&bScale==true){
+                    if(!bSingle){
+                        hashletters[i].scale.z-=.01;
                     }
-                    
-                    else if(hashletters[i].active&&bRot==true){
-                        if(!bSingle){
-                            hashletters[i].rot.z-=10;
-                        }
-                        else{
-                            hashletters[i].rot.z--;
-                        }
-                            updateCollision(i);
+                    else{
+                        hashletters[i].scale.z-=.001;
                     }
-                    
-                    else if(hashletters[i].active){
-                            if(!bSingle){
-                                hashletters[i].pos.z--;
-                            }
-                            else{
-                                hashletters[i].pos.z-=.1;
-                            }
-                            updateCollision(i);
-                        }
+                    updateCollision(i);
+                }
+                
+                else if(hashletters[i].active&&bRot==true){
+                    if(!bSingle){
+                        hashletters[i].rot.z-=10;
+                    }
+                    else{
+                        hashletters[i].rot.z--;
+                    }
+                    updateCollision(i);
+                }
+                
+                else if(hashletters[i].active){
+                    if(!bSingle){
+                        hashletters[i].pos.z--;
+                    }
+                    else{
+                        hashletters[i].pos.z-=.1;
+                    }
+                    updateCollision(i);
+                }
             }
             return;
             
         case '+':
         case '=':
-
+            
             for(int i=0;i<hashletters.size();i++){
-                    if(hashletters[i].active&&bScale==true){
-                            if(!bSingle){
-                                hashletters[i].scale.z+=.01;
-                            }
-                            else{
-                                hashletters[i].scale.z+=.001;
-                            }
-                            updateCollision(i);
+                if(hashletters[i].active&&bScale==true){
+                    if(!bSingle){
+                        hashletters[i].scale.z+=.01;
+                    }
+                    else{
+                        hashletters[i].scale.z+=.001;
+                    }
+                    updateCollision(i);
+                }
+                
+                else if(hashletters[i].active&&bRot==true){
+                    if(!bSingle){
+                        hashletters[i].rot.z+=10;
+                    }
+                    else{
+                        hashletters[i].rot.z++;
                     }
                     
-                    else if(hashletters[i].active&&bRot==true){
-                        if(!bSingle){
-                            hashletters[i].rot.z+=10;
-                        }
-                        else{
-                            hashletters[i].rot.z++;
-                        }
-
-                            updateCollision(i);
-
-                    }
+                    updateCollision(i);
                     
-                    else if(hashletters[i].active){
-
-                            if(!bSingle){
-                                hashletters[i].pos.z++;
-                            }
-                            else{
-                                hashletters[i].pos.z+=.1;
-                            }
-                            updateCollision(i);
+                }
+                
+                else if(hashletters[i].active){
+                    
+                    if(!bSingle){
+                        hashletters[i].pos.z++;
+                    }
+                    else{
+                        hashletters[i].pos.z+=.1;
+                    }
+                    updateCollision(i);
                 }
             }
             return;
@@ -832,20 +861,20 @@ void testApp::keyPressed(int key){
         case ']':
         case '}':
             for(int i=0;i<hashletters.size();i++){
-                    
-                    if(hashletters[i].active){
-                            if(!bSingle){
-                                hashletters[i].scale.x+=.01;
-                                hashletters[i].scale.y+=.01;
-                                hashletters[i].scale.z+=.01;
-                            }
-                            else{
-                                hashletters[i].scale.x+=.001;
-                                hashletters[i].scale.y+=.001;
-                                hashletters[i].scale.z+=.001;
-                            }
-                            updateCollision(i);
-                        }
+                
+                if(hashletters[i].active){
+                    if(!bSingle){
+                        hashletters[i].scale.x+=.01;
+                        hashletters[i].scale.y+=.01;
+                        hashletters[i].scale.z+=.01;
+                    }
+                    else{
+                        hashletters[i].scale.x+=.001;
+                        hashletters[i].scale.y+=.001;
+                        hashletters[i].scale.z+=.001;
+                    }
+                    updateCollision(i);
+                }
                 
             }
             
@@ -855,39 +884,39 @@ void testApp::keyPressed(int key){
         case '{':
             for(int i=0;i<hashletters.size();i++){
                 if(hashletters[i].active){
-                            if(!bSingle){
-                                hashletters[i].scale.x-=.01;
-                                hashletters[i].scale.y-=.01;
-                                hashletters[i].scale.z-=.01;
-                            }
-                            else{
-                                hashletters[i].scale.x-=.001;
-                                hashletters[i].scale.y-=.001;
-                                hashletters[i].scale.z-=.001;
-                            }
-                            updateCollision(i);
-                        }
+                    if(!bSingle){
+                        hashletters[i].scale.x-=.01;
+                        hashletters[i].scale.y-=.01;
+                        hashletters[i].scale.z-=.01;
+                    }
+                    else{
+                        hashletters[i].scale.x-=.001;
+                        hashletters[i].scale.y-=.001;
+                        hashletters[i].scale.z-=.001;
+                    }
+                    updateCollision(i);
+                }
             }
-    
+            
             return;
             
-            case 'q':
+        case 'q':
             bStarting=false;
             for(int i=0; i<hashletters.size();i++){
                 updateCollision(i);
             }
-                fetchTweets();
+            fetchTweets();
             if(bMulti==true){
                 tweet.loadMulti(list);
             }
             else{
                 tweet.loadTweet(list[listCount]);
             }
-                        bShadow=true;
+            bShadow=true;
             return;
             
-            case 'p':
-
+        case 'p':
+            
             return;
     }
     
