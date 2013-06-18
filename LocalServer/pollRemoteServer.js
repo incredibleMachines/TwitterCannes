@@ -17,7 +17,7 @@ mongo.open(function(err,mongo){
 });
 
 
-setInterval(checkRemote, 1000*60); //one minute
+setInterval(checkRemote, 1000*30); //one minute
 
 function checkRemote(){
 	var body=''; 
@@ -28,25 +28,31 @@ function checkRemote(){
 
 		if(!doc.length){
 			//console.log('Empty');
-			timestamp = '2012-06-12+00:00:00';
-			console.log(timestamp);
+			timestamp = '2013-06-18+03:00:00';
 
 		}else{
 			var newtime = doc[0].approved_at;
 			timestamp=newtime.replace(' ','+');
-			console.log(timestamp);
 		}
 		var options = {
 
 			host: 'cannes.incrediblemachin.es',
 			port: 9000,
-			path: '/?since='+timestamp+'&limit=0'
+			path: '/?since='+timestamp+'&limit=5'
 
 		};
 
+		var current_time = (new Date()).toISOString().substring(0, 19).replace('T', ' ');
+		console.log("\n");
+		console.log('[' +current_time + '] Fetching since: ' + timestamp);
+
 		http.get(options,function(res){
 
-			console.log(res.statusCode);
+			if (res.hasOwnProperty('statusCode')) {
+				console.log('[' +current_time + '] Remote server status code: ' + res.statusCode);
+			} else {
+				console.log('[' +current_time + '] No status code in result from remote server!');
+			}
 
 			res.on('data',function(chunk){
 
@@ -135,38 +141,65 @@ function insertOrUpdate(json){
 
 var fetchUserImage = function(uri, outfile, tweet_id) {
 
-	request.head(uri, function(err, res, body) {
+	console.log("\n");
+	console.log(tweet_id + ": Fetching user image...");
+	console.log(tweet_id + ": URI: " + uri);
+	console.log(tweet_id + ": Outfile: " + outfile);
 
-		console.log("\nFetching user image...");
-		console.log("URI: " + uri);
-		console.log("Outfile: " + outfile);
-		console.log("Tweet ID: " + tweet_id);
+	var request = http.get(uri, function(res) {
+	    var imageData = '';
+	    res.setEncoding('binary');
 
-		console.log("Status: " + res.statusCode);
-		console.log("Content-length: " + res.headers['content-length']);
-
-		if (res.headers['content-length'] > 0) {
-			request(uri).pipe(fs.createWriteStream(outfile));
-			collection.update({ id: tweet_id }, { $set: { user_image: outfile }}, function(err) { if (err) throw err; })
+	    if (res.hasOwnProperty('statusCode')) {
+			console.log(tweet_id + ": Status: " + res.statusCode);
+			console.log(tweet_id + ": Content-length: " + res.headers['content-length']);
 		}
-	});
+
+	    res.on('data', function(chunk) {
+	        imageData += chunk;
+	    })
+
+	    res.on('end', function(){
+	        fs.writeFile(outfile, imageData, 'binary', function(err) {
+	            if (err) throw err;
+	            console.log(tweet_id + ": User file saved.");
+		        collection.update({ id: tweet_id }, { $set: { user_image: outfile }}, function(err) { if (err) throw err; })
+	        })
+	    })
+
+	})
+
+
 };
 
 var fetchMediaImage = function(uri, outfile, tweet_id) {
-	
-	request.head(uri, function(err, res, body) {
-		
-		console.log("Fetching media image...");
-		console.log("URI: " + uri);
-		console.log("Outfile: " + outfile);
-		console.log("Tweet ID: " + tweet_id);
 
-		console.log("Status: " + res.statusCode);
-		console.log("Content-length: " + res.headers['content-length']);
+	console.log("\n");
+	console.log(tweet_id + ": Fetching media image...");
+	console.log(tweet_id + ": URI: " + uri);
+	console.log(tweet_id + ": Outfile: " + outfile);
 
-		if (res.headers['content-length'] > 0) {
-			request(uri).pipe(fs.createWriteStream(outfile));
-			collection.update({ id: tweet_id }, { $set: { media_url: outfile }}, function(err) { if (err) throw err; })
+	var request = http.get(uri, function(res) {
+	    var imageData = '';
+	    res.setEncoding('binary');
+
+	    if (res.hasOwnProperty('statusCode')) {
+			console.log(tweet_id + ": Status: " + res.statusCode);
+			console.log(tweet_id + ": Content-length: " + res.headers['content-length']);
 		}
-	});
+
+	    res.on('data', function(chunk) {
+	        imageData += chunk;
+	    })
+
+	    res.on('end', function(){
+	        fs.writeFile(outfile, imageData, 'binary', function(err) {
+	            if (err) throw err;
+	            console.log(tweet_id + ": Media file saved.");
+		        collection.update({ id: tweet_id }, { $set: { media_url: outfile }}, function(err) { if (err) throw err; })
+	        })
+	    })
+
+	})
+
 };
