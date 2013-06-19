@@ -17,7 +17,7 @@ mongo.open(function(err,mongo){
 });
 
 
-setInterval(checkRemote, 1000*30); //one minute
+setInterval(checkRemote, 1000*10); //one minute
 
 function checkRemote(){
 	var body=''; 
@@ -28,11 +28,12 @@ function checkRemote(){
 
 		if(!doc.length){
 			//console.log('Empty');
-			timestamp = '2013-06-18+03:00:00';
-
+			// If the db is empty, request tweets starting from 5am Cannes time/3am UTC time of the current day
+			timestamp = (new Date()).toISOString().substring(0, 10) + '+03:00:00';
 		}else{
+			// Otherwise request tweets starting from the most recent one in our db
 			var newtime = doc[0].approved_at;
-			timestamp=newtime.replace(' ','+');
+			timestamp = newtime.replace(' ','+');
 		}
 		var options = {
 
